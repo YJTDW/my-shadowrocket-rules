@@ -1,4 +1,5 @@
 # Manual Merge override: IPv4-only, DNS leak resistant and strict TUN routing.
+proxies: []
 ipv6: false
 tcp-concurrent: true
 unified-delay: true
