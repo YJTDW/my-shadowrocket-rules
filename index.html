@@ -731,7 +731,7 @@ function queryActive() {
     .catch(() => {
       activeSavedLat = null; activeSavedLon = null;
       text.textContent = '未连接配置 ●';
-      dot.className = 'status-dot off';
+      toast('未检测到模块拦截：请确认小火箭 MITM 证书已全权信任并开启配置模式');
     });
 }
 
