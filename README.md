@@ -62,7 +62,7 @@
 无论使用云端版还是本地版，你都可以配合以下工具方便地调整虚拟定位：
 
 * **快捷指令 (推荐)**
-  - 📍 [设置虚拟位置](https://www.icloud.com/shortcuts/a82717d8fdad4e6280866fcf911173f7)：快速在手机中输入新坐标进行设置。
-  - 🔄 [恢复真实位置](https://www.icloud.com/shortcuts/f42632d406504f24a2cd163af4fe012f)：一键清理缓存，还原为真实 GPS 定位。
+  - 📍 [iOS 定位键快捷指令](https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d)：快速在手机中输入新坐标进行设置。
+  - 🔄 [iOS 恢复键快捷指令](https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6)：一键清理缓存，还原为真实 GPS 定位。
 * **网页可视化选点**
-  - 🌐 [选点地图页面](https://wloc-pages.pages.dev/)：在地图上搜索或任意点击位置生成对应指令。
+  - 🌐 [YJTDW 专属选点地图页面](https://yjtdw.github.io/my-shadowrocket-rules/)：在地图上搜索或任意点击位置生成对应指令。
