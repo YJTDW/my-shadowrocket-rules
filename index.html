@@ -2,405 +2,688 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>WLOC 虚拟定位</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Apple WLOC 虚拟定位</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-:root { --blue:#007aff; --green:#34c759; --red:#ff3b30; --gray:#8e8e93; --bg:#f2f2f7; --tg:#229ED9; }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,system-ui,sans-serif; background:var(--bg); color:#333; }
-#map { height:50vh; width:100%; min-height:250px; }
-.panel { padding:16px; max-width:600px; margin:0 auto 30px auto; }
-.card { background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,.08); }
-.card h3 { font-size:15px; font-weight:600; margin-bottom:10px; }
-.coords { font-family:monospace; font-size:14px; color:#333; padding:8px 12px; background:var(--bg); border-radius:8px; word-break:break-all; }
-.row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-.btn { flex:1; min-width:100px; padding:12px 16px; border:none; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; text-align:center; color:#fff; }
-.btn-primary { background:var(--blue); }
-.btn-secondary { background:#e5e5ea; color:#333; }
-.btn-danger { background:var(--red); }
-.btn-tg { background:var(--tg); }
-.btn.success { background:var(--green); }
-.btn-sm { flex:none; min-width:auto; padding:6px 12px; font-size:12px; border-radius:8px; }
-.section-title { font-size:14px; font-weight:600; color:#1c1c1e; margin:16px 0 8px 0; display:flex; align-items:center; gap:6px; }
-.input-row { display:flex; gap:8px; margin-top:10px; }
-.input-row input { flex:1; padding:10px 12px; border:1px solid #d1d1d6; border-radius:8px; font-size:14px; outline:none; }
-.status { font-size:12px; color:var(--gray); margin-top:8px; text-align:center; }
-.toast { position:fixed; top:60px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.8); color:#fff; padding:10px 20px; border-radius:20px; font-size:14px; opacity:0; transition:opacity .3s; pointer-events:none; z-index:9999; }
-.toast.show { opacity:1; }
-.layer-switch { position:absolute; top:10px; right:10px; z-index:1000; display:flex; gap:4px; background:rgba(255,255,255,.92); border-radius:8px; padding:4px; box-shadow:0 2px 8px rgba(0,0,0,.15); }
-.layer-btn { border:none; background:transparent; padding:6px 10px; border-radius:6px; font-size:12px; cursor:pointer; color:#333; font-weight:500; }
-.layer-btn.active { background:var(--blue); color:#fff; }
-.active-loc { background:var(--bg); border-radius:8px; padding:10px 12px; font-size:13px; color:#333; margin-top:8px; }
-.active-loc .label { font-size:11px; color:var(--gray); margin-bottom:4px; }
-.active-loc .value { font-family:monospace; font-size:13px; }
-.fav-list { max-height:240px; overflow-y:auto; }
-.fav-item { display:flex; align-items:center; gap:8px; padding:10px 12px; background:var(--bg); border-radius:8px; margin-bottom:6px; cursor:pointer; }
-.fav-item .fav-info { flex:1; min-width:0; }
-.fav-item .fav-name { font-size:14px; font-weight:500; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.fav-item .fav-coords { font-size:11px; color:#8e8e93; font-family:monospace; margin-top:2px; }
-.fav-item .fav-del { flex:none; width:28px; height:28px; border:none; border-radius:50%; background:transparent; color:var(--red); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.fav-empty { text-align:center; color:var(--gray); font-size:13px; padding:16px 0; }
-.fav-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-.modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.4); z-index:10000; display:none; align-items:center; justify-content:center; padding:20px; }
-.modal-overlay.show { display:flex; }
-.modal { background:#fff; border-radius:16px; padding:20px; width:100%; max-width:340px; }
-.modal h3 { font-size:17px; font-weight:600; margin-bottom:16px; text-align:center; }
-.modal input { width:100%; padding:12px; border:1px solid #d1d1d6; border-radius:10px; font-size:15px; outline:none; margin-bottom:12px; }
-.footer-card { text-align:center; padding:24px 16px; background:#fff; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.08); margin-top:16px; }
+:root {
+  --apple-blue: #007aff;
+  --apple-blue-hover: #0062cc;
+  --apple-green: #34c759;
+  --apple-red: #ff3b30;
+  --apple-orange: #ff9500;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass-dark: rgba(28, 28, 30, 0.82);
+  --text-main: #1c1c1e;
+  --text-sub: #8e8e93;
+  --border-light: rgba(60, 60, 67, 0.12);
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-btn: 0 4px 12px rgba(0, 122, 255, 0.25);
+  --radius-card: 20px;
+  --radius-btn: 14px;
+}
 
-/* 原图 Logo 样式 */
-.footer-logo {
-  width: 72px;
-  height: 72px;
-  border-radius: 16px;
-  margin: 0 auto 10px auto;
-  object-fit: contain;
-  background: #000;
-  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.25);
-  display: block;
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width:100%; height:100%; overflow:hidden; font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif; background:#e5e5ea; color:var(--text-main); }
+
+/* 全屏地图容器 */
+#map { width:100vw; height:100vh; position:absolute; top:0; left:0; z-index:1; }
+
+/* 顶部浮动搜索与切换栏 */
+.top-bar {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 32px), 520px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  padding: 6px 8px 6px 16px;
+  box-shadow: var(--shadow-float);
+  transition: all 0.25s ease;
+}
+
+.search-box:focus-within {
+  border-color: rgba(0, 122, 255, 0.5);
+  box-shadow: 0 14px 36px rgba(0, 122, 255, 0.18);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text-sub);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  color: var(--text-main);
+  outline: none;
+  font-weight: 400;
+}
+
+.search-input::placeholder { color: var(--text-sub); }
+
+.search-btn {
+  background: var(--apple-blue);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.search-btn:active { transform: scale(0.96); }
+
+/* 图层选择器微调 */
+.layer-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 6px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  scrollbar-width: none;
+}
+.layer-pills::-webkit-scrollbar { display: none; }
+
+.pill-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pill-btn.active {
+  background: var(--apple-blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+/* 底部抽屉型控制面板 (Apple Maps Style) */
+.bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 540px);
+  z-index: 1000;
+  background: var(--bg-glass);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-float);
+  padding: 12px 20px max(24px, env(safe-area-inset-bottom)) 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.drag-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(142, 142, 147, 0.4);
+  border-radius: 2px;
+  margin: 0 auto 4px auto;
+}
+
+/* 当前选取位置展示卡片 */
+.location-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.loc-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-sub);
+}
+
+.loc-coords {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* 生效状态指示条 */
+.active-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(242, 242, 247, 0.7);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--apple-green);
+  box-shadow: 0 0 8px rgba(52, 199, 89, 0.6);
+}
+
+.dot.inactive {
+  background: var(--text-sub);
+  box-shadow: none;
+}
+
+/* 按钮组样式 */
+.action-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-main {
+  background: linear-gradient(135deg, var(--apple-blue), #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-main:active { transform: scale(0.97); }
+
+.btn-sub {
+  background: rgba(118, 118, 128, 0.12);
+  color: var(--text-main);
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-sub:active { background: rgba(118, 118, 128, 0.22); transform: scale(0.96); }
+
+.btn-sub.danger { color: var(--apple-red); }
+
+/* 收藏夹与辅助弹窗 */
+.favorites-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.favorites-bar::-webkit-scrollbar { display: none; }
+
+.fav-tag {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.fav-del-btn {
+  color: var(--text-sub);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* 顶部 / 通用 Modal */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-mask.active { display: flex; animation: fadeIn 0.25s ease; }
+
+.modal-card {
+  background: #fff;
+  width: min(100%, 360px);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-title { font-size: 18px; font-weight: 700; text-align: center; }
+
+.modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-light);
+  background: #f2f2f7;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+}
+
+.modal-actions { display: flex; gap: 10px; }
+
+.toast-msg {
+  position: fixed;
+  top: max(20px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+  transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 </style>
 </head>
 <body>
-<div style="position:relative">
+
+<!-- 地图画布容器 -->
 <div id="map"></div>
-<div class="layer-switch">
-  <button class="layer-btn active" data-layer="satellite" onclick="switchLayer('satellite')">卫星</button>
-  <button class="layer-btn" data-layer="wgs84" onclick="switchLayer('wgs84')">WGS84</button>
-  <button class="layer-btn" data-layer="amap" onclick="switchLayer('amap')">高德</button>
-  <button class="layer-btn" data-layer="voyager" onclick="switchLayer('voyager')">彩色</button>
-  <button class="layer-btn" data-layer="standard" onclick="switchLayer('standard')">标准</button>
-  <button class="layer-btn" data-layer="dark" onclick="switchLayer('dark')">暗色</button>
-</div>
-</div>
-<div class="panel">
-  <div class="card">
-    <h3>选择目标位置</h3>
-    <div class="coords" id="coords">经度 -0.127800  纬度 51.507900</div>
-    <div class="row">
-      <button class="btn btn-primary" id="saveBtn" onclick="save()">储存到设备</button>
-      <button class="btn btn-secondary" onclick="addFav()">收藏位置</button>
-      <button class="btn btn-secondary" onclick="locateMe()">当前位置</button>
-    </div>
 
-    <div class="section-title">环境安装</div>
-    <div class="row">
-      <button class="btn btn-primary" onclick="copyText('https://raw.githubusercontent.com/hankinsus/wloc/refs/heads/main/modules/wloc.module')">模块安装</button>
-      <a class="btn btn-primary" href="https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d" target="_blank">IOS定位键</a>
-      <a class="btn btn-primary" href="https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6" target="_blank">IOS恢复键</a>
-    </div>
+<!-- 顶部搜索与图层切换 -->
+<div class="top-bar">
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input type="text" id="searchInput" class="search-input" placeholder="搜索地名、地址或粘贴链接/坐标..." />
+    <button class="search-btn" onclick="handleSearch()">搜索</button>
   </div>
 
-  <div class="card">
-    <div class="fav-header">
-      <h3>收藏的位置</h3>
-      <button class="btn btn-sm btn-secondary" onclick="clearAllFav()" id="clearAllBtn" style="display:none">清空全部</button>
-    </div>
-    <div id="favList" class="fav-list"></div>
+  <div class="layer-pills">
+    <button class="pill-btn active" data-layer="amap" onclick="switchLayer('amap')">高德标准</button>
+    <button class="pill-btn" data-layer="satellite" onclick="switchLayer('satellite')">高清卫星</button>
+    <button class="pill-btn" data-layer="voyager" onclick="switchLayer('voyager')">苹果浅色</button>
+    <button class="pill-btn" data-layer="dark" onclick="switchLayer('dark')">苹果暗色</button>
   </div>
-
-  <div class="card">
-    <h3>当前生效坐标</h3>
-    <div class="active-loc" id="activeLoc">
-      <div class="label">设备持久化数据 (wloc_settings)</div>
-      <div class="value" id="activeValue">查询中...</div>
-    </div>
-    <div class="row" style="margin-top:10px">
-      <button class="btn btn-sm btn-secondary" onclick="queryActive()">刷新</button>
-      <button class="btn btn-sm btn-danger" onclick="clearActive()">清除数据</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>粘贴地图链接</h3>
-    <div class="input-row">
-      <input id="urlInput" placeholder="Apple/Google/高德地图链接 或 经纬度" />
-      <button class="btn btn-secondary" style="flex:none;min-width:56px" onclick="parseUrl()">解析</button>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>搜索地点</h3>
-    <div class="input-row">
-      <input id="searchInput" placeholder="输入地名（如: 美国纽约）" />
-      <button class="btn btn-secondary" style="flex:none;min-width:56px" onclick="searchPlace()">搜索</button>
-    </div>
-  </div>
-
-  <div class="footer-card">
-    <!-- 使用 GitHub Raw 绝对直链，并加入了防断网的自动降级兜底 -->
-    <img class="footer-logo" id="footerLogo" src="https://raw.githubusercontent.com/hankinsus/wloc/refs/heads/main/wloc.jpg" alt="Logo" onerror="this.onerror=null; this.style.display='none'; document.getElementById('fallbackLogo').style.display='flex';">
-    <div id="fallbackLogo" style="display:none; width:72px; height:72px; border-radius:16px; margin:0 auto 10px auto; background:linear-gradient(135deg, #007aff, #5856d6); box-shadow:0 4px 16px rgba(0, 122, 255, 0.25); align-items:center; justify-content:center;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"></circle>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-      </svg>
-    </div>
-    <div class="footer-brand" style="font-weight:600;font-size:15px;color:#1c1c1e;margin-bottom:4px">我爱研究 ILovestudy</div>
-    <div class="footer-version" style="font-size:12px;color:var(--gray);margin-bottom:14px;font-family:monospace;font-weight:700;">v1.1.9</div>
-    <a class="btn btn-tg" href="https://t.me/+ySKmeLUxaAM5NGFk" target="_blank">💬 加入 Telegram 交流群</a>
-  </div>
-
-  <div class="status" id="status">选好位置后点击「储存到设备」写入代理工具</div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- 底部控制抽屉 (Apple Maps Style) -->
+<div class="bottom-sheet">
+  <div class="drag-handle"></div>
 
-<div class="modal-overlay" id="favModal">
-  <div class="modal">
-    <h3>收藏此位置</h3>
-    <input id="favNameInput" placeholder="输入备注名称（如: 公司、家）" maxlength="30" />
-    <div style="font-size:12px;color:var(--gray);margin-bottom:12px;text-align:center" id="favModalCoords"></div>
-    <div class="row">
-      <button class="btn btn-secondary" onclick="closeFavModal()">取消</button>
-      <button class="btn btn-primary" onclick="confirmFav()">保存</button>
+  <div class="location-card">
+    <div class="loc-title">当前选择坐标</div>
+    <div class="loc-coords" id="coordsDisplay">经度 113.941140  纬度 22.544577</div>
+  </div>
+
+  <!-- 生效指示器 -->
+  <div class="active-status-bar">
+    <div class="status-badge">
+      <div class="dot" id="statusDot"></div>
+      <span id="activeText">系统持久化数据: 加载中...</span>
     </div>
+    <div style="display:flex; gap:6px;">
+      <button onclick="queryActive()" style="border:none; background:none; color:var(--apple-blue); font-size:12px; font-weight:600; cursor:pointer;">刷新</button>
+    </div>
+  </div>
+
+  <!-- 收藏列表横滑区域 -->
+  <div id="favContainer" class="favorites-bar"></div>
+
+  <!-- 操作按钮矩阵 -->
+  <div class="action-grid">
+    <button class="btn-main" id="saveBtn" onclick="saveLocation()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+      写入设备定位
+    </button>
+    
+    <button class="btn-sub" onclick="locateMe()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+      定位当前
+    </button>
+
+    <button class="btn-sub" onclick="openFavModal()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      收藏点位
+    </button>
+  </div>
+
+  <!-- 辅助功能入口 -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+    <button onclick="clearActiveLocation()" style="border:none; background:none; color:var(--apple-red); font-size:12px; font-weight:500; cursor:pointer;">还原真实定位</button>
+    <button onclick="openHelpModal()" style="border:none; background:none; color:var(--text-sub); font-size:12px; font-weight:500; cursor:pointer;">模块与安装说明</button>
+  </div>
+</div>
+
+<!-- 提示框 -->
+<div class="toast-msg" id="toast"></div>
+
+<!-- 收藏 Modal -->
+<div class="modal-mask" id="favModal">
+  <div class="modal-card">
+    <div class="modal-title">收藏当前点位</div>
+    <input type="text" id="favNameInput" class="modal-input" placeholder="输入名称（如: 公司、家里）" maxlength="20" />
+    <div class="modal-actions">
+      <button class="btn-sub" style="flex:1" onclick="closeModal('favModal')">取消</button>
+      <button class="btn-main" style="flex:1" onclick="confirmAddFav()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 说明 Modal -->
+<div class="modal-mask" id="helpModal">
+  <div class="modal-card" style="width:min(100%, 420px)">
+    <div class="modal-title">安装与配套工具</div>
+    <div style="font-size:13px; color:var(--text-main); line-height:1.6; display:flex; flex-direction:column; gap:10px;">
+      <div>快捷配置模块和iOS官方快捷指令：</div>
+      <button class="btn-sub" onclick="copyText('https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/apple-wloc.module')">复制专属云端模块 URL</button>
+      <a class="btn-sub" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d" target="_blank">📥 添加 iOS 定位键快捷指令</a>
+      <a class="btn-sub" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6" target="_blank">🔄 添加 iOS 恢复键快捷指令</a>
+    </div>
+    <button class="btn-main" onclick="closeModal('helpModal')">关闭</button>
   </div>
 </div>
 
 <script>
 const SAVE_API = 'https://gs-loc.apple.com/wloc-settings/save';
-const FAV_KEY = 'wloc_favorites';
-let lat = 51.5079, lon = -0.1278;
-let selected = true;
-let activeLon = null, activeLat = null;
+const FAV_KEY = 'apple_wloc_favs';
 
-const map = L.map('map').setView([lat, lon], 13);
-const tiles = {
-  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'ArcGIS'}),
-  wgs84: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {maxZoom:19, attribution:'ArcGIS'}),
-  standard: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'OSM'}),
-  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {maxZoom:19, attribution:'Carto'}),
-  amap: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {maxZoom:18, subdomains:'1234', attribution:'高德'}),
-  voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {maxZoom:19, attribution:'Carto'})
+let currentLat = 22.544577, currentLon = 113.941140;
+let map, marker, currentTileLayer;
+
+// 地图图层配置
+const tileServers = {
+  amap: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}', { maxZoom:19, subdomains:'1234', attribution:'高德地图' }),
+  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom:19, attribution:'ArcGIS Satellite' }),
+  voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom:19, attribution:'Carto' }),
+  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom:19, attribution:'Carto Dark' })
 };
-let currentLayer = tiles.satellite;
-currentLayer.addTo(map);
+
+// 初始化地图
+function initMap() {
+  map = L.map('map', { zoomControl: false }).setView([currentLat, currentLon], 15);
+  currentTileLayer = tileServers.amap;
+  currentTileLayer.addTo(map);
+
+  // 自定义地图标记
+  const customIcon = L.divIcon({
+    className: 'custom-pin',
+    html: `<div style="width:24px;height:24px;background:#007aff;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(0,122,255,0.4);animation:pulse 2s infinite;"></div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+
+  marker = L.marker([currentLat, currentLon], { draggable: true, icon: customIcon }).addTo(map);
+
+  marker.on('dragend', e => {
+    const pos = e.target.getLatLng();
+    updateCoords(pos.lat, pos.lng);
+  });
+
+  map.on('click', e => {
+    updateCoords(e.latlng.lat, e.latlng.lng);
+  });
+
+  renderFavs();
+  queryActive();
+}
 
 function switchLayer(name) {
-  map.removeLayer(currentLayer);
-  currentLayer = tiles[name];
-  currentLayer.addTo(map);
-  document.querySelectorAll('.layer-btn').forEach(b => b.classList.toggle('active', b.dataset.layer === name));
+  if (currentTileLayer) map.removeLayer(currentTileLayer);
+  currentTileLayer = tileServers[name];
+  currentTileLayer.addTo(map);
+
+  document.querySelectorAll('.pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.layer === name);
+  });
 }
 
-let marker = L.marker([lat, lon], {draggable:true}).addTo(map);
-marker.on('dragend', e => { const p=e.target.getLatLng(); setPos(p.lat, p.lng); });
-map.on('click', e => { setPos(e.latlng.lat, e.latlng.lng); });
-
-function setPos(newLat, newLon) {
-  lat = newLat; lon = newLon; selected = true;
+function updateCoords(lat, lon) {
+  currentLat = lat;
+  currentLon = lon;
   marker.setLatLng([lat, lon]);
-  document.getElementById('coords').textContent = '经度 ' + lon.toFixed(6) + '  纬度 ' + lat.toFixed(6);
+  document.getElementById('coordsDisplay').textContent = `经度 ${lon.toFixed(6)}  纬度 ${lat.toFixed(6)}`;
 }
 
-function moveTo(newLat, newLon, zoom) {
-  setPos(newLat, newLon);
-  map.setView([lat, lon], zoom || 15);
+function moveTo(lat, lon, zoom = 15) {
+  updateCoords(lat, lon);
+  map.setView([lat, lon], zoom);
 }
 
-function toast(msg, ms) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), ms || 2500);
+// 消息提示 Toast
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
 }
 
-function copyText(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => {
-      toast('已复制');
-    }).catch(() => {
-      fallbackCopyText(text);
-    });
-  } else {
-    fallbackCopyText(text);
-  }
-}
+// 保存位置到设备
+async function saveLocation() {
+  const btn = document.getElementById('saveBtn');
+  btn.style.opacity = '0.7';
+  btn.textContent = '写入中...';
 
-function fallbackCopyText(text) {
-  const textArea = document.createElement("textarea");
-  textArea.value = text;
-  textArea.style.position = "fixed";
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
   try {
-    document.execCommand('copy');
-    toast('已复制');
-  } catch (err) {
-    toast('复制失败，请手动长按复制');
+    const res = await fetch(`${SAVE_API}?lon=${currentLon}&lat=${currentLat}&acc=25`, { method: 'GET', mode: 'cors', cache: 'no-store' });
+    const data = await res.json();
+    if (data.success) {
+      toast('✓ 已成功写入系统定位');
+      queryActive();
+    } else {
+      throw new Error(data.error || '写入失败');
+    }
+  } catch (e) {
+    toast('✓ 坐标数据已发送（请确保小火箭代理开启）');
+  } finally {
+    btn.style.opacity = '1';
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>写入设备定位`;
   }
-  document.body.removeChild(textArea);
 }
 
-/* 收藏功能 */
-function getFavs() {
-  try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e) { return []; }
-}
-function saveFavs(favs) {
-  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
-}
-function renderFavs() {
-  const favs = getFavs();
-  const el = document.getElementById('favList');
-  const clearBtn = document.getElementById('clearAllBtn');
-  clearBtn.style.display = favs.length ? '' : 'none';
-  if (!favs.length) {
-    el.innerHTML = '<div class="fav-empty">暂无收藏，选好位置后点击「收藏位置」</div>';
-    return;
-  }
-  el.innerHTML = favs.map((f, i) => {
-    return '<div class="fav-item" onclick="loadFav(' + i + ')">' +
-      '<div class="fav-info">' +
-        '<div class="fav-name">' + escHtml(f.name) + '</div>' +
-        '<div class="fav-coords">' + f.lon.toFixed(6) + ', ' + f.lat.toFixed(6) + '</div>' +
-      '</div>' +
-      '<button class="fav-del" onclick="event.stopPropagation();delFav(' + i + ')" title="删除">×</button>' +
-    '</div>';
-  }).join('');
-}
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function addFav() {
-  if (!selected) { toast('请先在地图上选择一个位置'); return; }
-  document.getElementById('favModalCoords').textContent = lon.toFixed(6) + ', ' + lat.toFixed(6);
-  document.getElementById('favNameInput').value = '';
-  document.getElementById('favModal').classList.add('show');
-  setTimeout(() => document.getElementById('favNameInput').focus(), 100);
-}
-function closeFavModal() {
-  document.getElementById('favModal').classList.remove('show');
-}
-function confirmFav() {
-  const name = document.getElementById('favNameInput').value.trim();
-  if (!name) { toast('请输入备注名称'); return; }
-  const favs = getFavs();
-  favs.push({ name, lon, lat, time: new Date().toISOString() });
-  saveFavs(favs);
-  closeFavModal();
-  renderFavs();
-  toast('已收藏: ' + name);
-}
-function loadFav(i) {
-  const favs = getFavs();
-  if (!favs[i]) return;
-  moveTo(favs[i].lat, favs[i].lon, 15);
-  toast(favs[i].name + ' (' + favs[i].lon.toFixed(4) + ', ' + favs[i].lat.toFixed(4) + ')');
-}
-function delFav(i) {
-  const favs = getFavs();
-  if (!favs[i]) return;
-  const name = favs[i].name;
-  favs.splice(i, 1);
-  saveFavs(favs);
-  renderFavs();
-  toast('已删除: ' + name);
-}
-function clearAllFav() {
-  if (!confirm('确定清空所有收藏？')) return;
-  saveFavs([]);
-  renderFavs();
-  toast('已清空所有收藏');
-}
-
-/* 生效坐标查询 */
+// 查询激活状态
 function queryActive() {
-  const el = document.getElementById('activeValue');
-  el.textContent = '查询中...';
-  fetch(SAVE_API + '?action=query', { method:'GET', mode:'cors', cache:'no-store' })
+  const text = document.getElementById('activeText');
+  const dot = document.getElementById('statusDot');
+  text.textContent = '查询设备持久化数据...';
+
+  fetch(`${SAVE_API}?action=query`, { method: 'GET', mode: 'cors', cache: 'no-store' })
     .then(r => r.json())
     .then(d => {
       if (d.success && d.longitude && d.latitude) {
-        activeLon = parseFloat(d.longitude);
-        activeLat = parseFloat(d.latitude);
-        el.textContent = '经度 ' + activeLon.toFixed(6) + '  纬度 ' + activeLat.toFixed(6) + (d.accuracy ? '  精度 ' + d.accuracy + 'm' : '');
+        text.textContent = `当前生效: ${parseFloat(d.longitude).toFixed(4)}, ${parseFloat(d.latitude).toFixed(4)}`;
+        dot.className = 'dot';
       } else {
-        el.textContent = '无已保存的坐标';
+        text.textContent = '设备未保存持久数据 (恢复真实定位中)';
+        dot.className = 'dot inactive';
       }
     })
-    .catch(() => { el.textContent = '查询失败 (需要代理模块支持)'; });
+    .catch(() => {
+      text.textContent = '未检测到配置节点 (请检查代理开关)';
+      dot.className = 'dot inactive';
+    });
 }
-function clearActive() {
-  if (!confirm('确定清除设备上已保存的坐标？')) return;
-  fetch(SAVE_API + '?action=clear', { method:'GET', mode:'cors', cache:'no-store' })
+
+// 清除定位数据
+function clearActiveLocation() {
+  if (!confirm('确定清除设备持久化的虚拟定位？清除后将自动恢复真实 GPS 定位。')) return;
+
+  fetch(`${SAVE_API}?action=clear`, { method: 'GET', mode: 'cors', cache: 'no-store' })
     .then(r => r.json())
     .then(d => {
       if (d.success) {
-        document.getElementById('activeValue').textContent = '已清除';
-        toast('已清除设备坐标');
-      } else { toast('清除失败'); }
+        toast('✓ 已清空，恢复真实定位');
+        queryActive();
+      }
     })
-    .catch(() => { toast('清除失败 - 请检查模块配置'); });
+    .catch(() => {
+      toast('已发送清空请求');
+    });
 }
 
-/* 储存 */
-async function save() {
-  if (!selected) { toast('请先在地图上选择一个位置'); return; }
-  const btn = document.getElementById('saveBtn');
-  btn.textContent = '储存中...'; btn.disabled = true;
-  try {
-    const r = await fetch(SAVE_API + '?lon=' + lon + '&lat=' + lat + '&acc=25', { method: 'GET', mode: 'cors', cache: 'no-store' });
-    const d = await r.json();
-    if (d.success) {
-      btn.textContent = '✓ 已储存'; btn.className = 'btn btn-primary success';
-      toast('✓ 坐标已写入设备');
-      setTimeout(() => { btn.textContent='储存到设备'; btn.className='btn btn-primary'; btn.disabled=false; }, 2500);
-      queryActive();
-    } else { throw new Error(d.error || '写入失败'); }
-  } catch(e) {
-    btn.textContent = '储存到设备'; btn.className = 'btn btn-primary'; btn.disabled = false;
-    toast('✓ 坐标指令已发出（请确保代理模块开启）');
-  }
-}
-
+// 当前位置
 function locateMe() {
   if (!navigator.geolocation) return toast('浏览器不支持定位');
+  toast('正在获取当前真实 GPS...');
   navigator.geolocation.getCurrentPosition(
     pos => moveTo(pos.coords.latitude, pos.coords.longitude, 16),
-    err => toast('定位失败: ' + err.message, 3000),
-    { enableHighAccuracy:true, timeout:10000 }
+    err => toast('定位获取失败: ' + err.message)
   );
 }
 
-function parseMapUrl(text) {
-  let m;
-  if ((m = text.match(/(?:coordinate|ll|sll)=(-?d{1,3}.d+)(?:,|%2C)(-?d{1,3}.d+)/i))) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
-  if ((m = text.match(/[?&]p=[^,&%]*(?:,|%2C)(-?d{1,3}.d+)(?:,|%2C)(-?d{1,3}.d+)/i))) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
-  if ((m = text.match(/[?&]q=(-?d{1,3}.d+)(?:,|%2C)(-?d{1,3}.d+)/i))) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
-  if ((m = text.match(/(-?d{1,3}.d+)[,s]+(-?d{1,3}.d+)/))) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
-  return null;
-}
+// 搜索逻辑
+function handleSearch() {
+  const query = document.getElementById('searchInput').value.trim();
+  if (!query) return toast('请输入地名或坐标');
 
-function parseUrl() {
-  const input = document.getElementById('urlInput').value.trim();
-  if (!input) return toast('请粘贴地图链接或坐标');
-  const res = parseMapUrl(input);
-  if (!res) return toast('无法解析坐标格式');
-  moveTo(res.lat, res.lon, 15);
-  toast('已解析坐标');
-}
+  // 解析经纬度文本或地图 URL
+  let match = query.match(/(-?\d{1,3}\.\d+)[,\s]+(-?\d{1,3}\.\d+)/);
+  if (match) {
+    return moveTo(parseFloat(match[1]), parseFloat(match[2]), 16);
+  }
 
-async function searchPlace() {
-  const q = document.getElementById('searchInput').value.trim();
-  if (!q) return toast('请输入地名');
   toast('搜索中...');
-  try {
-    const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q));
-    const results = await r.json();
-    if (!results.length) return toast('未找到地点: ' + q);
-    moveTo(parseFloat(results[0].lat), parseFloat(results[0].lon), 15);
-    toast(results[0].display_name.slice(0, 30));
-  } catch(e) { toast('搜索失败'); }
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        moveTo(parseFloat(data[0].lat), parseFloat(data[0].lon), 16);
+        toast(`已定位到: ${data[0].display_name.slice(0, 20)}`);
+      } else {
+        toast('未找到对应地点');
+      }
+    })
+    .catch(() => toast('搜索解析失败'));
 }
 
-document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key==='Enter') searchPlace(); });
-document.getElementById('urlInput').addEventListener('keydown', e => { if(e.key==='Enter') parseUrl(); });
+// 收藏逻辑
+function getFavs() {
+  try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e) { return []; }
+}
 
-renderFavs();
-queryActive();
+function renderFavs() {
+  const favs = getFavs();
+  const container = document.getElementById('favContainer');
+  if (!favs.length) {
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = favs.map((f, i) => `
+    <div class="fav-tag" onclick="moveTo(${f.lat}, ${f.lon}, 16)">
+      📍 ${escapeHtml(f.name)}
+      <span class="fav-del-btn" onclick="event.stopPropagation(); delFav(${i})">×</span>
+    </div>
+  `).join('');
+}
+
+function openFavModal() {
+  document.getElementById('favModal').classList.add('active');
+  document.getElementById('favNameInput').value = '';
+  setTimeout(() => document.getElementById('favNameInput').focus(), 100);
+}
+
+function confirmAddFav() {
+  const name = document.getElementById('favNameInput').value.trim();
+  if (!name) return toast('请输入点位名称');
+  const favs = getFavs();
+  favs.push({ name, lat: currentLat, lon: currentLon });
+  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+  closeModal('favModal');
+  renderFavs();
+  toast(`✓ 已收藏: ${name}`);
+}
+
+function delFav(i) {
+  const favs = getFavs();
+  favs.splice(i, 1);
+  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+  renderFavs();
+}
+
+function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast('✓ 已复制到剪贴板'));
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+
+window.onload = initMap;
 </script>
 </body>
 </html>
