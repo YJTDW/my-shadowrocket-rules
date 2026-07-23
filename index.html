@@ -304,14 +304,14 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   position: absolute;
   top: max(68px, env(safe-area-inset-top));
   right: 12px;
-  width: 180px;
+  width: 200px;
   background: var(--surface);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-sheet);
-  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  z-index: 10001;
   display: none;
   flex-direction: column;
   padding: 6px;
@@ -439,10 +439,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
 
 <!-- 地图样式 Popover 菜单 -->
 <div class="menu-popover" id="layerMenu">
-  <button class="menu-item active" data-layer="amap" onclick="selectLayer('amap')">高德矢量 <span>✓</span></button>
-  <button class="menu-item" data-layer="satellite" onclick="selectLayer('satellite')">高德卫星</button>
-  <button class="menu-item" data-layer="light" onclick="selectLayer('light')">Apple 浅色</button>
-  <button class="menu-item" data-layer="dark" onclick="selectLayer('dark')">Apple 暗色</button>
+  <button class="menu-item active" data-layer="google_sat" onclick="selectLayer('google_sat')">🛰️ 谷歌卫星 (全球) <span>✓</span></button>
+  <button class="menu-item" data-layer="google_map" onclick="selectLayer('google_map')">🗺️ 谷歌地图 (全球)</button>
+  <button class="menu-item" data-layer="osm" onclick="selectLayer('osm')">🌍 OSM 全球地图</button>
+  <button class="menu-item" data-layer="esri_sat" onclick="selectLayer('esri_sat')">📷 ArcGIS 卫星</button>
+  <button class="menu-item" data-layer="amap" onclick="selectLayer('amap')">🇨🇳 高德地图 (国内)</button>
 </div>
 
 <!-- 底部控制面板 (极其耐看干净) -->
@@ -545,33 +546,39 @@ let currentLat = 22.544577, currentLon = 113.941140;
 let map, currentLayer, realLocMarker;
 let activeSavedLat = null, activeSavedLon = null;
 
-// 高速瓦片地图源
+// 全球与国内多数据源瓦片配置
 const tileLayers = {
+  google_sat: L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    subdomains: ['0', '1', '2', '3'],
+    maxZoom: 20,
+    maxNativeZoom: 20,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
+  google_map: L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    subdomains: ['0', '1', '2', '3'],
+    maxZoom: 20,
+    maxNativeZoom: 20,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
+  osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    subdomains: ['a', 'b', 'c'],
+    maxZoom: 19,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
+  esri_sat: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
   amap: L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
     subdomains: ['1', '2', '3', '4'],
     maxZoom: 18,
     maxNativeZoom: 18,
     updateWhenIdle: false,
-    updateWhenZooming: false,
     keepBuffer: 4
-  }),
-  satellite: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
-    subdomains: ['1', '2', '3', '4'],
-    maxZoom: 18,
-    maxNativeZoom: 18,
-    updateWhenIdle: false,
-    updateWhenZooming: false,
-    keepBuffer: 4
-  }),
-  light: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
-    maxZoom: 19,
-    updateWhenIdle: false
-  }),
-  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
-    maxZoom: 19,
-    updateWhenIdle: false
   })
 };
 
@@ -590,7 +597,7 @@ function initMap() {
     attributionControl: false
   }).setView([currentLat, currentLon], 15);
 
-  currentLayer = tileLayers.amap;
+  currentLayer = tileLayers.google_sat;
   currentLayer.addTo(map);
 
   // 地图移动监听：拖拽时沉降面板，停止时精准取中央经纬度
