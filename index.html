@@ -8,480 +8,548 @@
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
-  --apple-blue: #007aff;
-  --apple-blue-hover: #0062cc;
-  --apple-green: #34c759;
-  --apple-red: #ff3b30;
-  --apple-orange: #ff9500;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --bg-glass-dark: rgba(28, 28, 30, 0.82);
-  --text-main: #1c1c1e;
-  --text-sub: #8e8e93;
-  --border-light: rgba(60, 60, 67, 0.12);
-  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
-  --shadow-btn: 0 4px 12px rgba(0, 122, 255, 0.25);
-  --radius-card: 20px;
-  --radius-btn: 14px;
+  --accent: #0A67D8;
+  --accent-hover: #095FC7;
+  --accent-tint: rgba(10, 103, 216, 0.1);
+  --danger: #FF3B30;
+  --success: #34C759;
+  --bg-panel: rgba(248, 250, 252, 0.94);
+  --bg-input: rgba(238, 240, 243, 0.7);
+  --text-main: #1F2937;
+  --text-sub: #8E8E93;
+  --border-light: rgba(226, 232, 240, 0.8);
+  --shadow-panel: 0 -8px 32px rgba(15, 23, 42, 0.08);
+  --shadow-btn: 0 6px 18px rgba(10, 103, 216, 0.22);
+  --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.04);
+
+  /* 三档统一圆角 */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-html, body { width:100%; height:100%; overflow:hidden; font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif; background:#e5e5ea; color:var(--text-main); }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; background: #e2e8f0; color: var(--text-main); }
 
-/* 全屏地图容器 */
-#map { width:100vw; height:100vh; position:absolute; top:0; left:0; z-index:1; }
+/* 全屏地图画布 */
+#map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; background: #f1f5f9; }
 
-/* 顶部浮动搜索与切换栏 */
+/* 顶部搜索与样式选项 */
 .top-bar {
   position: absolute;
-  top: max(16px, env(safe-area-inset-top));
+  top: max(12px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
-  width: min(calc(100% - 32px), 520px);
+  width: min(calc(100% - 24px), 480px);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .search-box {
   display: flex;
   align-items: center;
-  background: var(--bg-glass);
+  background: var(--bg-panel);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-md);
+  padding: 4px 6px 4px 14px;
+  box-shadow: var(--shadow-card);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-card);
-  padding: 6px 8px 6px 16px;
-  box-shadow: var(--shadow-float);
-  transition: all 0.25s ease;
-}
-
-.search-box:focus-within {
-  border-color: rgba(0, 122, 255, 0.5);
-  box-shadow: 0 14px 36px rgba(0, 122, 255, 0.18);
-}
-
-.search-icon {
-  width: 20px;
-  height: 20px;
-  stroke: var(--text-sub);
-  margin-right: 10px;
-  flex-shrink: 0;
 }
 
 .search-input {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-main);
   outline: none;
   font-weight: 400;
 }
-
 .search-input::placeholder { color: var(--text-sub); }
 
-.search-btn {
-  background: var(--apple-blue);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.search-btn:active { transform: scale(0.96); }
-
-/* 图层选择器微调 */
-.layer-pills {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 4px 6px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 14px;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  scrollbar-width: none;
-}
-.layer-pills::-webkit-scrollbar { display: none; }
-
-.pill-btn {
+.search-btn-icon {
   border: none;
   background: transparent;
-  padding: 6px 14px;
-  border-radius: 10px;
+  padding: 8px;
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+/* 顶部模式切换 Pills */
+.layer-pills {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+}
+
+.pill-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 6px 0;
+  border-radius: 9px;
   font-size: 12px;
   font-weight: 500;
-  color: var(--text-main);
-  white-space: nowrap;
+  color: var(--text-sub);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  text-align: center;
 }
 
 .pill-btn.active {
-  background: var(--apple-blue);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-weight: 600;
 }
 
-/* 底部抽屉型控制面板 (Apple Maps Style) */
+/* 底部面板 (克制的苹果系统工具风) */
 .bottom-sheet {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: min(100%, 540px);
+  width: min(100%, 500px);
   z-index: 1000;
-  background: var(--bg-glass);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-float);
-  padding: 12px 20px max(24px, env(safe-area-inset-bottom)) 20px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: var(--shadow-panel);
+  padding: 10px 20px max(18px, env(safe-area-inset-bottom)) 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.drag-handle {
-  width: 36px;
-  height: 4px;
-  background: rgba(142, 142, 147, 0.4);
-  border-radius: 2px;
-  margin: 0 auto 4px auto;
-}
-
-/* 当前选取位置展示卡片 */
-.location-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.loc-title {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: var(--text-sub);
-}
-
-.loc-coords {
-  font-family: "SF Mono", Menlo, Consolas, monospace;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-/* 生效状态指示条 */
-.active-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(242, 242, 247, 0.7);
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-}
-
-.status-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--apple-green);
-  box-shadow: 0 0 8px rgba(52, 199, 89, 0.6);
-}
-
-.dot.inactive {
-  background: var(--text-sub);
-  box-shadow: none;
-}
-
-/* 按钮组样式 */
-.action-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
   gap: 10px;
 }
 
-.btn-main {
-  background: linear-gradient(135deg, var(--apple-blue), #0056b3);
-  color: #fff;
+.drag-handle {
+  width: 32px;
+  height: 4px;
+  background: rgba(142, 142, 147, 0.3);
+  border-radius: 2px;
+  margin: 0 auto 2px auto;
+}
+
+/* 坐标显示（两列精简设计） */
+.coord-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: var(--bg-input);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+}
+
+.coord-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+
+.coordinate {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--text-main);
+}
+
+/* 系统级提示风格的状态栏 */
+.system-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 2px;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+.status-dot.off { background: var(--text-sub); }
+
+.status-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.status-sub {
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 400;
+}
+
+.icon-btn {
   border: none;
-  border-radius: var(--radius-btn);
-  padding: 14px;
-  font-size: 16px;
+  background: transparent;
+  padding: 6px;
+  color: var(--text-sub);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:active { background: rgba(0,0,0,0.05); }
+
+/* 操作按钮层级优化 */
+.action-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-btn);
-  transition: all 0.2s ease;
+  transition: background 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+}
+.btn-primary:active { background: var(--accent-hover); }
+
+.btn-secondary-row {
+  display: flex;
   gap: 8px;
 }
 
-.btn-main:active { transform: scale(0.97); }
-
-.btn-sub {
-  background: rgba(118, 118, 128, 0.12);
+.btn-secondary {
+  flex: 1;
+  background: var(--bg-input);
   color: var(--text-main);
   border: none;
-  border-radius: var(--radius-btn);
-  padding: 12px;
-  font-size: 13px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: 550;
   cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
 }
+.btn-secondary:active { background: rgba(220, 224, 230, 0.8); }
 
-.btn-sub:active { background: rgba(118, 118, 128, 0.22); transform: scale(0.96); }
-
-.btn-sub.danger { color: var(--apple-red); }
-
-/* 收藏夹与辅助弹窗 */
-.favorites-bar {
+/* 收藏卡片横向滑块 */
+.fav-bar {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 4px;
   scrollbar-width: none;
 }
-.favorites-bar::-webkit-scrollbar { display: none; }
+.fav-bar::-webkit-scrollbar { display: none; }
 
-.fav-tag {
+.fav-chip {
   background: #fff;
   border: 1px solid var(--border-light);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 11px;
   font-weight: 500;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.fav-del { color: var(--text-sub); margin-left: 2px; font-size: 12px; }
+
+/* 底部辅助链接 */
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2px;
 }
 
-.fav-del-btn {
+.link-btn {
+  border: none;
+  background: transparent;
+  font-size: 11px;
   color: var(--text-sub);
-  font-size: 14px;
-  line-height: 1;
+  cursor: pointer;
+  font-weight: 400;
 }
+.link-btn.danger { color: var(--danger); }
 
-/* 顶部 / 通用 Modal */
-.modal-mask {
+/* 模态弹窗 */
+.modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 9999;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
+.modal-overlay.active { display: flex; }
 
-.modal-mask.active { display: flex; animation: fadeIn 0.25s ease; }
-
-.modal-card {
-  background: #fff;
-  width: min(100%, 360px);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+.modal-box {
+  background: #ffffff;
+  width: min(100%, 340px);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-.modal-title { font-size: 18px; font-weight: 700; text-align: center; }
-
+.modal-title { font-size: 16px; font-weight: 600; text-align: center; color: var(--text-main); }
 .modal-input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 12px;
   border: 1px solid var(--border-light);
-  background: #f2f2f7;
-  border-radius: 12px;
-  font-size: 15px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
   outline: none;
 }
+.modal-btns { display: flex; gap: 8px; }
 
-.modal-actions { display: flex; gap: 10px; }
-
-.toast-msg {
+.toast {
   position: fixed;
-  top: max(20px, env(safe-area-inset-top));
+  top: max(16px, env(safe-area-inset-top));
   left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: rgba(0, 0, 0, 0.85);
+  transform: translateX(-50%) translateY(-10px);
+  background: rgba(30, 41, 59, 0.9);
   color: #fff;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   opacity: 0;
   pointer-events: none;
   z-index: 10000;
-  transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- 地图画布容器 -->
+<!-- 高效地图画布 -->
 <div id="map"></div>
 
-<!-- 顶部搜索与图层切换 -->
+<!-- 顶部搜索与切图 Pills -->
 <div class="top-bar">
   <div class="search-box">
-    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-    <input type="text" id="searchInput" class="search-input" placeholder="搜索地名、地址或粘贴链接/坐标..." />
-    <button class="search-btn" onclick="handleSearch()">搜索</button>
+    <input type="text" id="searchInput" class="search-input" placeholder="搜索地名、地址或粘贴坐标..." />
+    <button class="search-btn-icon" onclick="handleSearch()" title="搜索">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
   </div>
 
   <div class="layer-pills">
-    <button class="pill-btn active" data-layer="amap" onclick="switchLayer('amap')">高德标准</button>
-    <button class="pill-btn" data-layer="satellite" onclick="switchLayer('satellite')">高清卫星</button>
-    <button class="pill-btn" data-layer="voyager" onclick="switchLayer('voyager')">苹果浅色</button>
-    <button class="pill-btn" data-layer="dark" onclick="switchLayer('dark')">苹果暗色</button>
+    <button class="pill-btn active" data-layer="amap" onclick="switchLayer('amap')">高德矢量</button>
+    <button class="pill-btn" data-layer="satellite" onclick="switchLayer('satellite')">高德卫星</button>
+    <button class="pill-btn" data-layer="light" onclick="switchLayer('light')">浅色极简</button>
+    <button class="pill-btn" data-layer="dark" onclick="switchLayer('dark')">深色暗夜</button>
   </div>
 </div>
 
-<!-- 底部控制抽屉 (Apple Maps Style) -->
+<!-- 底部控制面板 (克制精致系统风) -->
 <div class="bottom-sheet">
   <div class="drag-handle"></div>
 
-  <div class="location-card">
-    <div class="loc-title">当前选择坐标</div>
-    <div class="loc-coords" id="coordsDisplay">经度 113.941140  纬度 22.544577</div>
-  </div>
-
-  <!-- 生效指示器 -->
-  <div class="active-status-bar">
-    <div class="status-badge">
-      <div class="dot" id="statusDot"></div>
-      <span id="activeText">系统持久化数据: 加载中...</span>
+  <!-- 两列式坐标卡片 -->
+  <div class="coord-card">
+    <div class="coord-item">
+      <span class="label">经度</span>
+      <span class="coordinate" id="lonDisplay">113.941140</span>
     </div>
-    <div style="display:flex; gap:6px;">
-      <button onclick="queryActive()" style="border:none; background:none; color:var(--apple-blue); font-size:12px; font-weight:600; cursor:pointer;">刷新</button>
+    <div class="coord-item">
+      <span class="label">纬度</span>
+      <span class="coordinate" id="latDisplay">22.544577</span>
     </div>
   </div>
 
-  <!-- 收藏列表横滑区域 -->
-  <div id="favContainer" class="favorites-bar"></div>
+  <!-- 系统规范状态提醒 -->
+  <div class="system-status-bar">
+    <div class="status-info">
+      <div class="status-dot" id="statusDot"></div>
+      <div class="status-text-group">
+        <span class="status-title" id="statusTitle">系统数据检查中...</span>
+        <span class="status-sub" id="statusSub">请确保代理工具处于开启状态</span>
+      </div>
+    </div>
+    <button class="icon-btn" onclick="queryActive()" title="刷新状态">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+      </svg>
+    </button>
+  </div>
 
-  <!-- 操作按钮矩阵 -->
-  <div class="action-grid">
-    <button class="btn-main" id="saveBtn" onclick="saveLocation()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+  <!-- 收藏夹 Pills -->
+  <div id="favContainer" class="fav-bar"></div>
+
+  <!-- 层次分明动作按钮组 -->
+  <div class="action-area">
+    <button class="btn-primary" id="saveBtn" onclick="saveLocation()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+        <polyline points="7 3 7 8 15 8"></polyline>
+      </svg>
       写入设备定位
     </button>
-    
-    <button class="btn-sub" onclick="locateMe()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-      定位当前
-    </button>
 
-    <button class="btn-sub" onclick="openFavModal()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-      收藏点位
-    </button>
+    <div class="btn-secondary-row">
+      <button class="btn-secondary" onclick="locateMe()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+        </svg>
+        定位当前
+      </button>
+
+      <button class="btn-secondary" onclick="openModal('favModal')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        收藏点位
+      </button>
+    </div>
   </div>
 
-  <!-- 辅助功能入口 -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-    <button onclick="clearActiveLocation()" style="border:none; background:none; color:var(--apple-red); font-size:12px; font-weight:500; cursor:pointer;">还原真实定位</button>
-    <button onclick="openHelpModal()" style="border:none; background:none; color:var(--text-sub); font-size:12px; font-weight:500; cursor:pointer;">模块与安装说明</button>
+  <!-- 底部离散辅助链接 -->
+  <div class="footer-links">
+    <button class="link-btn danger" onclick="clearActiveLocation()">还原真实定位</button>
+    <button class="link-btn" onclick="openModal('helpModal')">模块安装说明</button>
   </div>
 </div>
 
-<!-- 提示框 -->
-<div class="toast-msg" id="toast"></div>
+<!-- Toast 消息 -->
+<div class="toast" id="toast"></div>
 
-<!-- 收藏 Modal -->
-<div class="modal-mask" id="favModal">
-  <div class="modal-card">
+<!-- 收藏弹窗 -->
+<div class="modal-overlay" id="favModal">
+  <div class="modal-box">
     <div class="modal-title">收藏当前点位</div>
-    <input type="text" id="favNameInput" class="modal-input" placeholder="输入名称（如: 公司、家里）" maxlength="20" />
-    <div class="modal-actions">
-      <button class="btn-sub" style="flex:1" onclick="closeModal('favModal')">取消</button>
-      <button class="btn-main" style="flex:1" onclick="confirmAddFav()">保存</button>
+    <input type="text" id="favNameInput" class="modal-input" placeholder="备注名称（如：家、公司）" maxlength="15" />
+    <div class="modal-btns">
+      <button class="btn-secondary" onclick="closeModal('favModal')">取消</button>
+      <button class="btn-primary" style="flex:1" onclick="confirmAddFav()">保存</button>
     </div>
   </div>
 </div>
 
-<!-- 说明 Modal -->
-<div class="modal-mask" id="helpModal">
-  <div class="modal-card" style="width:min(100%, 420px)">
-    <div class="modal-title">安装与配套工具</div>
-    <div style="font-size:13px; color:var(--text-main); line-height:1.6; display:flex; flex-direction:column; gap:10px;">
-      <div>快捷配置模块和iOS官方快捷指令：</div>
-      <button class="btn-sub" onclick="copyText('https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/apple-wloc.module')">复制专属云端模块 URL</button>
-      <a class="btn-sub" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d" target="_blank">📥 添加 iOS 定位键快捷指令</a>
-      <a class="btn-sub" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6" target="_blank">🔄 添加 iOS 恢复键快捷指令</a>
+<!-- 模块说明弹窗 -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal-box">
+    <div class="modal-title">模块与快捷指令</div>
+    <div style="font-size:12px; color:var(--text-sub); line-height:1.6; display:flex; flex-direction:column; gap:8px;">
+      <button class="btn-secondary" onclick="copyText('https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/apple-wloc.module')">复制专属云端模块 URL</button>
+      <a class="btn-secondary" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d" target="_blank">📥 添加 iOS 定位键快捷指令</a>
+      <a class="btn-secondary" style="text-decoration:none;" href="https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6" target="_blank">🔄 添加 iOS 恢复键快捷指令</a>
     </div>
-    <button class="btn-main" onclick="closeModal('helpModal')">关闭</button>
+    <button class="btn-secondary" onclick="closeModal('helpModal')">关闭</button>
   </div>
 </div>
 
 <script>
 const SAVE_API = 'https://gs-loc.apple.com/wloc-settings/save';
-const FAV_KEY = 'apple_wloc_favs';
+const FAV_KEY = 'apple_wloc_favs_v2';
 
 let currentLat = 22.544577, currentLon = 113.941140;
-let map, marker, currentTileLayer;
+let map, marker, currentLayer;
 
-// 地图图层配置
-const tileServers = {
-  amap: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}', { maxZoom:19, subdomains:'1234', attribution:'高德地图' }),
-  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom:19, attribution:'ArcGIS Satellite' }),
-  voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom:19, attribution:'Carto' }),
-  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom:19, attribution:'Carto Dark' })
+// 高效地图图层源 (国内高德镜像与快速 CDN 预加载)
+const tileLayers = {
+  amap: L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1', '2', '3', '4'],
+    maxZoom: 18,
+    maxNativeZoom: 18,
+    updateWhenIdle: false,
+    updateWhenZooming: false,
+    keepBuffer: 4
+  }),
+  satellite: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1', '2', '3', '4'],
+    maxZoom: 18,
+    maxNativeZoom: 18,
+    updateWhenIdle: false,
+    updateWhenZooming: false,
+    keepBuffer: 4
+  }),
+  light: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
+    updateWhenIdle: false
+  }),
+  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
+    updateWhenIdle: false
+  })
 };
 
-// 初始化地图
 function initMap() {
-  map = L.map('map', { zoomControl: false }).setView([currentLat, currentLon], 15);
-  currentTileLayer = tileServers.amap;
-  currentTileLayer.addTo(map);
+  map = L.map('map', {
+    zoomControl: false,
+    attributionControl: false,
+    fadeAnimation: true,
+    zoomAnimation: true
+  }).setView([currentLat, currentLon], 15);
 
-  // 自定义地图标记
+  currentLayer = tileLayers.amap;
+  currentLayer.addTo(map);
+
+  // 精致软核 Marker 标记
   const customIcon = L.divIcon({
     className: 'custom-pin',
-    html: `<div style="width:24px;height:24px;background:#007aff;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 12px rgba(0,122,255,0.4);animation:pulse 2s infinite;"></div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
+    html: `<div style="width:20px;height:20px;background:#0A67D8;border:2.5px solid #ffffff;border-radius:50%;box-shadow:0 3px 10px rgba(10,103,216,0.35);"></div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10]
   });
 
   marker = L.marker([currentLat, currentLon], { draggable: true, icon: customIcon }).addTo(map);
@@ -500,9 +568,9 @@ function initMap() {
 }
 
 function switchLayer(name) {
-  if (currentTileLayer) map.removeLayer(currentTileLayer);
-  currentTileLayer = tileServers[name];
-  currentTileLayer.addTo(map);
+  if (currentLayer) map.removeLayer(currentLayer);
+  currentLayer = tileLayers[name];
+  currentLayer.addTo(map);
 
   document.querySelectorAll('.pill-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.layer === name);
@@ -513,7 +581,8 @@ function updateCoords(lat, lon) {
   currentLat = lat;
   currentLon = lon;
   marker.setLatLng([lat, lon]);
-  document.getElementById('coordsDisplay').textContent = `经度 ${lon.toFixed(6)}  纬度 ${lat.toFixed(6)}`;
+  document.getElementById('lonDisplay').textContent = lon.toFixed(6);
+  document.getElementById('latDisplay').textContent = lat.toFixed(6);
 }
 
 function moveTo(lat, lon, zoom = 15) {
@@ -521,113 +590,109 @@ function moveTo(lat, lon, zoom = 15) {
   map.setView([lat, lon], zoom);
 }
 
-// 消息提示 Toast
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2200);
+  setTimeout(() => el.classList.remove('show'), 2000);
 }
 
-// 保存位置到设备
+// 写入数据
 async function saveLocation() {
   const btn = document.getElementById('saveBtn');
-  btn.style.opacity = '0.7';
-  btn.textContent = '写入中...';
+  btn.style.opacity = '0.75';
+  btn.textContent = '写入设备中...';
 
   try {
     const res = await fetch(`${SAVE_API}?lon=${currentLon}&lat=${currentLat}&acc=25`, { method: 'GET', mode: 'cors', cache: 'no-store' });
     const data = await res.json();
     if (data.success) {
-      toast('✓ 已成功写入系统定位');
+      toast('✓ 定位已被写入系统存储');
       queryActive();
     } else {
-      throw new Error(data.error || '写入失败');
+      throw new Error(data.error || '失败');
     }
   } catch (e) {
-    toast('✓ 坐标数据已发送（请确保小火箭代理开启）');
+    toast('✓ 坐标更新请求已发出');
   } finally {
     btn.style.opacity = '1';
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>写入设备定位`;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>写入设备定位`;
   }
 }
 
-// 查询激活状态
+// 查询系统激活状态
 function queryActive() {
-  const text = document.getElementById('activeText');
+  const title = document.getElementById('statusTitle');
+  const sub = document.getElementById('statusSub');
   const dot = document.getElementById('statusDot');
-  text.textContent = '查询设备持久化数据...';
+
+  title.textContent = '设备持久化数据检查中...';
 
   fetch(`${SAVE_API}?action=query`, { method: 'GET', mode: 'cors', cache: 'no-store' })
     .then(r => r.json())
     .then(d => {
       if (d.success && d.longitude && d.latitude) {
-        text.textContent = `当前生效: ${parseFloat(d.longitude).toFixed(4)}, ${parseFloat(d.latitude).toFixed(4)}`;
-        dot.className = 'dot';
+        title.textContent = `已生效: ${parseFloat(d.longitude).toFixed(4)}, ${parseFloat(d.latitude).toFixed(4)}`;
+        sub.textContent = '虚拟定位修改生效中';
+        dot.className = 'status-dot';
       } else {
-        text.textContent = '设备未保存持久数据 (恢复真实定位中)';
-        dot.className = 'dot inactive';
+        title.textContent = '无已保存坐标数据';
+        sub.textContent = '设备处于真实 GPS 定位模式';
+        dot.className = 'status-dot off';
       }
     })
     .catch(() => {
-      text.textContent = '未检测到配置节点 (请检查代理开关)';
-      dot.className = 'dot inactive';
+      title.textContent = '未连接配置节点';
+      sub.textContent = '请检查小火箭代理或模块是否开启';
+      dot.className = 'status-dot off';
     });
 }
 
-// 清除定位数据
 function clearActiveLocation() {
-  if (!confirm('确定清除设备持久化的虚拟定位？清除后将自动恢复真实 GPS 定位。')) return;
-
+  if (!confirm('确定清除设备持久化数据？将自动恢复真实 GPS。')) return;
   fetch(`${SAVE_API}?action=clear`, { method: 'GET', mode: 'cors', cache: 'no-store' })
     .then(r => r.json())
     .then(d => {
       if (d.success) {
-        toast('✓ 已清空，恢复真实定位');
+        toast('✓ 已清除，恢复真实定位');
         queryActive();
       }
     })
-    .catch(() => {
-      toast('已发送清空请求');
-    });
+    .catch(() => toast('清除请求已发出'));
 }
 
-// 当前位置
 function locateMe() {
-  if (!navigator.geolocation) return toast('浏览器不支持定位');
-  toast('正在获取当前真实 GPS...');
+  if (!navigator.geolocation) return toast('无法获取浏览器定位');
+  toast('获取当前位置中...');
   navigator.geolocation.getCurrentPosition(
     pos => moveTo(pos.coords.latitude, pos.coords.longitude, 16),
     err => toast('定位获取失败: ' + err.message)
   );
 }
 
-// 搜索逻辑
 function handleSearch() {
   const query = document.getElementById('searchInput').value.trim();
-  if (!query) return toast('请输入地名或坐标');
+  if (!query) return toast('请输入查询内容');
 
-  // 解析经纬度文本或地图 URL
   let match = query.match(/(-?\d{1,3}\.\d+)[,\s]+(-?\d{1,3}\.\d+)/);
   if (match) {
     return moveTo(parseFloat(match[1]), parseFloat(match[2]), 16);
   }
 
-  toast('搜索中...');
+  toast('搜索地名中...');
   fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`)
     .then(r => r.json())
     .then(data => {
       if (data && data.length > 0) {
         moveTo(parseFloat(data[0].lat), parseFloat(data[0].lon), 16);
-        toast(`已定位到: ${data[0].display_name.slice(0, 20)}`);
+        toast(`已找到: ${data[0].display_name.slice(0, 18)}`);
       } else {
-        toast('未找到对应地点');
+        toast('未搜索到对应位置');
       }
     })
-    .catch(() => toast('搜索解析失败'));
+    .catch(() => toast('搜索连接异常'));
 }
 
-// 收藏逻辑
 function getFavs() {
   try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch(e) { return []; }
 }
@@ -640,17 +705,11 @@ function renderFavs() {
     return;
   }
   container.innerHTML = favs.map((f, i) => `
-    <div class="fav-tag" onclick="moveTo(${f.lat}, ${f.lon}, 16)">
+    <div class="fav-chip" onclick="moveTo(${f.lat}, ${f.lon}, 16)">
       📍 ${escapeHtml(f.name)}
-      <span class="fav-del-btn" onclick="event.stopPropagation(); delFav(${i})">×</span>
+      <span class="fav-del" onclick="event.stopPropagation(); delFav(${i})">×</span>
     </div>
   `).join('');
-}
-
-function openFavModal() {
-  document.getElementById('favModal').classList.add('active');
-  document.getElementById('favNameInput').value = '';
-  setTimeout(() => document.getElementById('favNameInput').focus(), 100);
 }
 
 function confirmAddFav() {
@@ -661,7 +720,7 @@ function confirmAddFav() {
   localStorage.setItem(FAV_KEY, JSON.stringify(favs));
   closeModal('favModal');
   renderFavs();
-  toast(`✓ 已收藏: ${name}`);
+  toast(`✓ 已保存: ${name}`);
 }
 
 function delFav(i) {
@@ -671,15 +730,10 @@ function delFav(i) {
   renderFavs();
 }
 
-function openHelpModal() { document.getElementById('helpModal').classList.add('active'); }
+function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => toast('✓ 已复制到剪贴板'));
-}
-
-function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
-}
+function copyText(text) { navigator.clipboard.writeText(text).then(() => toast('✓ 已复制链接')); }
+function escapeHtml(str) { return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 
 document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
 
