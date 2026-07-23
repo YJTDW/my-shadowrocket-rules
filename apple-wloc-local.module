@@ -1,5 +1,5 @@
 #!name=Apple WLOC 定位修改 (纯本地版)
-#!desc=修改 Apple 网络定位返回坐标（已本地化）| 选点网页: https://wloc-spoofer.kinshanusai.workers.dev/ | 定位键: https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d | 恢复键: https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6
+#!desc=修改 Apple 网络定位返回坐标（已本地化）| 选点网页: https://yjtdw.github.io/my-shadowrocket-rules/ | 定位键: https://www.icloud.com/shortcuts/2a811c3bac0e4694b1875ae45b26ab0d | 恢复键: https://www.icloud.com/shortcuts/9092b1a576cf4b7c8bc0dd931ba512a6
 #!category=Tools
 
 [Script]
