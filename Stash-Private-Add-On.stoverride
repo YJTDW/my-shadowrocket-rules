@@ -1,16 +1,15 @@
 # Stash Override (YAML)
-# Enable Stash-All-in-One.stoverride first, then enable this file below it.
-# Generated from the current airport subscription; secrets are intentionally
-# kept only inside proxy definitions and are never printed by this generator.
+# Keep this original URL in Stash and refresh it after updates.
+# Enable Stash-All-in-One.stoverride above this override.
 
-name: 美国洛杉矶逐节点链式出口
-desc: 与三合一复写配套使用。列表中每一项都以对应机场节点为前置，并固定由美国洛杉矶静态节点作为最终出口。
+name: 美国洛杉矶逐节点 Relay 链式出口
+desc: 与三合一复写配套使用。每个链式策略组严格包含两个成员：一个机场前置节点和一个洛杉矶固定最终出口。
 author: YJTDW
 homepage: https://github.com/YJTDW/my-shadowrocket-rules
 date: '2026-07-28'
-version: 2.0.0
+version: 3.0.0
 proxies:
-- name: 🔗洛杉矶 · 🇯🇵日本东京01-0.1倍 | 电信联通推荐
+- name: 🇺🇸洛杉矶固定出口
   type: socks5
   server: 207.97.139.109
   port: 443
@@ -19,717 +18,7 @@ proxies:
   udp: true
   benchmark-url: http://www.apple.com/
   benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京01-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京02-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京02-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京03-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京03-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京04-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京04-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京05-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京05-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京06-0.1倍 | 高速专线推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京06-0.1倍 | 高速专线推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京07-0.1倍 | 高速专线推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京07-0.1倍 | 高速专线推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京08-0.1倍 | 高速专线推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京08-0.1倍 | 高速专线推荐
-- name: 🔗洛杉矶 · 🇯🇵日本东京09-0.1倍 | 高速专线推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵日本东京09-0.1倍 | 高速专线推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡01 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡01 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡02 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡02 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本01 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本01 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本02 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本02 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本03 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本03 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本04 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本04 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本05 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本05 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本06 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本06 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本07 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本07 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本08 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本08 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本09 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本09 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇯🇵AWS日本10 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇯🇵AWS日本10 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡01-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡01-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡02-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡02-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡03-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡03-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡04-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡04-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬新加坡05-0.1倍 | 电信联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡05-0.1倍 | 电信联通推荐
-- name: 🔗洛杉矶 · 🇸🇬AWS新加坡01 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬AWS新加坡01 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇸🇬AWS新加坡02 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬AWS新加坡02 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇸🇬AWS新加坡03 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬AWS新加坡03 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇸🇬AWS新加坡04 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬AWS新加坡04 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇸🇬AWS新加坡05 | 电信移动联通推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬AWS新加坡05 | 电信移动联通推荐
-- name: 🔗洛杉矶 · 🇺🇸美国01-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国01-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国02-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国02-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国03-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国03-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国04-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国04-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国05-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国05-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国06-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国06-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国07-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国07-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇺🇸美国08-0.1倍 | 电信联通移动推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国08-0.1倍 | 电信联通移动推荐
-- name: 🔗洛杉矶 · 🇭🇰香港HKT | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇭🇰香港HKT | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇸🇬新加坡 | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡 | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇸🇬新加坡2 | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡2 | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇸🇬新加坡3 | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡3 | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇸🇬新加坡4 | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡4 | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇸🇬新加坡5 | 高速专线-hy2
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇸🇬新加坡5 | 高速专线-hy2
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞01-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞01-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞02-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞02-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞03-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞03-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞04-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞04-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞05-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞05-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞06-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞06-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞07-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞07-0.1倍
-- name: 🔗洛杉矶 · 🇺🇸美国洛杉矶08-0.1倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国洛杉矶08-0.1倍
-- name: 🔗洛杉矶 · 🇹🇼台湾 | 避免晚高峰使用
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇹🇼台湾 | 避免晚高峰使用
-- name: 🔗洛杉矶 · 🇹🇼台湾2 | 避免晚高峰使用
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇹🇼台湾2 | 避免晚高峰使用
-- name: 🔗洛杉矶 · 🇹🇼台湾3 | 避免晚高峰使用
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇹🇼台湾3 | 避免晚高峰使用
-- name: 🔗洛杉矶 · 🇺🇸美国01 | 合适下载使用-0.01倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国01 | 合适下载使用-0.01倍
-- name: 🔗洛杉矶 · 🇺🇸美国02 | 合适下载使用-0.01倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国02 | 合适下载使用-0.01倍
-- name: 🔗洛杉矶 · 🇺🇸美国03 | 合适下载使用-0.01倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国03 | 合适下载使用-0.01倍
-- name: 🔗洛杉矶 · 🇺🇸美国04 | 合适下载使用-0.01倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国04 | 合适下载使用-0.01倍
-- name: 🔗洛杉矶 · 🇺🇸美国05 | 合适下载使用-0.01倍
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国05 | 合适下载使用-0.01倍
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞01 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞01 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞02 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞02 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞03 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞03 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞04 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞04 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞05 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞05 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞06 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞06 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国圣何塞07 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国圣何塞07 | 三网推荐
-- name: 🔗洛杉矶 · 🇺🇸美国洛杉矶08 | 三网推荐
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 🇺🇸美国洛杉矶08 | 三网推荐
-- name: 🔗洛杉矶 · 剩余流量：966.26 GB
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 剩余流量：966.26 GB
-- name: 🔗洛杉矶 · 距离下次重置剩余：15 天
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 距离下次重置剩余：15 天
-- name: 🔗洛杉矶 · 套餐到期：2026-08-12
-  type: socks5
-  server: 207.97.139.109
-  port: 443
-  username: fXaEWJpRKeAp
-  password: eTzA9SVbZ1
-  udp: true
-  benchmark-url: http://www.apple.com/
-  benchmark-timeout: 5
-  dialer-proxy: 套餐到期：2026-08-12
+  benchmark-disabled: true
 proxy-groups:
 - name: 美国洛杉矶一节点选择
   type: select
@@ -803,9 +92,513 @@ proxy-groups:
   - 🔗洛杉矶 · 🇺🇸美国圣何塞06 | 三网推荐
   - 🔗洛杉矶 · 🇺🇸美国圣何塞07 | 三网推荐
   - 🔗洛杉矶 · 🇺🇸美国洛杉矶08 | 三网推荐
-  - 🔗洛杉矶 · 剩余流量：966.26 GB
+  - 🔗洛杉矶 · 剩余流量：966.2 GB
   - 🔗洛杉矶 · 距离下次重置剩余：15 天
   - 🔗洛杉矶 · 套餐到期：2026-08-12
+- name: 🔗洛杉矶 · 🇯🇵日本东京01-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京01-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京02-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京02-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京03-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京03-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京04-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京04-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京05-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京05-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京06-0.1倍 | 高速专线推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京06-0.1倍 | 高速专线推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京07-0.1倍 | 高速专线推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京07-0.1倍 | 高速专线推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京08-0.1倍 | 高速专线推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京08-0.1倍 | 高速专线推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵日本东京09-0.1倍 | 高速专线推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵日本东京09-0.1倍 | 高速专线推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡01 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡01 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡02 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡02 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本01 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本01 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本02 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本02 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本03 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本03 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本04 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本04 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本05 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本05 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本06 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本06 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本07 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本07 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本08 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本08 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本09 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本09 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇯🇵AWS日本10 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇯🇵AWS日本10 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡01-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡01-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡02-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡02-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡03-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡03-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡04-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡04-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡05-0.1倍 | 电信联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡05-0.1倍 | 电信联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬AWS新加坡01 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬AWS新加坡01 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬AWS新加坡02 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬AWS新加坡02 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬AWS新加坡03 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬AWS新加坡03 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬AWS新加坡04 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬AWS新加坡04 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬AWS新加坡05 | 电信移动联通推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬AWS新加坡05 | 电信移动联通推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国01-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国01-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国02-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国02-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国03-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国03-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国04-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国04-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国05-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国05-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国06-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国06-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国07-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国07-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国08-0.1倍 | 电信联通移动推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国08-0.1倍 | 电信联通移动推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇭🇰香港HKT | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇭🇰香港HKT | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡 | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡 | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡2 | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡2 | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡3 | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡3 | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡4 | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡4 | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇸🇬新加坡5 | 高速专线-hy2
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇸🇬新加坡5 | 高速专线-hy2
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞01-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞01-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞02-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞02-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞03-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞03-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞04-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞04-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞05-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞05-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞06-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞06-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞07-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞07-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国洛杉矶08-0.1倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国洛杉矶08-0.1倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇹🇼台湾 | 避免晚高峰使用
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇹🇼台湾 | 避免晚高峰使用
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇹🇼台湾2 | 避免晚高峰使用
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇹🇼台湾2 | 避免晚高峰使用
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇹🇼台湾3 | 避免晚高峰使用
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇹🇼台湾3 | 避免晚高峰使用
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国01 | 合适下载使用-0.01倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国01 | 合适下载使用-0.01倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国02 | 合适下载使用-0.01倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国02 | 合适下载使用-0.01倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国03 | 合适下载使用-0.01倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国03 | 合适下载使用-0.01倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国04 | 合适下载使用-0.01倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国04 | 合适下载使用-0.01倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国05 | 合适下载使用-0.01倍
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国05 | 合适下载使用-0.01倍
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞01 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞01 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞02 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞02 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞03 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞03 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞04 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞04 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞05 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞05 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞06 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞06 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国圣何塞07 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国圣何塞07 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 🇺🇸美国洛杉矶08 | 三网推荐
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 🇺🇸美国洛杉矶08 | 三网推荐
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 剩余流量：966.2 GB
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 剩余流量：966.2 GB
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 距离下次重置剩余：15 天
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 距离下次重置剩余：15 天
+  - 🇺🇸洛杉矶固定出口
+- name: 🔗洛杉矶 · 套餐到期：2026-08-12
+  type: relay
+  benchmark-url: http://www.apple.com
+  benchmark-timeout: 5
+  proxies:
+  - 套餐到期：2026-08-12
+  - 🇺🇸洛杉矶固定出口
 rules: #!replace
 - DOMAIN-SUFFIX,local,DIRECT
 - DOMAIN-SUFFIX,localhost,DIRECT
