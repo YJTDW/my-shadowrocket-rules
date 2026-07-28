@@ -10,14 +10,25 @@
  * The API key is intentionally never stored in the public YAML/GitHub files.
  */
 
+function readRuntimeOptions() {
+  if (typeof $argument !== "string" || !$argument.trim()) return {};
+  try {
+    return JSON.parse($argument);
+  } catch (_) {
+    return {};
+  }
+}
+
+const RUNTIME_OPTIONS = readRuntimeOptions();
+
 const SETTINGS = {
   controller:
     $persistentStore.read("stash_chain_controller") ||
     "http://127.0.0.1:9090",
   apiKey: $persistentStore.read("stash_chain_api_key") || "",
-  frontGroup: "🎛链式前置选择",
-  autoGroup: "⚡前置延迟自动",
-  exitProxy: "🏁洛杉矶固定出口",
+  frontGroup: RUNTIME_OPTIONS.frontGroup || "🎛链式前置选择",
+  autoGroup: RUNTIME_OPTIONS.autoGroup || "⚡前置延迟自动",
+  exitProxy: RUNTIME_OPTIONS.exitProxy || "🏁洛杉矶固定出口",
   delayUrl: "http://www.apple.com/library/test/success.html",
   speedUrl: "https://speed.cloudflare.com/__down",
   latencyConcurrency: 12,
@@ -391,10 +402,10 @@ async function main() {
 
   const ranked = scoreResults(fullChainResults);
   if (!ranked.length) {
-    await selectFront(SETTINGS.autoGroup);
+    await selectFront(group.current || SETTINGS.autoGroup);
     finish(
       "真实测速失败",
-      "已恢复为延迟自动选择。请检查固定洛杉矶出口是否可用。",
+      "已恢复测速前的选择。请检查固定洛杉矶出口是否可用。",
       "#D97706",
       true
     );

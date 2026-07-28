@@ -1,0 +1,197 @@
+# Stash 单文件通用链式复写
+# 适用于机场原有主策略组名称为“🚀节点选择”的配置。
+# 链路：Stash -> 机场原节点选择中的优选节点 -> 洛杉矶固定 SOCKS5 -> Internet
+
+name: "通用动态链式测速（复写版）"
+desc: |-
+  保留机场原配置和动态节点，不复制逐节点 relay。
+  延迟初筛后对前 5 条完整链路下载测速，并自动切换机场原“🚀节点选择”。
+  内含 DNS、防 WebRTC 泄露、广告与国内外分流。
+author: YJTDW
+homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
+date: "2026-07-28"
+version: "1.0.0"
+
+mode: rule
+ipv6: false
+external-controller: "127.0.0.1:9090"
+
+dns:
+  default-nameserver: #!replace
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver: #!replace
+    - "https://dns.alidns.com/dns-query"
+    - "https://doh.pub/dns-query"
+  follow-rule: false
+  skip-cert-verify: false
+  nameserver-policy: #!replace
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+  fake-ip-filter: #!replace
+    - "*.lan"
+    - "+.local"
+    - "+.localhost"
+    - "+.home.arpa"
+    - "captive.apple.com"
+    - "time.*.com"
+    - "time.*.gov"
+    - "time.*.edu.cn"
+    - "time.*.apple.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+
+proxies:
+  - name: "🏁智能链·洛杉矶固定出口"
+    type: socks5
+    server: "207.97.139.109"
+    port: 443
+    username: "fXaEWJpRKeAp"
+    password: "eTzA9SVbZ1"
+    udp: true
+    dialer-proxy: "🚀节点选择"
+    benchmark-url: "http://www.apple.com/library/test/success.html"
+    benchmark-timeout: 5
+
+proxy-groups:
+  # 使用复写后，所有境外流量直接指向这个唯一新增入口。
+  - name: "🚀智能链式出口"
+    type: select
+    proxies:
+      - "🏁智能链·洛杉矶固定出口"
+
+script-providers:
+  智能链综合测速:
+    url: "https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/Stash-Chain-Auto-Speed.js"
+    interval: 86400
+    headers:
+      Accept: "application/javascript,text/plain,*/*"
+
+tiles:
+  - name: 智能链综合测速
+    interval: 21600
+    argument: '{"frontGroup":"🚀节点选择","autoGroup":"♻️自动选择","exitProxy":"🏁智能链·洛杉矶固定出口"}'
+    title: "智能链测速等待运行"
+    content: "延迟初筛 + 完整链路下载测速"
+    icon: "gauge.with.dots.needle.67percent"
+    backgroundColor: "#2563EB"
+
+cron:
+  script:
+    - name: 智能链综合测速
+      cron: "5 */6 * * *"
+      argument: '{"frontGroup":"🚀节点选择","autoGroup":"♻️自动选择","exitProxy":"🏁智能链·洛杉矶固定出口"}'
+      timeout: 180
+
+rule-providers:
+  usc-proxy-domain:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/proxy.txt"
+    interval: 86400
+
+  usc-tld-not-cn:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/tld-not-cn.txt"
+    interval: 86400
+
+  usc-proxy-classical:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/Proxy/Proxy.list"
+    interval: 86400
+
+  usc-cn-domain:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaMax/ChinaMax_Domain.list"
+    interval: 86400
+
+  usc-cn-classical:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaMax/ChinaMax.list"
+    interval: 86400
+
+  usc-cn-ip:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaIPs/ChinaIPs.list"
+    interval: 86400
+
+rules: #!replace
+  # 防 WebRTC/STUN 泄露并关闭 QUIC。
+  - "PROTOCOL,STUN,REJECT-DROP,no-track"
+  - "PROTOCOL,QUIC,REJECT,no-track"
+
+  # 本地与保留地址直连。
+  - "DOMAIN-SUFFIX,local,DIRECT"
+  - "DOMAIN-SUFFIX,localhost,DIRECT"
+  - "DOMAIN-SUFFIX,lan,DIRECT"
+  - "DOMAIN-SUFFIX,home.arpa,DIRECT"
+  - "DOMAIN,captive.apple.com,DIRECT"
+  - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
+  - "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,169.254.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
+  - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
+
+  # 境外服务全部走唯一智能链式出口。
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,chatgpt.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,openai.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,chat.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,sora.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,oaistatic.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,copilot.microsoft.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,google.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,googleapis.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,gstatic.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,youtube.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,youtu.be,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,telegram.org,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,t.me,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,x.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,twitter.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,facebook.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,instagram.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,dnsleaktest.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,ipleak.net,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,browserleaks.com,🚀智能链式出口"
+  - "DOMAIN-SUFFIX,whoer.net,🚀智能链式出口"
+  - "RULE-SET,usc-proxy-domain,🚀智能链式出口"
+  - "RULE-SET,usc-tld-not-cn,🚀智能链式出口"
+  - "RULE-SET,usc-proxy-classical,🚀智能链式出口"
+
+  # Apple 常用服务与中国网络直连。
+  - "DOMAIN-SUFFIX,apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  - "RULE-SET,usc-cn-domain,DIRECT"
+  - "DOMAIN-SUFFIX,cn,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qx5d,DIRECT"
+  - "DOMAIN-SUFFIX,xn--io0a7i,DIRECT"
+  - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
+  - "GEOSITE,cn,DIRECT"
+  - "RULE-SET,usc-cn-classical,DIRECT"
+  - "RULE-SET,usc-cn-ip,DIRECT"
+  - "GEOIP,CN,DIRECT,no-resolve"
+
+  - "GEOSITE,category-ads-all,REJECT"
+  - "NETWORK,udp,🚀智能链式出口"
+  - "GEOSITE,geolocation-!cn,🚀智能链式出口"
+  - "MATCH,🚀智能链式出口"
