@@ -29,6 +29,8 @@ const SETTINGS = {
   frontGroup: RUNTIME_OPTIONS.frontGroup || "🎛链式前置选择",
   autoGroup: RUNTIME_OPTIONS.autoGroup || "⚡前置延迟自动",
   exitProxy: RUNTIME_OPTIONS.exitProxy || "🏁洛杉矶固定出口",
+  triggerGroup: RUNTIME_OPTIONS.triggerGroup || "",
+  triggerValue: RUNTIME_OPTIONS.triggerValue || "",
   delayUrl: "http://www.apple.com/library/test/success.html",
   speedUrl: "https://speed.cloudflare.com/__down",
   latencyConcurrency: 12,
@@ -175,6 +177,12 @@ async function getFrontGroup() {
     current: typeof group.now === "string" ? group.now : "",
     candidates: all.filter(isRealCandidate),
   };
+}
+
+async function getSelectedValue(groupName) {
+  const path = `/proxies/${encodeURIComponent(groupName)}`;
+  const group = await api("get", path);
+  return typeof group.now === "string" ? group.now : "";
 }
 
 async function selectFront(name) {
@@ -352,6 +360,29 @@ async function main() {
       backgroundColor: "#D97706",
     });
     return;
+  }
+
+  if (SETTINGS.triggerGroup && SETTINGS.triggerValue) {
+    try {
+      const selected = await getSelectedValue(SETTINGS.triggerGroup);
+      if (selected !== SETTINGS.triggerValue) {
+        finish(
+          "智能出口未启用",
+          `请先在“${SETTINGS.triggerGroup}”中选择“${SETTINGS.triggerValue}”，普通节点不会触发链式测速。`,
+          "#64748B",
+          false
+        );
+        return;
+      }
+    } catch (error) {
+      finish(
+        "无法读取触发策略",
+        `请确认策略组“${SETTINGS.triggerGroup}”存在。\n${String(error)}`,
+        "#DC2626",
+        true
+      );
+      return;
+    }
   }
 
   let group;
