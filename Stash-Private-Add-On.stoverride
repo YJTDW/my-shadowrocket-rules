@@ -1,14 +1,14 @@
 # Private Stash add-on override.
 # Enable together with Stash-All-in-One.stoverride.
-# The injected proxy automatically appears in “🚀 Stash 节点选择”
-# because that group uses include-all.
+# The three-in-one override routes proxy traffic through this fixed exit.
+# Its upstream is selected in the subscription's original “🚀节点选择” group.
 
 name: "新增私密固定出口"
 desc: |-
   在三合一复写上新增一个固定 SOCKS5 出口。
-  前置使用机场现有“♻️自动选择”，自动选择延迟最低的机场节点。
+  在机场原有“🚀节点选择”中选择前置，最终出口固定为洛杉矶。
 date: "2026-07-28"
-version: "1.0.0"
+version: "1.1.0"
 
 proxies:
   - name: "🔗固定出口链"
@@ -18,6 +18,6 @@ proxies:
     username: "fXaEWJpRKeAp"
     password: "eTzA9SVbZ1"
     udp: true
-    dialer-proxy: "♻️自动选择"
+    dialer-proxy: "🚀节点选择"
     benchmark-url: "http://www.apple.com/"
     benchmark-timeout: 5

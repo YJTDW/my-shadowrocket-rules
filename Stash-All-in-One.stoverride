@@ -16,19 +16,19 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-07-28"
-version: "1.0.1"
+version: "1.1.0"
 
 mode: rule
 ipv6: false
 
-# Stash automatically merges this group into the subscription configuration.
-# include-all covers both inline proxies and proxy-providers.
+# This policy always selects the fixed Los Angeles chain supplied by the
+# private add-on override. Upstream airport nodes are selected separately in
+# the subscription's original “🚀节点选择” group.
 proxy-groups:
   - name: "美国洛杉矶一节点选择"
     type: select
-    include-all: true
     proxies:
-      - DIRECT
+      - "🔗固定出口链"
 
 # Stash uses Fake IP internally. Two domestic DoH servers provide encrypted
 # resolution and China-friendly CDN results without using the system DNS.
