@@ -12,23 +12,15 @@
 name: "三合一防泄露分流"
 desc: |-
   将 Clash Merge、Clash Script 与 Shadowrocket 规则整合为一个 Stash YAML 覆写。
-  自动纳入当前订阅的所有节点，国内直连，国外代理，拦截广告与 QUIC，关闭 IPv6。
+  仅负责 DNS/IPv6/QUIC 防泄露与分流，不新增或改写任何策略组。
+  默认复用订阅原有的“🚀节点选择”；可在其下方叠加独立的静态出口链复写。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-07-28"
-version: "1.1.0"
+version: "2.0.0"
 
 mode: rule
 ipv6: false
-
-# This policy always selects the fixed Los Angeles chain supplied by the
-# private add-on override. Upstream airport nodes are selected separately in
-# the subscription's original “🚀节点选择” group.
-proxy-groups:
-  - name: "美国洛杉矶一节点选择"
-    type: select
-    proxies:
-      - "🔗固定出口链"
 
 # Stash uses Fake IP internally. Two domestic DoH servers provide encrypted
 # resolution and China-friendly CDN results without using the system DNS.
@@ -123,38 +115,38 @@ rules: #!replace
   - "SCRIPT,merged-quic,REJECT,no-track"
 
   # Apple Private Relay must use the selected proxy.
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
 
   # Explicit foreign services take priority over China rule-set overlap.
-  - "DOMAIN-SUFFIX,chatgpt.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,openai.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,chat.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,sora.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,oaistatic.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,oaiusercontent.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,copilot.microsoft.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,google.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,googleapis.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,gstatic.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,youtube.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,youtu.be,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,telegram.org,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,t.me,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,x.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,twitter.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,facebook.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,instagram.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,dnsleaktest.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,ipleak.net,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,browserleaks.com,美国洛杉矶一节点选择"
-  - "DOMAIN-SUFFIX,whoer.net,美国洛杉矶一节点选择"
-  - "RULE-SET,merged-proxy-domain,美国洛杉矶一节点选择"
-  - "RULE-SET,merged-tld-not-cn,美国洛杉矶一节点选择"
-  - "RULE-SET,merged-proxy-classical,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,openai.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,chat.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,sora.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaistatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,🚀节点选择"
+  - "DOMAIN-SUFFIX,copilot.microsoft.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,googleapis.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gstatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,youtube.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,youtu.be,🚀节点选择"
+  - "DOMAIN-SUFFIX,telegram.org,🚀节点选择"
+  - "DOMAIN-SUFFIX,t.me,🚀节点选择"
+  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,facebook.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,instagram.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,dnsleaktest.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,ipleak.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,browserleaks.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,whoer.net,🚀节点选择"
+  - "RULE-SET,merged-proxy-domain,🚀节点选择"
+  - "RULE-SET,merged-tld-not-cn,🚀节点选择"
+  - "RULE-SET,merged-proxy-classical,🚀节点选择"
 
   # Apple services that should remain on the local route.
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
@@ -178,6 +170,6 @@ rules: #!replace
 
   # Ads are blocked; remaining UDP and foreign traffic use the selected proxy.
   - "GEOSITE,category-ads-all,REJECT"
-  - "NETWORK,udp,美国洛杉矶一节点选择"
-  - "GEOSITE,geolocation-!cn,美国洛杉矶一节点选择"
-  - "MATCH,美国洛杉矶一节点选择"
+  - "NETWORK,udp,🚀节点选择"
+  - "GEOSITE,geolocation-!cn,🚀节点选择"
+  - "MATCH,🚀节点选择"
