@@ -29,6 +29,38 @@ const SETTINGS = {
 };
 
 const RESULT_KEY = "stash_chain_speedtest_result";
+const LOCK_KEY = "stash_chain_speedtest_lock";
+const RUN_ID = `${Date.now()}-${Math.random()}`;
+
+function acquireLock() {
+  try {
+    const lock = JSON.parse($persistentStore.read(LOCK_KEY) || "{}");
+    if (
+      lock.id &&
+      Number.isFinite(Number(lock.time)) &&
+      Date.now() - Number(lock.time) < 180000
+    ) {
+      return false;
+    }
+  } catch (_) {
+    // An invalid or expired lock is safe to replace.
+  }
+  return $persistentStore.write(
+    JSON.stringify({ id: RUN_ID, time: Date.now() }),
+    LOCK_KEY
+  );
+}
+
+function releaseLock() {
+  try {
+    const lock = JSON.parse($persistentStore.read(LOCK_KEY) || "{}");
+    if (lock.id === RUN_ID) {
+      $persistentStore.write("", LOCK_KEY);
+    }
+  } catch (_) {
+    $persistentStore.write("", LOCK_KEY);
+  }
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -288,6 +320,7 @@ function chooseWinner(ranked, current) {
 }
 
 function finish(title, content, color, notify) {
+  releaseLock();
   if (notify) {
     $notification.post(title, "", content);
   }
@@ -300,6 +333,16 @@ function finish(title, content, color, notify) {
 }
 
 async function main() {
+  if (!acquireLock()) {
+    $done({
+      title: "链式测速正在进行",
+      content: "请等待当前测速完成，避免两次测速互相抢占带宽。",
+      icon: "gauge.with.dots.needle.67percent",
+      backgroundColor: "#D97706",
+    });
+    return;
+  }
+
   let group;
   try {
     group = await getFrontGroup();
