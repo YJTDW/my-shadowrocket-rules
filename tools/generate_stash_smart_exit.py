@@ -82,13 +82,16 @@ def original_groups(config: dict) -> list[dict]:
         name = group.get("name")
         if name in reserved:
             continue
+        members = [
+            item
+            for item in group.get("proxies", [])
+            if isinstance(item, str) and not STATUS_PATTERN.search(item)
+        ]
+        if "proxies" in group:
+            group["proxies"] = members
         if name == MAIN_GROUP:
             found_main = True
-            members = [
-                item
-                for item in group.get("proxies", [])
-                if isinstance(item, str) and item != SMART_GROUP
-            ]
+            members = [item for item in members if item != SMART_GROUP]
             group["proxies"] = [SMART_GROUP, *members]
         output.append(group)
 

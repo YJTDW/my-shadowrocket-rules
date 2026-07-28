@@ -98,9 +98,6 @@ proxy-groups: #!replace
   - 🇺🇸美国圣何塞06 | 三网推荐
   - 🇺🇸美国圣何塞07 | 三网推荐
   - 🇺🇸美国洛杉矶08 | 三网推荐
-  - 剩余流量：965.57 GB
-  - 距离下次重置剩余：15 天
-  - 套餐到期：2026-08-12
 - name: ♻️自动选择
   type: url-test
   url: http://cp.cloudflare.com/generate_204
