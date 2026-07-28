@@ -1,14 +1,13 @@
 # Stash Override (YAML)
 # Refresh the existing URL; do not add a second copy.
-# This snapshot preserves the airport's current strategy groups and injects
-# relay entries into its original node selection group.
+# Airport status text is intentionally excluded from all strategy groups.
 
 name: 洛杉矶链式节点注入机场原节点选择
-desc: 保留机场当前全部策略组，并将逐节点双跳 relay 直接加入机场原有“🚀节点选择”。每条链路均为机场节点在前、洛杉矶固定出口在后。
+desc: 过滤机场的流量/重置/到期状态文字，仅将真实代理的双跳 relay 加入机场原有“🚀节点选择”。
 author: YJTDW
 homepage: https://github.com/YJTDW/my-shadowrocket-rules
 date: '2026-07-28'
-version: 4.0.0
+version: 4.0.1
 proxies:
 - name: 🇺🇸洛杉矶固定出口
   type: socks5
@@ -93,9 +92,6 @@ proxy-groups: #!replace
   - 🔗洛杉矶 · 🇺🇸美国圣何塞06 | 三网推荐
   - 🔗洛杉矶 · 🇺🇸美国圣何塞07 | 三网推荐
   - 🔗洛杉矶 · 🇺🇸美国洛杉矶08 | 三网推荐
-  - 🔗洛杉矶 · 剩余流量：966.2 GB
-  - 🔗洛杉矶 · 距离下次重置剩余：15 天
-  - 🔗洛杉矶 · 套餐到期：2026-08-12
   - ♻️自动选择
   - 🇯🇵日本节点
   - 🇸🇬狮城节点
@@ -169,9 +165,6 @@ proxy-groups: #!replace
   - 🇺🇸美国圣何塞06 | 三网推荐
   - 🇺🇸美国圣何塞07 | 三网推荐
   - 🇺🇸美国洛杉矶08 | 三网推荐
-  - 剩余流量：966.2 GB
-  - 距离下次重置剩余：15 天
-  - 套餐到期：2026-08-12
 - name: ♻️自动选择
   type: url-test
   url: http://cp.cloudflare.com/generate_204
@@ -1040,25 +1033,4 @@ proxy-groups: #!replace
   benchmark-timeout: 5
   proxies:
   - 🇺🇸美国洛杉矶08 | 三网推荐
-  - 🇺🇸洛杉矶固定出口
-- name: 🔗洛杉矶 · 剩余流量：966.2 GB
-  type: relay
-  benchmark-url: http://www.apple.com
-  benchmark-timeout: 5
-  proxies:
-  - 剩余流量：966.2 GB
-  - 🇺🇸洛杉矶固定出口
-- name: 🔗洛杉矶 · 距离下次重置剩余：15 天
-  type: relay
-  benchmark-url: http://www.apple.com
-  benchmark-timeout: 5
-  proxies:
-  - 距离下次重置剩余：15 天
-  - 🇺🇸洛杉矶固定出口
-- name: 🔗洛杉矶 · 套餐到期：2026-08-12
-  type: relay
-  benchmark-url: http://www.apple.com
-  benchmark-timeout: 5
-  proxies:
-  - 套餐到期：2026-08-12
   - 🇺🇸洛杉矶固定出口
