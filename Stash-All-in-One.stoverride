@@ -16,7 +16,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-07-28"
-version: "1.0.0"
+version: "1.0.1"
 
 mode: rule
 ipv6: false
@@ -24,7 +24,7 @@ ipv6: false
 # Stash automatically merges this group into the subscription configuration.
 # include-all covers both inline proxies and proxy-providers.
 proxy-groups:
-  - name: "🚀 Stash 节点选择"
+  - name: "美国洛杉矶一节点选择"
     type: select
     include-all: true
     proxies:
@@ -123,38 +123,38 @@ rules: #!replace
   - "SCRIPT,merged-quic,REJECT,no-track"
 
   # Apple Private Relay must use the selected proxy.
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,美国洛杉矶一节点选择"
 
   # Explicit foreign services take priority over China rule-set overlap.
-  - "DOMAIN-SUFFIX,chatgpt.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,openai.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,chat.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,sora.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,oaistatic.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,copilot.microsoft.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,google.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,googleapis.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,gstatic.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,youtube.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,youtu.be,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,telegram.org,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,t.me,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,x.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,twitter.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,facebook.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,instagram.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,dnsleaktest.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,ipleak.net,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,browserleaks.com,🚀 Stash 节点选择"
-  - "DOMAIN-SUFFIX,whoer.net,🚀 Stash 节点选择"
-  - "RULE-SET,merged-proxy-domain,🚀 Stash 节点选择"
-  - "RULE-SET,merged-tld-not-cn,🚀 Stash 节点选择"
-  - "RULE-SET,merged-proxy-classical,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,openai.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,chat.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,sora.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,oaistatic.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,copilot.microsoft.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,google.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,googleapis.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,gstatic.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,youtube.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,youtu.be,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,telegram.org,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,t.me,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,x.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,facebook.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,instagram.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,dnsleaktest.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,ipleak.net,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,browserleaks.com,美国洛杉矶一节点选择"
+  - "DOMAIN-SUFFIX,whoer.net,美国洛杉矶一节点选择"
+  - "RULE-SET,merged-proxy-domain,美国洛杉矶一节点选择"
+  - "RULE-SET,merged-tld-not-cn,美国洛杉矶一节点选择"
+  - "RULE-SET,merged-proxy-classical,美国洛杉矶一节点选择"
 
   # Apple services that should remain on the local route.
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
@@ -178,6 +178,6 @@ rules: #!replace
 
   # Ads are blocked; remaining UDP and foreign traffic use the selected proxy.
   - "GEOSITE,category-ads-all,REJECT"
-  - "NETWORK,udp,🚀 Stash 节点选择"
-  - "GEOSITE,geolocation-!cn,🚀 Stash 节点选择"
-  - "MATCH,🚀 Stash 节点选择"
+  - "NETWORK,udp,美国洛杉矶一节点选择"
+  - "GEOSITE,geolocation-!cn,美国洛杉矶一节点选择"
+  - "MATCH,美国洛杉矶一节点选择"
