@@ -1,0 +1,183 @@
+# Stash Override (YAML)
+# Merged from:
+#   1. Clash-Merge.yaml
+#   2. Clash-Script.js
+#   3. Shadowrocket.conf
+#
+# This file is meant to be enabled as an Override on top of an existing
+# Stash/Clash subscription. It does not contain subscription URLs or nodes.
+# Stash manages TUN routing and DNS interception itself, so Clash-only
+# gVisor/auto-route/dns-hijack fields are intentionally not copied verbatim.
+
+name: "三合一防泄露分流"
+desc: |-
+  将 Clash Merge、Clash Script 与 Shadowrocket 规则整合为一个 Stash YAML 覆写。
+  自动纳入当前订阅的所有节点，国内直连，国外代理，拦截广告与 QUIC，关闭 IPv6。
+author: YJTDW
+homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
+date: "2026-07-28"
+version: "1.0.0"
+
+mode: rule
+ipv6: false
+
+# Stash automatically merges this group into the subscription configuration.
+# include-all covers both inline proxies and proxy-providers.
+proxy-groups:
+  - name: "🚀 Stash 节点选择"
+    type: select
+    include-all: true
+    proxies:
+      - DIRECT
+
+# Stash uses Fake IP internally. Two domestic DoH servers provide encrypted
+# resolution and China-friendly CDN results without using the system DNS.
+dns:
+  default-nameserver: #!replace
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver: #!replace
+    - "https://dns.alidns.com/dns-query"
+    - "https://doh.pub/dns-query"
+  follow-rule: false
+  skip-cert-verify: false
+  nameserver-policy: #!replace
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+  fake-ip-filter: #!replace
+    - "*.lan"
+    - "+.local"
+    - "+.localhost"
+    - "+.home.arpa"
+    - "captive.apple.com"
+    - "time.*.com"
+    - "time.*.gov"
+    - "time.*.edu.cn"
+    - "time.*.apple.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+
+# Stash-native shortcut replacing the Clash logical UDP/443 rule.
+script:
+  shortcuts:
+    merged-quic: "network == 'udp' and dst_port == 443"
+
+# Remote rules from the original Shadowrocket profile, declared in the
+# provider format required by Stash.
+rule-providers:
+  merged-proxy-domain:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/proxy.txt"
+    interval: 86400
+
+  merged-tld-not-cn:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/surge-rules@release/tld-not-cn.txt"
+    interval: 86400
+
+  merged-proxy-classical:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/Proxy/Proxy.list"
+    interval: 86400
+
+  merged-cn-domain:
+    behavior: domain
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaMax/ChinaMax_Domain.list"
+    interval: 86400
+
+  merged-cn-classical:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaMax/ChinaMax.list"
+    interval: 86400
+
+  merged-cn-ip:
+    behavior: classical
+    format: text
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Shadowrocket/ChinaIPs/ChinaIPs.list"
+    interval: 86400
+
+# Replace the subscription's rule array so that ordering is deterministic.
+rules: #!replace
+  # Local/private traffic always stays direct.
+  - "DOMAIN-SUFFIX,local,DIRECT"
+  - "DOMAIN-SUFFIX,localhost,DIRECT"
+  - "DOMAIN-SUFFIX,lan,DIRECT"
+  - "DOMAIN-SUFFIX,home.arpa,DIRECT"
+  - "DOMAIN,captive.apple.com,DIRECT"
+  - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
+  - "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,169.254.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
+  - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
+
+  # Strict leak prevention: force HTTP/3 to fall back to TCP.
+  - "SCRIPT,merged-quic,REJECT,no-track"
+
+  # Apple Private Relay must use the selected proxy.
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀 Stash 节点选择"
+
+  # Explicit foreign services take priority over China rule-set overlap.
+  - "DOMAIN-SUFFIX,chatgpt.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,openai.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,chat.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,sora.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,oaistatic.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,openaiapi-site.azureedge.net,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.livekit.cloud,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,copilot.microsoft.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,google.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,googleapis.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,gstatic.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,youtube.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,youtu.be,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,telegram.org,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,t.me,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,x.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,facebook.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,instagram.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,dnsleaktest.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,ipleak.net,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,browserleaks.com,🚀 Stash 节点选择"
+  - "DOMAIN-SUFFIX,whoer.net,🚀 Stash 节点选择"
+  - "RULE-SET,merged-proxy-domain,🚀 Stash 节点选择"
+  - "RULE-SET,merged-tld-not-cn,🚀 Stash 节点选择"
+  - "RULE-SET,merged-proxy-classical,🚀 Stash 节点选择"
+
+  # Apple services that should remain on the local route.
+  - "DOMAIN-SUFFIX,apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+
+  # China domains/IPs stay direct.
+  - "RULE-SET,merged-cn-domain,DIRECT"
+  - "DOMAIN-SUFFIX,cn,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qx5d,DIRECT"
+  - "DOMAIN-SUFFIX,xn--io0a7i,DIRECT"
+  - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
+  - "GEOSITE,cn,DIRECT"
+  - "RULE-SET,merged-cn-classical,DIRECT"
+  - "RULE-SET,merged-cn-ip,DIRECT"
+  - "GEOIP,CN,DIRECT,no-resolve"
+
+  # Ads are blocked; remaining UDP and foreign traffic use the selected proxy.
+  - "GEOSITE,category-ads-all,REJECT"
+  - "NETWORK,udp,🚀 Stash 节点选择"
+  - "GEOSITE,geolocation-!cn,🚀 Stash 节点选择"
+  - "MATCH,🚀 Stash 节点选择"
