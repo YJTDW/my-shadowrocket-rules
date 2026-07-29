@@ -55,15 +55,30 @@ cfg["proxy-groups"] = cfg["proxy-groups"].filter(
     group.name !== upstreamName && !chainNames.includes(group.name)
 );
 
+// 优先读取 MATCH/FINAL 实际指向的策略组，因此主策略组可以叫
+// “Kitty Network”“Proxy”或机场自定义的其他名称。
+const finalPolicyName = [...(Array.isArray(cfg.rules) ? cfg.rules : [])]
+  .reverse()
+  .map((rule) => {
+    if (typeof rule !== "string") return null;
+    const parts = rule.split(",").map((part) => part.trim());
+    return /^(MATCH|FINAL)$/i.test(parts[0] || "") ? parts[1] : null;
+  })
+  .find(Boolean);
+
+const selectGroups = cfg["proxy-groups"].filter(
+  (group) => group && group.type === "select"
+);
+
 const mainGroup =
+  cfg["proxy-groups"].find((group) => group.name === finalPolicyName) ||
   cfg["proxy-groups"].find((group) => group.name === "🚀节点选择") ||
   cfg["proxy-groups"].find((group) => group.name === "节点选择") ||
-  cfg["proxy-groups"].find(
+  selectGroups.find(
     (group) =>
-      group.type === "select" &&
-      typeof group.name === "string" &&
-      /节点选择/.test(group.name)
-  );
+      typeof group.name === "string" && /节点选择/.test(group.name)
+  ) ||
+  selectGroups[0];
 
 if (!mainGroup) {
   throw new Error("没有找到机场原有的“节点选择”策略组");
@@ -117,5 +132,18 @@ mainGroup.proxies = Array.isArray(mainGroup.proxies)
   : [];
 
 mainGroup.proxies.unshift(...chainNames);
+
+// 三合一规则固定使用“🚀节点选择”。当机场的主策略组使用其他名称时，
+// 自动建立兼容入口，避免更换机场后出现 policy not found。
+if (
+  mainGroup.name !== "🚀节点选择" &&
+  !cfg["proxy-groups"].some((group) => group.name === "🚀节点选择")
+) {
+  cfg["proxy-groups"].push({
+    name: "🚀节点选择",
+    type: "select",
+    proxies: [mainGroup.name]
+  });
+}
 
 $content = ProxyUtils.yaml.dump(cfg);
