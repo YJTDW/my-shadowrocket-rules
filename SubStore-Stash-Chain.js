@@ -1,7 +1,8 @@
 /**
  * Sub-Store File Script Operator
  *
- * 读取机场完整 Clash/Stash YAML，保留真实节点，并统一生成：
+ * 读取机场完整 Clash/Stash YAML，先收集真实节点，再彻底删除机场原有
+ * 策略组，最后统一生成：
  * 1. 节点选择
  * 2. 链式前置自动选择
  * 3. 洛杉矶链式出口
@@ -35,7 +36,9 @@ const staticExits = [
   // }
 ];
 
-const raw = $content || ($files && $files[0]);
+const raw =
+  (typeof $content !== "undefined" && $content) ||
+  (typeof $files !== "undefined" && $files && $files[0]);
 if (!raw) throw new Error("没有读取到机场配置");
 
 const cfg = ProxyUtils.yaml.safeLoad(raw);
@@ -44,9 +47,14 @@ if (!cfg || typeof cfg !== "object") {
 }
 
 cfg.proxies = Array.isArray(cfg.proxies) ? cfg.proxies : [];
-cfg["proxy-groups"] = Array.isArray(cfg["proxy-groups"])
-  ? cfg["proxy-groups"]
-  : [];
+
+// 有些机场会使用不同拼法保存策略组。先全部读取，后面统一删除。
+const oldGroups = [
+  ...(Array.isArray(cfg["proxy-groups"]) ? cfg["proxy-groups"] : []),
+  ...(Array.isArray(cfg.proxy_groups) ? cfg.proxy_groups : []),
+  ...(Array.isArray(cfg["policy-groups"]) ? cfg["policy-groups"] : []),
+  ...(Array.isArray(cfg.policy_groups) ? cfg.policy_groups : [])
+].filter((group) => group && typeof group === "object");
 
 const upstreamName = "⚡链式前置自动选择";
 const exitNames = staticExits.map((item) => item.nodeName);
@@ -55,9 +63,22 @@ const chainNames = staticExits.map((item) => item.groupName);
 cfg.proxies = cfg.proxies.filter((proxy) => !exitNames.includes(proxy.name));
 
 const infoPattern = /剩余|流量|套餐|到期|重置|官网|客服/;
-const airportNodes = cfg.proxies
-  .map((proxy) => proxy.name)
+const realProxyNames = cfg.proxies
+  .map((proxy) => proxy && proxy.name)
   .filter((name) => name && !infoPattern.test(name));
+const realProxySet = new Set(realProxyNames);
+
+// 先按机场原策略组中的顺序收集真实节点，再补齐没有出现在策略组里的节点。
+// 策略组名、DIRECT/REJECT 等内建策略不会被误当成节点。
+const referencedNodes = oldGroups.flatMap((group) =>
+  Array.isArray(group.proxies) ? group.proxies : []
+);
+const airportNodes = [
+  ...new Set([
+    ...referencedNodes.filter((name) => realProxySet.has(name)),
+    ...realProxyNames
+  ])
+];
 
 const providers = Object.keys(cfg["proxy-providers"] || {});
 
@@ -105,7 +126,14 @@ for (const item of staticExits) {
   });
 }
 
-// 统一策略组页面。机场原有的分组不再展示，但真实节点和远程代理集保留。
+// 硬重建：彻底删除所有可能的旧策略组字段及不再使用的子规则，
+// 避免策略组很多的机场把旧分组重新带回结果。
+delete cfg["proxy-groups"];
+delete cfg.proxy_groups;
+delete cfg["policy-groups"];
+delete cfg.policy_groups;
+delete cfg["sub-rules"];
+
 cfg["proxy-groups"] = [
   manualGroup,
   upstreamGroup,

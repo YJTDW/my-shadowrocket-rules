@@ -30,6 +30,10 @@
 
 脚本适用于包含标准 `proxies` 或 `proxy-providers` 的 Clash/Stash YAML，不再依赖机场原有策略组的名称。
 
+处理时会先从机场全部旧策略组中识别真实节点，然后彻底删除
+`proxy-groups`、`proxy_groups`、`policy-groups` 和 `policy_groups`
+等旧策略组字段，再从零生成下面 4 个策略组。机场原有策略组不会保留。
+
 无论机场原来叫 `Kitty Network`、`Proxy`、`节点选择` 或其他名称，策略组页面都会统一为：
 
 1. `节点选择`
