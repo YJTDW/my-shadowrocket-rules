@@ -90,7 +90,8 @@ const upstreamGroup = {
   name: upstreamName,
   type: "url-test",
   url: "http://www.gstatic.com/generate_204",
-  interval: 300,
+  interval: 900,
+  lazy: true,
   tolerance: 100
 };
 
