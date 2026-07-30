@@ -101,6 +101,7 @@ if (providers.length) upstreamGroup.use = providers;
 const manualGroup = {
   name: "节点选择",
   type: "select",
+  interval: -1,
   proxies: [...chainNames, ...airportNodes]
 };
 
@@ -123,6 +124,7 @@ for (const item of staticExits) {
   chainGroups.push({
     name: item.groupName,
     type: "select",
+    interval: -1,
     proxies: [item.nodeName]
   });
 }
@@ -142,6 +144,7 @@ cfg["proxy-groups"] = [
   {
     name: "🚀节点选择",
     type: "select",
+    interval: -1,
     proxies: ["节点选择"]
   }
 ];
