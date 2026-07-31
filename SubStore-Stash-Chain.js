@@ -3,10 +3,10 @@
  *
  * 读取机场完整 Clash/Stash YAML，先收集真实节点，再彻底删除机场原有
  * 策略组，最后统一生成：
- * 1. 节点选择
- * 2. 链式前置自动选择
- * 3. 洛杉矶链式出口
- * 4. 🚀节点选择（三合一兼容入口）
+ * 1. 🚀节点选择（三合一兼容入口）
+ * 2. 节点选择
+ * 3. ♻️自动选择（同时作为固定出口的链式前置）
+ * 4. 洛杉矶链式出口
  */
 
 // ===== 静态出口列表：以后新增出口只需要复制一个对象 =====
@@ -56,7 +56,7 @@ const oldGroups = [
   ...(Array.isArray(cfg.policy_groups) ? cfg.policy_groups : [])
 ].filter((group) => group && typeof group === "object");
 
-const upstreamName = "⚡链式前置自动选择";
+const upstreamName = "♻️自动选择";
 const exitNames = staticExits.map((item) => item.nodeName);
 const chainNames = staticExits.map((item) => item.groupName);
 
@@ -102,7 +102,7 @@ const manualGroup = {
   name: "节点选择",
   type: "select",
   interval: -1,
-  proxies: [...chainNames, ...airportNodes]
+  proxies: airportNodes
 };
 
 if (providers.length) manualGroup.use = providers;
@@ -138,18 +138,19 @@ delete cfg.policy_groups;
 delete cfg["sub-rules"];
 
 cfg["proxy-groups"] = [
-  manualGroup,
-  upstreamGroup,
-  ...chainGroups,
   {
     name: "🚀节点选择",
     type: "select",
     interval: -1,
-    proxies: ["节点选择"]
-  }
+    proxies: ["节点选择", upstreamName, ...chainNames, "DIRECT"]
+  },
+  manualGroup,
+  upstreamGroup,
+  ...chainGroups
 ];
 
 // 保证未启用三合一时配置也有效；启用三合一后会由其完整规则覆盖。
 cfg.rules = ["MATCH,🚀节点选择"];
 
 $content = ProxyUtils.yaml.dump(cfg);
+
