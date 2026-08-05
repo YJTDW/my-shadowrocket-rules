@@ -21,7 +21,16 @@ const staticExits = [
     password: "eTzA9SVbZ1",
     udp: true
   }
-
+  {
+    nodeName: "SOCKS5 70.39.254.81:443",
+    groupName: "🔗SOCKS5 70.39.254.81:443 链式出口",
+    type: "socks5",
+    server: "70.39.254.81",
+    port: 443,
+    username: "UmZexcBEiCfQ",
+    password: "2tErwHd2kn",
+    udp: true
+  }
   // 新增 SOCKS5 静态出口示例：
   // ,
   // {
