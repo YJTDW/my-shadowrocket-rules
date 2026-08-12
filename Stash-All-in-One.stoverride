@@ -4,12 +4,12 @@
 
 name: "三合一防泄露分流（轻量版）"
 desc: |-
-  保留 DNS/IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
+  保留 DNS/IPv6/QUIC 防泄露、Google 全生态代理、国内直连、Apple 分流与广告拦截。
   删除大型重复规则源，继续复用订阅或 Sub-Store 脚本提供的“🚀节点选择”。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-07-30"
-version: "3.0.0"
+date: "2026-08-12"
+version: "3.1.0"
 
 mode: rule
 ipv6: false
@@ -74,7 +74,40 @@ rules: #!replace
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
 
-  # Block ads before the broad China direct rules.
+  # Force the complete Google ecosystem through the selected proxy before ad
+  # blocking and China-direct rules. GEOSITE,google follows the maintained
+  # domain-list-community set (Google, YouTube, Android, Firebase, etc.).
+  - "GEOSITE,google,🚀节点选择"
+
+  # Core fallbacks keep common Google services proxied even before GEOSITE data
+  # has finished its first download. Keyword rules cover Google/YouTube country
+  # domains; suffix rules cover important service domains with different names.
+  - "DOMAIN-KEYWORD,google,🚀节点选择"
+  - "DOMAIN-KEYWORD,youtube,🚀节点选择"
+  - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,android.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,appspot.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,blogger.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,blogspot.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,firebaseapp.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,firebaseio.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,ggpht.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gstatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt0.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt1.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt2.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt3.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,kaggle.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,recaptcha.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,waze.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,widevine.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,withgoogle.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,youtu.be,🚀节点选择"
+  - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
+  - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
+
+  # Block non-Google ads before the broad China direct rules. Google-owned
+  # domains matched above follow the explicit all-ecosystem proxy requirement.
   - "GEOSITE,category-ads-all,REJECT"
 
   # China domains and IPs stay direct without downloading large classical
