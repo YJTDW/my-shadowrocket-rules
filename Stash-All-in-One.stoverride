@@ -1,21 +1,24 @@
 # Stash Override (YAML)
-# Lightweight DNS leak prevention and routing override.
+# Mobile-optimized DNS leak prevention and routing override.
 # It does not contain subscription URLs, nodes, or proxy groups.
 
-name: "三合一防泄露分流（轻量版）"
+name: "三合一防泄露分流（手机优化版）"
 desc: |-
-  保留 DNS/IPv6/QUIC 防泄露、Google 全生态代理、国内直连、Apple 分流与广告拦截。
-  删除大型重复规则源，继续复用订阅或 Sub-Store 脚本提供的“🚀节点选择”。
+  适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
+  保留国内直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
+  不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
+  要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-12"
-version: "3.1.0"
+date: "2026-08-13"
+version: "3.2.0"
 
 mode: rule
 ipv6: false
 
-# Two encrypted resolvers are enough for stable daily use without excessive
-# parallel DNS queries.
+# 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
+# Google/OpenAI 使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
+# 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -23,8 +26,61 @@ dns:
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
-  follow-rule: false
+  follow-rule: true
   skip-cert-verify: false
+  nameserver-policy: #!replace
+    # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
+    "geosite:google": "https://1.1.1.1/dns-query"
+    "+.google.com": "https://1.1.1.1/dns-query"
+    "+.google.cn": "https://1.1.1.1/dns-query"
+    "+.googleapis.com": "https://1.1.1.1/dns-query"
+    "+.googleusercontent.com": "https://1.1.1.1/dns-query"
+    "+.googlevideo.com": "https://1.1.1.1/dns-query"
+    "+.gstatic.com": "https://1.1.1.1/dns-query"
+    "+.youtube.com": "https://1.1.1.1/dns-query"
+    "+.ytimg.com": "https://1.1.1.1/dns-query"
+    "+.1e100.net": "https://1.1.1.1/dns-query"
+    "+.recaptcha.net": "https://1.1.1.1/dns-query"
+
+    # OpenAI / ChatGPT / Codex 及其登录、实时通道和遥测缺口。
+    "geosite:openai": "https://1.1.1.1/dns-query"
+    "+.openai.com": "https://1.1.1.1/dns-query"
+    "+.chatgpt.com": "https://1.1.1.1/dns-query"
+    "+.chatgpt.site": "https://1.1.1.1/dns-query"
+    "+.chat.com": "https://1.1.1.1/dns-query"
+    "+.sora.com": "https://1.1.1.1/dns-query"
+    "+.oaistatic.com": "https://1.1.1.1/dns-query"
+    "+.oaistatsig.com": "https://1.1.1.1/dns-query"
+    "+.oaiusercontent.com": "https://1.1.1.1/dns-query"
+    "+.crixet.com": "https://1.1.1.1/dns-query"
+    "+.openai.com.cdn.cloudflare.net": "https://1.1.1.1/dns-query"
+    "openaiapi-site.azureedge.net": "https://1.1.1.1/dns-query"
+    "openaiassets.blob.core.windows.net": "https://1.1.1.1/dns-query"
+    "openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net": "https://1.1.1.1/dns-query"
+    "openaicom.imgix.net": "https://1.1.1.1/dns-query"
+    "openaicomproductionae4b.blob.core.windows.net": "https://1.1.1.1/dns-query"
+    "production-openaicom-storage.azureedge.net": "https://1.1.1.1/dns-query"
+    "+.livekit.cloud": "https://1.1.1.1/dns-query"
+    "+.webpubsub.azure.com": "https://1.1.1.1/dns-query"
+    "client-api.arkoselabs.com": "https://1.1.1.1/dns-query"
+    "openai-api.arkoselabs.com": "https://1.1.1.1/dns-query"
+    "challenges.cloudflare.com": "https://1.1.1.1/dns-query"
+    "cdn.openaimerge.com": "https://1.1.1.1/dns-query"
+    "cdn.workos.com": "https://1.1.1.1/dns-query"
+    "forwarder.workos.com": "https://1.1.1.1/dns-query"
+    "images.workoscdn.com": "https://1.1.1.1/dns-query"
+    "setup.workos.com": "https://1.1.1.1/dns-query"
+    "workos.imgix.net": "https://1.1.1.1/dns-query"
+    "o207216.ingest.sentry.io": "https://1.1.1.1/dns-query"
+    "o33249.ingest.sentry.io": "https://1.1.1.1/dns-query"
+    "o33249.ingest.us.sentry.io": "https://1.1.1.1/dns-query"
+    "+.browser-intake-datadoghq.com": "https://1.1.1.1/dns-query"
+
+    # 国内域名继续使用国内加密 DNS，维持国内 CDN 与低延迟。
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+
   fake-ip-filter: #!replace
     - "*.lan"
     - "+.local"
@@ -38,15 +94,23 @@ dns:
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
-# Block QUIC so HTTP/3 falls back to TCP and follows the selected proxy path.
+# 只拒绝没有提前命中 Google/OpenAI/国内规则的其他 QUIC，应用会回退 TCP。
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
 
-# Replace the subscription rule array while leaving its nodes and proxy groups
-# untouched. The Sub-Store chain script supplies the stable “🚀节点选择”.
+# 清空订阅携带但已不再使用的大型远程规则源，避免手机后台下载和常驻内存。
+rule-providers: #!replace
+  {}
+
+# 完整替换订阅规则，保留订阅节点和策略组不变。
 rules: #!replace
-  # Local/private traffic always stays direct.
+  # DNS 服务器自身的连接必须先确定出口，避免 follow-rule 递归。
+  - "DOMAIN,dns.alidns.com,DIRECT"
+  - "DOMAIN,doh.pub,DIRECT"
+  - "IP-CIDR,1.1.1.1/32,🚀节点选择,no-resolve"
+
+  # 局域网和保留地址直连。
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
@@ -61,11 +125,7 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
-  - "SCRIPT,merged-quic,REJECT,no-track"
-
-  # Apple Private Relay must use the selected proxy before the broader Apple
-  # direct rules below.
+  # Apple Private Relay 先代理，其余 Apple 服务保持直连。
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
@@ -74,44 +134,41 @@ rules: #!replace
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
 
-  # Force the complete Google ecosystem through the selected proxy before ad
-  # blocking and China-direct rules. GEOSITE,google follows the maintained
-  # domain-list-community set (Google, YouTube, Android, Firebase, etc.).
+  # Google 全生态必须在广告和国内规则之前命中，包含 Google 中国域名。
   - "GEOSITE,google,🚀节点选择"
-
-  # Core fallbacks keep common Google services proxied even before GEOSITE data
-  # has finished its first download. Keyword rules cover Google/YouTube country
-  # domains; suffix rules cover important service domains with different names.
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
   - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,android.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,appspot.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,blogger.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,blogspot.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,firebaseapp.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,firebaseio.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,ggpht.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,googleapis.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,googleusercontent.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,googlevideo.com,🚀节点选择"
   - "DOMAIN-SUFFIX,gstatic.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,gvt0.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,gvt1.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,gvt2.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,gvt3.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,kaggle.com,🚀节点选择"
   - "DOMAIN-SUFFIX,recaptcha.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,waze.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,widevine.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,withgoogle.com,🚀节点选择"
   - "DOMAIN-SUFFIX,youtu.be,🚀节点选择"
-  - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # Block non-Google ads before the broad China direct rules. Google-owned
-  # domains matched above follow the explicit all-ecosystem proxy requirement.
+  # OpenAI / ChatGPT / Codex 主域、API、静态文件、实时通道和高级语音。
+  - "GEOSITE,openai,🚀节点选择"
+  - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
+
+  # 登录验证、企业身份链、共享 CDN 与遥测的精确缺口。
+  - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
+  - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
+  - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
+  - "DOMAIN,cdn.openaimerge.com,🚀节点选择"
+  - "DOMAIN,cdn.workos.com,🚀节点选择"
+  - "DOMAIN,forwarder.workos.com,🚀节点选择"
+  - "DOMAIN,images.workoscdn.com,🚀节点选择"
+  - "DOMAIN,setup.workos.com,🚀节点选择"
+  - "DOMAIN,workos.imgix.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,webpubsub.azure.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,browser-intake-datadoghq.com,🚀节点选择"
+  - "DOMAIN-REGEX,^o(207216|33249)\\.ingest(\\.[a-z0-9-]+)?\\.sentry\\.io$,🚀节点选择"
+
+  # Google/OpenAI 已在上方优先代理；其余广告继续拦截。
   - "GEOSITE,category-ads-all,REJECT"
 
-  # China domains and IPs stay direct without downloading large classical
-  # providers.
+  # 国内域名和 IP 直连，包含国内 UDP。
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -122,5 +179,9 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # Everything else follows the user's selected normal or chained exit.
+  # 剩余境外 QUIC 拒绝并回退 TCP；其他 UDP 必须走当前代理节点。
+  - "SCRIPT,merged-quic,REJECT,no-track"
+  - "NETWORK,udp,🚀节点选择"
+
+  # 其他未分类流量统一跟随当前正常或链式出口。
   - "MATCH,🚀节点选择"
