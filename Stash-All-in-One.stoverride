@@ -5,13 +5,14 @@
 name: "三合一防泄露分流（手机优化版）"
 desc: |-
   适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
-  保留国内直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
+  保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
+  对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
   不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-13"
-version: "3.2.0"
+version: "3.2.1"
 
 mode: rule
 ipv6: false
@@ -76,7 +77,33 @@ dns:
     "o33249.ingest.us.sentry.io": "https://1.1.1.1/dns-query"
     "+.browser-intake-datadoghq.com": "https://1.1.1.1/dns-query"
 
-    # 国内域名继续使用国内加密 DNS，维持国内 CDN 与低延迟。
+    # 启航教育 iPhone/iPad、官网和课程视频明确使用国内加密 DNS。
+    "+.iqihang.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.iqihangedu.com.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qihang.com.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.vipqihang.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.polyv.net":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.videocc.net":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.alicdn.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "iqh-zt.oss-cn-beijing.aliyuncs.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+
+    # 其余国内域名继续使用国内加密 DNS，维持国内 CDN 与低延迟。
     "geosite:cn":
       - "https://dns.alidns.com/dns-query"
       - "https://doh.pub/dns-query"
@@ -165,10 +192,18 @@ rules: #!replace
   - "DOMAIN-SUFFIX,browser-intake-datadoghq.com,🚀节点选择"
   - "DOMAIN-REGEX,^o(207216|33249)\\.ingest(\\.[a-z0-9-]+)?\\.sentry\\.io$,🚀节点选择"
 
-  # Google/OpenAI 已在上方优先代理；其余广告继续拦截。
-  - "GEOSITE,category-ads-all,REJECT"
+  # 启航教育 iPhone/iPad、官网、课件、直播/录播与静态资源明确直连。
+  # 这些规则必须位于广告拦截和通用 QUIC/UDP 规则之前。
+  - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
+  - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
+  - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
+  - "DOMAIN-SUFFIX,vipqihang.com,DIRECT"
+  - "DOMAIN-SUFFIX,polyv.net,DIRECT"
+  - "DOMAIN-SUFFIX,videocc.net,DIRECT"
+  - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
+  - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # 国内域名和 IP 直连，包含国内 UDP。
+  # 国内常用软件的域名优先直连，避免被广告集合误伤。
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -177,7 +212,12 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
   - "GEOSITE,cn,DIRECT"
-  - "GEOIP,CN,DIRECT,no-resolve"
+
+  # Google/OpenAI 和国内核心域名均已在上方分流；其余广告继续拦截。
+  - "GEOSITE,category-ads-all,REJECT"
+
+  # 为尚未被 GEOSITE 收录的国内 .com/App 接口按中国大陆 IP 兜底直连。
+  - "GEOIP,CN,DIRECT"
 
   # 剩余境外 QUIC 拒绝并回退 TCP；其他 UDP 必须走当前代理节点。
   - "SCRIPT,merged-quic,REJECT,no-track"
