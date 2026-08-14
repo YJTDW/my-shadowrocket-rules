@@ -6,20 +6,19 @@ name: "三合一防泄露分流（手机优化版）"
 desc: |-
   适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
   保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
-  Apple APNs 推送链路经当前代理节点，改善部分海外 App 在大陆网络的通知到达率。
   对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
   不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-14"
-version: "3.2.4"
+date: "2026-08-13"
+version: "3.2.1"
 
 mode: rule
 ipv6: false
 
 # 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# Google/OpenAI/APNs 使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
+# Google/OpenAI 使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
 # 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
 dns:
   default-nameserver: #!replace
@@ -31,12 +30,6 @@ dns:
   follow-rule: true
   skip-cert-verify: false
   nameserver-policy: #!replace
-    # Apple APNs：通过当前节点解析，避免海外 App 的推送 DNS 与出口分裂。
-    "+.push.apple.com": "https://1.1.1.1/dns-query"
-    "+.akadns.net": "https://1.1.1.1/dns-query"
-    "apple.com.edgekey.net": "https://1.1.1.1/dns-query"
-    "*.apple.com.edgekey.net": "https://1.1.1.1/dns-query"
-
     # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
     "geosite:google": "https://1.1.1.1/dns-query"
     "+.google.com": "https://1.1.1.1/dns-query"
@@ -125,11 +118,6 @@ dns:
     - "time.*.gov"
     - "time.*.edu.cn"
     - "time.*.apple.com"
-    # APNs 为长连接；返回真实 IP，确保下方 Apple 官方推送 IP 规则能够匹配。
-    - "+.push.apple.com"
-    - "+.akadns.net"
-    - "apple.com.edgekey.net"
-    - "*.apple.com.edgekey.net"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
@@ -163,17 +151,6 @@ rules: #!replace
   - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
-
-  # Apple APNs：仅推送链路经当前节点，改善海外 App 的 iOS/iPadOS 通知。
-  # 取自 Apple 官方公布的 APNs IPv4 网段；不使用过宽的 17.0.0.0/8。
-  - "DOMAIN-SUFFIX,push.apple.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,akadns.net,🚀节点选择"
-  - "DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择"
-  - "IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.188.128.0/18,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.188.20.0/23,🚀节点选择,no-resolve"
 
   # Apple Private Relay 先代理，其余 Apple 服务保持直连。
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
