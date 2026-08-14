@@ -1,27 +1,22 @@
 # Stash Override (YAML)
-# 私有配置，请勿公开。
-# 与「通用全部节点 + SOCKS5 链式出口（四策略组完全覆盖版）」策略组覆写配套使用。
-# 本覆写只负责 DNS 防泄漏与分流规则，不定义任何策略组，只引用「🚀节点选择」。
+# Lightweight Stash DNS/routing override rebuilt from the known-working v3.1.0 base.
+# It does not contain subscription URLs, nodes, or proxy groups.
 
-name: "三合一防泄露分流（四策略组版）"
+name: "三合一防泄露分流（Google + OpenAI 轻量回归版）"
 desc: |-
-  适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
-  保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
-  对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
-  使用 Stash Fake-IP 与代理端解析，避免 DNS 跟随策略组引发节点冷启动递归。
-  不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
-  要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
+  保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
+  Google 与 OpenAI/ChatGPT/Codex 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
+  适用于直接导入订阅并叠加“四策略组”私有覆写的 Stash。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-14"
-version: "3.4.2"
+version: "3.3.1"
 
 mode: rule
 ipv6: false
 
-# 国内直连域名使用两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# 代理域名依靠 Fake-IP 和代理端解析，不把 DNS 请求重新交给“🚀节点选择”，避免域名型节点启动递归。
-# default-nameserver 只负责解析 DoH 服务域名，保持基础解析路径独立可用。
+# Two encrypted resolvers are enough for stable daily use without excessive
+# parallel DNS queries.
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -31,8 +26,6 @@ dns:
     - "https://doh.pub/dns-query"
   follow-rule: false
   skip-cert-verify: false
-  nameserver-policy: #!replace
-    {}
   fake-ip-filter: #!replace
     - "*.lan"
     - "+.local"
@@ -46,18 +39,15 @@ dns:
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
-# 只拒绝没有提前命中 Google/OpenAI/国内规则的其他 QUIC，应用会回退 TCP。
+# Block QUIC so HTTP/3 falls back to TCP and follows the selected proxy path.
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
 
-# 清空订阅携带但已不再使用的大型远程规则源，避免手机后台下载和常驻内存。
-rule-providers: #!replace
-  {}
-
-# 完整替换订阅规则，保留订阅节点和策略组不变。
+# Replace the subscription rule array while leaving its nodes and proxy groups
+# untouched. The separate four-group override supplies “🚀节点选择”.
 rules: #!replace
-  # 局域网和保留地址直连。
+  # Local/private traffic always stays direct.
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
@@ -72,7 +62,11 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # Apple Private Relay 先代理，其余 Apple 服务保持直连。
+  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
+  - "SCRIPT,merged-quic,REJECT,no-track"
+
+  # Apple Private Relay must use the selected proxy before the broader Apple
+  # direct rules below.
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
@@ -81,39 +75,52 @@ rules: #!replace
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
 
-  # Google 全生态必须在广告和国内规则之前命中，包含 Google 中国域名。
+  # Force the complete Google ecosystem through the selected proxy before ad
+  # blocking and China-direct rules. GEOSITE,google follows the maintained
+  # domain-list-community set (Google, YouTube, Android, Firebase, etc.).
   - "GEOSITE,google,🚀节点选择"
+
+  # Core fallbacks keep common Google services proxied even before GEOSITE data
+  # has finished its first download. Keyword rules cover Google/YouTube country
+  # domains; suffix rules cover important service domains with different names.
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
   - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,googleapis.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,googleusercontent.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,googlevideo.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,android.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,appspot.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,blogger.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,blogspot.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,firebaseapp.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,firebaseio.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,ggpht.com,🚀节点选择"
   - "DOMAIN-SUFFIX,gstatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt0.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt1.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt2.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,gvt3.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,kaggle.com,🚀节点选择"
   - "DOMAIN-SUFFIX,recaptcha.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,waze.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,widevine.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,withgoogle.com,🚀节点选择"
   - "DOMAIN-SUFFIX,youtu.be,🚀节点选择"
+  - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # OpenAI / ChatGPT / Codex 主域、API、静态文件、实时通道和高级语音。
+  # OpenAI / ChatGPT / Codex core services and login verification.
+  # GEOSITE is the maintained primary list; the small fallbacks protect
+  # critical login and realtime paths before ad and China-direct rules.
   - "GEOSITE,openai,🚀节点选择"
+  - "DOMAIN-KEYWORD,openai,🚀节点选择"
+  - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
   - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
-
-  # 登录验证、企业身份链、共享 CDN 与遥测的精确缺口。
   - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
-  - "DOMAIN,cdn.openaimerge.com,🚀节点选择"
-  - "DOMAIN,cdn.workos.com,🚀节点选择"
-  - "DOMAIN,forwarder.workos.com,🚀节点选择"
-  - "DOMAIN,images.workoscdn.com,🚀节点选择"
-  - "DOMAIN,setup.workos.com,🚀节点选择"
-  - "DOMAIN,workos.imgix.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,webpubsub.azure.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,browser-intake-datadoghq.com,🚀节点选择"
-  - "DOMAIN-REGEX,^o(207216|33249)\\.ingest(\\.[a-z0-9-]+)?\\.sentry\\.io$,🚀节点选择"
+  - "DOMAIN-KEYWORD,workos,🚀节点选择"
 
-  # 启航教育 iPhone/iPad、官网、课件、直播/录播与静态资源明确直连。
-  # 这些规则必须位于广告拦截和通用 QUIC/UDP 规则之前。
+  # Qihang Education website, iPhone/iPad courses, video and static assets.
+  # Keep these domestic services direct before ad blocking.
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -123,7 +130,12 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # 国内常用软件的域名优先直连，避免被广告集合误伤。
+  # Block non-Google ads before the broad China direct rules. Google-owned
+  # domains matched above follow the explicit all-ecosystem proxy requirement.
+  - "GEOSITE,category-ads-all,REJECT"
+
+  # China domains and IPs stay direct without downloading large classical
+  # providers.
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -132,16 +144,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
   - "GEOSITE,cn,DIRECT"
-
-  # Google/OpenAI 和国内核心域名均已在上方分流；其余广告继续拦截。
-  - "GEOSITE,category-ads-all,REJECT"
-
-  # 仅对已取得真实目标 IP 的连接做中国大陆 IP 兜底，禁止为分类主动触发本地 DNS。
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # 剩余境外 QUIC 拒绝并回退 TCP；其他 UDP 必须走当前代理节点。
-  - "SCRIPT,merged-quic,REJECT,no-track"
-  - "NETWORK,udp,🚀节点选择"
-
-  # 其他未分类流量统一跟随当前正常或链式出口。
+  # Everything else follows the user's selected normal or chained exit.
   - "MATCH,🚀节点选择"
