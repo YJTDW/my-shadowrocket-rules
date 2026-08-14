@@ -8,19 +8,20 @@ desc: |-
   适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
   保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
   对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
+  使用 Stash Fake-IP 与代理端解析，避免 DNS 跟随策略组引发节点冷启动递归。
   不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-14"
-version: "3.4.1"
+version: "3.4.2"
 
 mode: rule
 ipv6: false
 
-# 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# 默认解析走国内加密 DNS 直连，保证基础可用；所有非中国大陆域名由 geosite:geolocation-!cn 兜底到境外双 DoH 并经当前节点出站，杜绝 DNS 泄漏；Google/OpenAI 全生态额外显式兜底。
-# 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
+# 国内直连域名使用两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
+# 代理域名依靠 Fake-IP 和代理端解析，不把 DNS 请求重新交给“🚀节点选择”，避免域名型节点启动递归。
+# default-nameserver 只负责解析 DoH 服务域名，保持基础解析路径独立可用。
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -28,232 +29,10 @@ dns:
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
-  follow-rule: true
+  follow-rule: false
   skip-cert-verify: false
   nameserver-policy: #!replace
-    # 兜底：所有非中国大陆域名 → 境外双 DoH（经规则走当前节点，与连接同源，防泄漏）。
-    "geosite:geolocation-!cn":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-
-    # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
-    "geosite:google":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.google.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.google.cn":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.googleapis.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.googleusercontent.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.googlevideo.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.gstatic.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.youtube.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.ytimg.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.1e100.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.recaptcha.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.youtube-nocookie.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.android.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.appspot.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.blogger.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.blogspot.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.firebaseapp.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.firebaseio.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.ggpht.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.gvt0.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.gvt1.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.gvt2.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.gvt3.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.kaggle.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.waze.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.widevine.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.withgoogle.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.youtu.be":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.yt.be":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-
-    # OpenAI / ChatGPT / Codex 及其登录、实时通道和遥测缺口。
-    "geosite:openai":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.openai.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.chatgpt.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.chatgpt.site":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.chat.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.sora.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.oaistatic.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.oaistatsig.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.oaiusercontent.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.crixet.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.openai.com.cdn.cloudflare.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openaiapi-site.azureedge.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openaiassets.blob.core.windows.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openaicom.imgix.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openaicomproductionae4b.blob.core.windows.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "production-openaicom-storage.azureedge.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.livekit.cloud":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.webpubsub.azure.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "client-api.arkoselabs.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "openai-api.arkoselabs.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "challenges.cloudflare.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "cdn.openaimerge.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "cdn.workos.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "forwarder.workos.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "images.workoscdn.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "setup.workos.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "workos.imgix.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "o207216.ingest.sentry.io":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "o33249.ingest.sentry.io":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "o33249.ingest.us.sentry.io":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.browser-intake-datadoghq.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-
-    # 启航教育 iPhone/iPad、官网和课程视频明确使用国内加密 DNS。
-    "+.iqihang.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.iqihangedu.com.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.qihang.com.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.vipqihang.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.polyv.net":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.videocc.net":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.alicdn.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "iqh-zt.oss-cn-beijing.aliyuncs.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-
-    # 其余国内域名继续使用国内加密 DNS，维持国内 CDN 与低延迟。
-    "geosite:cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-
+    {}
   fake-ip-filter: #!replace
     - "*.lan"
     - "+.local"
@@ -278,12 +57,6 @@ rule-providers: #!replace
 
 # 完整替换订阅规则，保留订阅节点和策略组不变。
 rules: #!replace
-  # DNS 服务器自身的连接必须先确定出口，避免 follow-rule 递归。
-  - "DOMAIN,dns.alidns.com,DIRECT"
-  - "DOMAIN,doh.pub,DIRECT"
-  - "IP-CIDR,1.1.1.1/32,🚀节点选择,no-resolve"
-  - "IP-CIDR,8.8.8.8/32,🚀节点选择,no-resolve"
-
   # 局域网和保留地址直连。
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
@@ -360,14 +133,11 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
   - "GEOSITE,cn,DIRECT"
 
-  # 兜底：其余非中国大陆域名统一跟随当前节点（显式直连规则已在上方命中）。
-  - "GEOSITE,geolocation-!cn,🚀节点选择"
-
   # Google/OpenAI 和国内核心域名均已在上方分流；其余广告继续拦截。
   - "GEOSITE,category-ads-all,REJECT"
 
-  # 为尚未被 GEOSITE 收录的国内 .com/App 接口按中国大陆 IP 兜底直连。
-  - "GEOIP,CN,DIRECT"
+  # 仅对已取得真实目标 IP 的连接做中国大陆 IP 兜底，禁止为分类主动触发本地 DNS。
+  - "GEOIP,CN,DIRECT,no-resolve"
 
   # 剩余境外 QUIC 拒绝并回退 TCP；其他 UDP 必须走当前代理节点。
   - "SCRIPT,merged-quic,REJECT,no-track"
