@@ -7,36 +7,30 @@ desc: |-
   适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
   保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
   Apple APNs 推送链路经当前代理节点，改善部分海外 App 在大陆网络的通知到达率。
+  默认境外解析经当前节点；仅国内域名和启航教育使用国内加密 DNS，避免 DNS 检测落入国内解析。
   对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
   不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-13"
-version: "3.2.2"
+date: "2026-08-14"
+version: "3.2.3"
 
 mode: rule
 ipv6: false
 
-# 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# Google/OpenAI 使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
+# 默认解析使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
+# 仅国内域名另行指定国内加密 DNS，兼顾国内 CDN 和 DNS 隐私。
 # 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
   nameserver: #!replace
-    - "https://dns.alidns.com/dns-query"
-    - "https://doh.pub/dns-query"
+    - "https://1.1.1.1/dns-query"
   follow-rule: true
   skip-cert-verify: false
   nameserver-policy: #!replace
-    # Apple APNs：通过当前节点解析，避免海外 App 的推送 DNS 与出口分裂。
-    "+.push.apple.com": "https://1.1.1.1/dns-query"
-    "+.akadns.net": "https://1.1.1.1/dns-query"
-    "apple.com.edgekey.net": "https://1.1.1.1/dns-query"
-    "*.apple.com.edgekey.net": "https://1.1.1.1/dns-query"
-
     # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
     "geosite:google": "https://1.1.1.1/dns-query"
     "+.google.com": "https://1.1.1.1/dns-query"
