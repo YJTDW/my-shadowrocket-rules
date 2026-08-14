@@ -13,7 +13,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-14"
-version: "3.4.0"
+version: "3.4.1"
 
 mode: rule
 ipv6: false
