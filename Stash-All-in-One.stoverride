@@ -11,14 +11,14 @@ desc: |-
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-13"
-version: "3.2.1"
+date: "2026-08-14"
+version: "3.3.0"
 
 mode: rule
 ipv6: false
 
 # 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# Google/OpenAI 使用单个 Cloudflare DoH，并通过 follow-rule 跟随“🚀节点选择”。
+# Google/OpenAI 全生态对齐电脑 Clash Verge 清单，双境外 DoH（Cloudflare+Google）并发解析并跟随“🚀节点选择”。
 # 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
 dns:
   default-nameserver: #!replace
@@ -31,51 +31,191 @@ dns:
   skip-cert-verify: false
   nameserver-policy: #!replace
     # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
-    "geosite:google": "https://1.1.1.1/dns-query"
-    "+.google.com": "https://1.1.1.1/dns-query"
-    "+.google.cn": "https://1.1.1.1/dns-query"
-    "+.googleapis.com": "https://1.1.1.1/dns-query"
-    "+.googleusercontent.com": "https://1.1.1.1/dns-query"
-    "+.googlevideo.com": "https://1.1.1.1/dns-query"
-    "+.gstatic.com": "https://1.1.1.1/dns-query"
-    "+.youtube.com": "https://1.1.1.1/dns-query"
-    "+.ytimg.com": "https://1.1.1.1/dns-query"
-    "+.1e100.net": "https://1.1.1.1/dns-query"
-    "+.recaptcha.net": "https://1.1.1.1/dns-query"
+    "geosite:google":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.google.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.google.cn":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.googleapis.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.googleusercontent.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.googlevideo.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.gstatic.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.youtube.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.ytimg.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.1e100.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.recaptcha.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.youtube-nocookie.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.android.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.appspot.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.blogger.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.blogspot.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.firebaseapp.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.firebaseio.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.ggpht.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.gvt0.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.gvt1.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.gvt2.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.gvt3.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.kaggle.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.waze.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.widevine.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.withgoogle.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.youtu.be":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.yt.be":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
 
     # OpenAI / ChatGPT / Codex 及其登录、实时通道和遥测缺口。
-    "geosite:openai": "https://1.1.1.1/dns-query"
-    "+.openai.com": "https://1.1.1.1/dns-query"
-    "+.chatgpt.com": "https://1.1.1.1/dns-query"
-    "+.chatgpt.site": "https://1.1.1.1/dns-query"
-    "+.chat.com": "https://1.1.1.1/dns-query"
-    "+.sora.com": "https://1.1.1.1/dns-query"
-    "+.oaistatic.com": "https://1.1.1.1/dns-query"
-    "+.oaistatsig.com": "https://1.1.1.1/dns-query"
-    "+.oaiusercontent.com": "https://1.1.1.1/dns-query"
-    "+.crixet.com": "https://1.1.1.1/dns-query"
-    "+.openai.com.cdn.cloudflare.net": "https://1.1.1.1/dns-query"
-    "openaiapi-site.azureedge.net": "https://1.1.1.1/dns-query"
-    "openaiassets.blob.core.windows.net": "https://1.1.1.1/dns-query"
-    "openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net": "https://1.1.1.1/dns-query"
-    "openaicom.imgix.net": "https://1.1.1.1/dns-query"
-    "openaicomproductionae4b.blob.core.windows.net": "https://1.1.1.1/dns-query"
-    "production-openaicom-storage.azureedge.net": "https://1.1.1.1/dns-query"
-    "+.livekit.cloud": "https://1.1.1.1/dns-query"
-    "+.webpubsub.azure.com": "https://1.1.1.1/dns-query"
-    "client-api.arkoselabs.com": "https://1.1.1.1/dns-query"
-    "openai-api.arkoselabs.com": "https://1.1.1.1/dns-query"
-    "challenges.cloudflare.com": "https://1.1.1.1/dns-query"
-    "cdn.openaimerge.com": "https://1.1.1.1/dns-query"
-    "cdn.workos.com": "https://1.1.1.1/dns-query"
-    "forwarder.workos.com": "https://1.1.1.1/dns-query"
-    "images.workoscdn.com": "https://1.1.1.1/dns-query"
-    "setup.workos.com": "https://1.1.1.1/dns-query"
-    "workos.imgix.net": "https://1.1.1.1/dns-query"
-    "o207216.ingest.sentry.io": "https://1.1.1.1/dns-query"
-    "o33249.ingest.sentry.io": "https://1.1.1.1/dns-query"
-    "o33249.ingest.us.sentry.io": "https://1.1.1.1/dns-query"
-    "+.browser-intake-datadoghq.com": "https://1.1.1.1/dns-query"
+    "geosite:openai":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.openai.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.chatgpt.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.chatgpt.site":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.chat.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.sora.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.oaistatic.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.oaistatsig.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.oaiusercontent.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.crixet.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.openai.com.cdn.cloudflare.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openaiapi-site.azureedge.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openaiassets.blob.core.windows.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openaicom.imgix.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openaicomproductionae4b.blob.core.windows.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "production-openaicom-storage.azureedge.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.livekit.cloud":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.webpubsub.azure.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "client-api.arkoselabs.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "openai-api.arkoselabs.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "challenges.cloudflare.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "cdn.openaimerge.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "cdn.workos.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "forwarder.workos.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "images.workoscdn.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "setup.workos.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "workos.imgix.net":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "o207216.ingest.sentry.io":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "o33249.ingest.sentry.io":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "o33249.ingest.us.sentry.io":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
+    "+.browser-intake-datadoghq.com":
+      - "https://1.1.1.1/dns-query"
+      - "https://8.8.8.8/dns-query"
 
     # 启航教育 iPhone/iPad、官网和课程视频明确使用国内加密 DNS。
     "+.iqihang.com":
@@ -136,6 +276,7 @@ rules: #!replace
   - "DOMAIN,dns.alidns.com,DIRECT"
   - "DOMAIN,doh.pub,DIRECT"
   - "IP-CIDR,1.1.1.1/32,🚀节点选择,no-resolve"
+  - "IP-CIDR,8.8.8.8/32,🚀节点选择,no-resolve"
 
   # 局域网和保留地址直连。
   - "DOMAIN-SUFFIX,local,DIRECT"
