@@ -1,13 +1,12 @@
 # Stash Override (YAML)
-# Mobile-optimized DNS leak prevention and routing override.
-# It does not contain subscription URLs, nodes, or proxy groups.
+# 私有配置，请勿公开。
+# 与「通用全部节点 + SOCKS5 链式出口（四策略组完全覆盖版）」策略组覆写配套使用。
+# 本覆写只负责 DNS 防泄漏与分流规则，不定义任何策略组，只引用「🚀节点选择」。
 
-name: "三合一防泄露分流（手机优化版）"
+name: "三合一防泄露分流（四策略组版）"
 desc: |-
   适用于直接导入 Stash 的 Clash/Mihomo 订阅，不依赖 Sub-Store。
   保留国内常用软件直连、Apple 分流和广告拦截；Google/OpenAI 全生态统一跟随“🚀节点选择”。
-  未分类及境外域名默认使用境外加密 DNS；国内、启航教育和普通 Apple 服务保留国内加密 DNS。
-  Apple 推送不设置专用代理、IP 网段或 Fake-IP 例外，继续沿用普通 Apple 直连路径。
   对启航教育 iPhone/iPad、课程视频与静态资源增加明确的国内直连兜底。
   不加载大型远程规则集，减少手机内存、后台下载、DNS 并发与电量消耗。
   要求当前订阅已提供“🚀节点选择”，且不要在该组内选择 DIRECT。
@@ -19,42 +18,23 @@ version: "3.4.0"
 mode: rule
 ipv6: false
 
-# 默认使用两个境外加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
-# 国内、启航教育和普通 Apple 服务由 nameserver-policy 指回国内加密 DNS。
-# follow-rule 使境外 DNS 连接跟随“🚀节点选择”，避免未分类域名回落国内解析。
+# 国内日常解析保留两个加密 DNS；Stash 官方不建议超过两个，以免增加功耗。
+# 默认解析走国内加密 DNS 直连，保证基础可用；所有非中国大陆域名由 geosite:geolocation-!cn 兜底到境外双 DoH 并经当前节点出站，杜绝 DNS 泄漏；Google/OpenAI 全生态额外显式兜底。
 # 使用 IP 形式的 DoH 地址可避免代理服务器和 DNS 服务器之间发生递归解析。
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
   nameserver: #!replace
-    - "https://1.1.1.1/dns-query"
-    - "https://8.8.8.8/dns-query"
+    - "https://dns.alidns.com/dns-query"
+    - "https://doh.pub/dns-query"
   follow-rule: true
   skip-cert-verify: false
   nameserver-policy: #!replace
-    # Apple Private Relay 与现有代理规则对齐；其余普通 Apple 服务继续国内解析和直连。
-    "+.apple-relay.apple.com":
+    # 兜底：所有非中国大陆域名 → 境外双 DoH（经规则走当前节点，与连接同源，防泄漏）。
+    "geosite:geolocation-!cn":
       - "https://1.1.1.1/dns-query"
       - "https://8.8.8.8/dns-query"
-    "+.apple-relay.cloudflare.com":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.apple-relay.akamaized.net":
-      - "https://1.1.1.1/dns-query"
-      - "https://8.8.8.8/dns-query"
-    "+.apple.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.icloud.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.cdn-apple.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.mzstatic.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
 
     # Google：GEOSITE 主规则加少量关键兜底，统一使用境外 DNS。
     "geosite:google":
@@ -379,6 +359,9 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
   - "GEOSITE,cn,DIRECT"
+
+  # 兜底：其余非中国大陆域名统一跟随当前节点（显式直连规则已在上方命中）。
+  - "GEOSITE,geolocation-!cn,🚀节点选择"
 
   # Google/OpenAI 和国内核心域名均已在上方分流；其余广告继续拦截。
   - "GEOSITE,category-ads-all,REJECT"
