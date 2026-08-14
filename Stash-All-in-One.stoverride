@@ -2,7 +2,7 @@
 # Lightweight Stash DNS/routing override rebuilt from the known-working v3.1.0 base.
 # It does not contain subscription URLs, nodes, or proxy groups.
 
-name: "三合一防泄露分流（Google + OpenAI 轻量回归版）"
+name: "正式版"
 desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
   Google 与 OpenAI/ChatGPT/Codex 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
