@@ -11,8 +11,17 @@
 <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIldMT0Mgg55mo5YWt5L2NIiwKICAic2hvcnRfbmFtZSI6ICJXTExDIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRkFGQkZDIiwKICAidGhlbWVfY29sb3IiOiAiIzBGQTY2RDgiCn0=">
 
 <title>WLOC 虚拟定位工具</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Leaflet CSS 具备主备 CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'"/>
+
+<!-- Leaflet JS 具备主备 CDN 自动容灾加载 -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js" onerror="
+  var s = document.createElement('script');
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  document.head.appendChild(s);
+"></script>
+
 <style>
 :root {
   --primary: #0A66D8;
@@ -39,10 +48,27 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif; background: #e2e8f0; color: var(--text-main); }
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: #e2e8f0;
+  color: var(--text-main);
+}
 
 /* 全屏地图容器 */
-#map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; background: #f1f5f9; }
+#map {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: #eef2f6;
+}
 
 /* 地图正中央固定精准准星 */
 .map-crosshair {
@@ -119,8 +145,52 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   justify-content: center;
   flex-shrink: 0;
   transition: transform 0.12s ease;
+  user-select: none;
 }
+.top-icon-btn svg { pointer-events: none; }
 .top-icon-btn:active { transform: scale(0.94); }
+
+/* 图层下拉菜单 */
+.menu-popover {
+  position: absolute;
+  top: max(68px, env(safe-area-inset-top));
+  right: 12px;
+  width: 220px;
+  background: var(--surface);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.18);
+  z-index: 10001;
+  display: none;
+  flex-direction: column;
+  padding: 6px;
+  gap: 2px;
+}
+.menu-popover.active { display: flex; animation: popIn 0.15s ease; }
+
+.menu-item {
+  border: none;
+  background: transparent;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main);
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.12s ease;
+}
+.menu-item:active { background: rgba(0,0,0,0.05); }
+.menu-item.active {
+  background: rgba(10, 102, 216, 0.1);
+  color: var(--primary);
+  font-weight: 600;
+}
 
 /* 底部极其清爽的系统面板 */
 .bottom-sheet {
@@ -179,7 +249,11 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   font-weight: 500;
   color: var(--text-secondary);
   cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+  transition: background 0.12s ease;
 }
+.status-badge:active { background: rgba(0,0,0,0.05); }
 
 .status-dot {
   width: 7px;
@@ -204,6 +278,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  user-select: none;
 }
 .coord-item:active { opacity: 0.7; }
 
@@ -265,6 +340,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   justify-content: center;
   gap: 8px;
   transition: all 0.15s ease;
+  user-select: none;
 }
 .primary-button:active {
   background: var(--primary-pressed);
@@ -295,46 +371,12 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   justify-content: center;
   gap: 5px;
   transition: background 0.15s ease;
+  user-select: none;
 }
 .secondary-button:active { background: #E4E7EC; }
 .secondary-button.danger-text { color: var(--danger); }
 
-/* 下拉菜单 & 弹窗 */
-.menu-popover {
-  position: absolute;
-  top: max(68px, env(safe-area-inset-top));
-  right: 12px;
-  width: 200px;
-  background: var(--surface);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
-  z-index: 10001;
-  display: none;
-  flex-direction: column;
-  padding: 6px;
-  gap: 2px;
-}
-.menu-popover.active { display: flex; animation: popIn 0.15s ease; }
-
-.menu-item {
-  border: none;
-  background: transparent;
-  padding: 10px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-main);
-  text-align: left;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.menu-item.active { background: rgba(10, 102, 216, 0.1); color: var(--primary); font-weight: 600; }
-
+/* 弹窗通用 */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -388,6 +430,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
   z-index: 10000;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  max-width: 90vw;
+  text-align: center;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -420,7 +464,8 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
     <button onclick="handleSearch()" style="border:none;background:none;padding:4px 8px;color:var(--primary);font-size:13px;font-weight:600;cursor:pointer;">搜索</button>
   </div>
 
-  <button class="top-icon-btn" onclick="togglePopover('layerMenu')" title="地图样式">
+  <!-- 图层切换按钮 -->
+  <button class="top-icon-btn" onclick="event.stopPropagation(); togglePopover('layerMenu')" title="地图样式">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
       <polyline points="2 17 12 22 22 17"></polyline>
@@ -428,6 +473,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
     </svg>
   </button>
 
+  <!-- 说明帮助按钮 -->
   <button class="top-icon-btn" onclick="openModal('helpModal')" title="模块说明">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
@@ -439,21 +485,24 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
 
 <!-- 地图样式 Popover 菜单 -->
 <div class="menu-popover" id="layerMenu">
-  <button class="menu-item active" data-layer="google_sat" onclick="selectLayer('google_sat')">🛰️ 谷歌卫星 (全球) <span>✓</span></button>
-  <button class="menu-item" data-layer="google_map" onclick="selectLayer('google_map')">🗺️ 谷歌地图 (全球)</button>
-  <button class="menu-item" data-layer="osm" onclick="selectLayer('osm')">🌍 OSM 全球地图</button>
-  <button class="menu-item" data-layer="esri_sat" onclick="selectLayer('esri_sat')">📷 ArcGIS 卫星</button>
-  <button class="menu-item" data-layer="amap" onclick="selectLayer('amap')">🇨🇳 高德地图 (国内)</button>
+  <button class="menu-item" data-layer="amap" onclick="selectLayer('amap')">🇨🇳 高德地图 (国内极速)</button>
+  <button class="menu-item" data-layer="amap_sat" onclick="selectLayer('amap_sat')">🛰️ 高德卫星 (国内高清)</button>
+  <button class="menu-item" data-layer="google_sat" onclick="selectLayer('google_sat')">🛰️ 谷歌卫星 (全球高清)</button>
+  <button class="menu-item" data-layer="google_map" onclick="selectLayer('google_map')">🗺️ 谷歌地图 (全球标准)</button>
+  <button class="menu-item" data-layer="osm" onclick="selectLayer('osm')">🌍 OSM 地图 (全球通用)</button>
+  <button class="menu-item" data-layer="esri_sat" onclick="selectLayer('esri_sat')">📷 ArcGIS 卫星 (全球影像)</button>
+  <button class="menu-item" data-layer="carto_light" onclick="selectLayer('carto_light')">🎨 极简浅色 (Apple 风格)</button>
+  <button class="menu-item" data-layer="carto_dark" onclick="selectLayer('carto_dark')">🌙 极简深色 (夜间暗色)</button>
 </div>
 
-<!-- 底部控制面板 (极其耐看干净) -->
+<!-- 底部控制面板 -->
 <div class="bottom-sheet" id="bottomSheet">
   <div class="drag-handle"></div>
 
   <!-- 头部：标题与右侧融合状态 -->
   <div class="sheet-header">
     <div class="sheet-title">目标位置</div>
-    <div class="status-badge" onclick="queryActive()">
+    <div class="status-badge" onclick="queryActive(true)" title="点击刷新设备配置状态">
       <div class="status-dot off" id="statusDot"></div>
       <span id="statusText">未连接 ●</span>
     </div>
@@ -541,13 +590,28 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: -apple-sy
 const SAVE_API = 'https://gs-loc.apple.com/wloc-settings/save';
 const FAV_KEY = 'apple_wloc_favs_v3';
 const LAST_VIEW_KEY = 'apple_wloc_last_view';
+const LAST_LAYER_KEY = 'apple_wloc_layer';
 
 let currentLat = 22.544577, currentLon = 113.941140;
-let map, currentLayer, realLocMarker;
+let map, currentLayer, currentLayerKey = 'amap', realLocMarker;
 let activeSavedLat = null, activeSavedLon = null;
 
 // 全球与国内多数据源瓦片配置
 const tileLayers = {
+  amap: L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+    subdomains: ['1', '2', '3', '4'],
+    maxZoom: 18,
+    maxNativeZoom: 18,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
+  amap_sat: L.tileLayer('https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
+    subdomains: ['1', '2', '3', '4'],
+    maxZoom: 18,
+    maxNativeZoom: 18,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
   google_sat: L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
     subdomains: ['0', '1', '2', '3'],
     maxZoom: 20,
@@ -573,34 +637,53 @@ const tileLayers = {
     updateWhenIdle: false,
     keepBuffer: 4
   }),
-  amap: L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-    subdomains: ['1', '2', '3', '4'],
-    maxZoom: 18,
-    maxNativeZoom: 18,
+  carto_light: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
+    updateWhenIdle: false,
+    keepBuffer: 4
+  }),
+  carto_dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
     updateWhenIdle: false,
     keepBuffer: 4
   })
 };
 
 function initMap() {
-  // 读取上次记忆位置
+  if (typeof L === 'undefined') {
+    setTimeout(initMap, 200);
+    return;
+  }
+
+  // 1. 读取上次记忆位置
+  let initZoom = 15;
   try {
     const last = JSON.parse(localStorage.getItem(LAST_VIEW_KEY));
-    if (last && last.lat && last.lon) {
+    if (last && typeof last.lat === 'number' && typeof last.lon === 'number' && isFinite(last.lat) && isFinite(last.lon)) {
       currentLat = last.lat;
       currentLon = last.lon;
+      if (last.zoom && isFinite(last.zoom)) initZoom = last.zoom;
     }
   } catch(e) {}
 
+  // 2. 初始化地图
   map = L.map('map', {
     zoomControl: false,
-    attributionControl: false
-  }).setView([currentLat, currentLon], 15);
+    attributionControl: false,
+    fadeAnimation: true,
+    zoomAnimation: true
+  }).setView([currentLat, currentLon], initZoom);
 
-  currentLayer = tileLayers.google_sat;
-  currentLayer.addTo(map);
+  // 3. 读取上次选择的图层，默认使用高德或记忆图层
+  let savedLayer = localStorage.getItem(LAST_LAYER_KEY);
+  if (!savedLayer || !tileLayers[savedLayer]) {
+    savedLayer = 'amap';
+  }
+  selectLayer(savedLayer, false);
 
-  // 地图移动监听：拖拽时沉降面板，停止时精准取中央经纬度
+  // 4. 地图移动监听：拖拽时沉降面板，停止时精准取中央经纬度
   const sheet = document.getElementById('bottomSheet');
   const crosshair = document.getElementById('crosshair');
 
@@ -616,12 +699,21 @@ function initMap() {
     updateCoordsDisplay(center.lat, center.lng);
   });
 
+  // 5. 确保在各种移动设备上都能正确重绘尺寸
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
+  window.addEventListener('resize', () => {
+    map.invalidateSize();
+  });
+
   updateCoordsDisplay(currentLat, currentLon);
   renderFavs();
-  queryActive();
+  queryActive(false);
 }
 
 function updateCoordsDisplay(lat, lon) {
+  if (!isFinite(lat) || !isFinite(lon)) return;
   currentLat = lat;
   currentLon = lon;
   document.getElementById('lonDisplay').textContent = lon.toFixed(6);
@@ -629,7 +721,7 @@ function updateCoordsDisplay(lat, lon) {
 
   // 保存最新视图记忆
   try {
-    localStorage.setItem(LAST_VIEW_KEY, JSON.stringify({ lat, lon, zoom: map.getZoom() }));
+    localStorage.setItem(LAST_VIEW_KEY, JSON.stringify({ lat, lon, zoom: map ? map.getZoom() : 15 }));
   } catch(e) {}
 
   checkUnwrittenChanges();
@@ -650,10 +742,17 @@ function checkUnwrittenChanges() {
   }
 }
 
-function selectLayer(name) {
+function selectLayer(name, showToast = true) {
+  if (!tileLayers[name]) name = 'amap';
   if (currentLayer) map.removeLayer(currentLayer);
+  currentLayerKey = name;
   currentLayer = tileLayers[name];
   currentLayer.addTo(map);
+
+  // 记忆用户图层偏好
+  try {
+    localStorage.setItem(LAST_LAYER_KEY, name);
+  } catch(e) {}
 
   document.querySelectorAll('#layerMenu .menu-item').forEach(item => {
     const isTarget = item.dataset.layer === name;
@@ -665,11 +764,18 @@ function selectLayer(name) {
   });
 
   closePopover('layerMenu');
+
+  if (showToast) {
+    const activeBtn = document.querySelector(`#layerMenu .menu-item[data-layer="${name}"]`);
+    const label = activeBtn ? activeBtn.textContent.replace('✓', '').trim() : name;
+    toast(`已切换至: ${label}`);
+  }
 }
 
 function moveTo(lat, lon, zoom = 15) {
-  map.setView([lat, lon], zoom);
+  if (!isFinite(lat) || !isFinite(lon)) return;
   updateCoordsDisplay(lat, lon);
+  if (map) map.setView([lat, lon], zoom);
 }
 
 function toast(msg) {
@@ -716,11 +822,11 @@ async function saveLocation() {
 }
 
 // 查询系统激活数据
-function queryActive() {
+function queryActive(isManual = false) {
   const text = document.getElementById('statusText');
   const dot = document.getElementById('statusDot');
 
-  text.textContent = '检查中...';
+  if (isManual) text.textContent = '检查中...';
 
   fetch(`${SAVE_API}?action=query`, { method: 'GET', mode: 'cors', cache: 'no-store' })
     .then(r => r.json())
@@ -729,16 +835,19 @@ function queryActive() {
         activeSavedLon = parseFloat(d.longitude);
         activeSavedLat = parseFloat(d.latitude);
         checkUnwrittenChanges();
+        if (isManual) toast(`已获取设备定位: ${activeSavedLon.toFixed(4)}, ${activeSavedLat.toFixed(4)}`);
       } else {
         activeSavedLat = null; activeSavedLon = null;
         text.textContent = '未保存坐标 ●';
         dot.className = 'status-dot off';
+        if (isManual) toast('当前处于真实 GPS 模式 (未保存虚拟坐标)');
       }
     })
     .catch(() => {
       activeSavedLat = null; activeSavedLon = null;
       text.textContent = '未连接配置 ●';
-      toast('未检测到模块拦截：请确认小火箭 MITM 证书已全权信任并开启配置模式');
+      dot.className = 'status-dot off';
+      if (isManual) toast('未连接到模块：请确认小火箭代理开启并全权信任 MITM 证书');
     });
 }
 
@@ -750,7 +859,7 @@ function confirmClearActive() {
       if (d.success) {
         activeSavedLat = null; activeSavedLon = null;
         toast('✓ 已清除，恢复真实定位');
-        queryActive();
+        queryActive(false);
       }
     })
     .catch(() => toast('还原请求已发送'));
@@ -765,32 +874,48 @@ function locateMe() {
       const lat = pos.coords.latitude, lon = pos.coords.longitude;
       if (!realLocMarker) {
         realLocMarker = L.circleMarker([lat, lon], {
-          radius: 7,
+          radius: 8,
           color: '#ffffff',
-          weight: 2,
-          fillColor: '#34C759',
+          weight: 2.5,
+          fillColor: '#12B76A',
           fillOpacity: 1
         }).addTo(map);
       } else {
         realLocMarker.setLatLng([lat, lon]);
       }
       moveTo(lat, lon, 16);
-      toast('已定位到物理 GPS 位置');
+      toast('已定位到当前物理 GPS 位置');
     },
-    err => toast('定位获取失败: ' + err.message)
+    err => {
+      toast('定位获取失败: ' + (err.message || '权限被拒绝'));
+    },
+    { enableHighAccuracy: true, timeout: 8000 }
   );
 }
 
-// 搜索解析
+// 搜索解析（支持地名、坐标、或常见地图 URL）
 function handleSearch() {
   const query = document.getElementById('searchInput').value.trim();
-  if (!query) return toast('请输入查询内容');
+  if (!query) return toast('请输入地名或经纬度坐标');
 
-  let match = query.match(/(-?\d{1,3}\.\d+)[,\s]+(-?\d{1,3}\.\d+)/);
+  // 1. 尝试匹配两组数字坐标 (例如 22.5445, 113.9411 或 113.9411, 22.5445)
+  let match = query.match(/(-?\d{1,3}\.\d+)[,\s/]+(-?\d{1,3}\.\d+)/);
   if (match) {
-    return moveTo(parseFloat(match[1]), parseFloat(match[2]), 16);
+    let p1 = parseFloat(match[1]), p2 = parseFloat(match[2]);
+    // 经度通常在 -180~180, 纬度通常在 -90~90
+    let lat, lon;
+    if (Math.abs(p1) <= 90 && Math.abs(p2) > 90) {
+      lat = p1; lon = p2;
+    } else if (Math.abs(p2) <= 90 && Math.abs(p1) > 90) {
+      lon = p1; lat = p2;
+    } else {
+      lat = p1; lon = p2;
+    }
+    moveTo(lat, lon, 16);
+    return toast(`已跳转到坐标: ${lon.toFixed(4)}, ${lat.toFixed(4)}`);
   }
 
+  // 2. 地名网络搜索
   toast('搜索中...');
   fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`)
     .then(r => r.json())
@@ -799,10 +924,12 @@ function handleSearch() {
         moveTo(parseFloat(data[0].lat), parseFloat(data[0].lon), 16);
         toast(`已找到: ${data[0].display_name.slice(0, 16)}`);
       } else {
-        toast('未找到对应位置');
+        toast('未搜索到对应位置，请尝试具体路名或城市');
       }
     })
-    .catch(() => toast('搜索解析连接失败'));
+    .catch(() => {
+      toast('搜索接口连接失败，可直接输入经纬度');
+    });
 }
 
 function copyCoord(type) {
@@ -851,7 +978,10 @@ function togglePopover(id) {
   const el = document.getElementById(id);
   el.classList.toggle('active');
 }
-function closePopover(id) { document.getElementById(id).classList.remove('active'); }
+function closePopover(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('active');
+}
 
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -859,13 +989,15 @@ function copyText(text) { navigator.clipboard.writeText(text).then(() => toast('
 function escapeHtml(str) { return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 
 document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+
+// 点击空白处关闭 Popover
 document.addEventListener('click', e => {
   if (!e.target.closest('.top-icon-btn') && !e.target.closest('.menu-popover')) {
     closePopover('layerMenu');
   }
 });
 
-window.onload = initMap;
+window.addEventListener('DOMContentLoaded', initMap);
 </script>
 </body>
 </html>
