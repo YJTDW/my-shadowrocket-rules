@@ -15,7 +15,8 @@
 - 小火箭配置：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/%E5%B0%8F%E7%81%AB%E7%AE%AD.conf`
 
 ## Stash
-
+ 
+- WLOC 定位修改覆写：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/apple-wloc-stash.stoverride`
 - 三合一防泄露分流：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/Stash-All-in-One.stoverride`
 - Sub-Store 通用链式脚本：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/SubStore-Stash-Chain.js`
 - Sub-Store 使用说明：`https://github.com/YJTDW/my-shadowrocket-rules/blob/main/SubStore-Stash-Chain-Guide.md`

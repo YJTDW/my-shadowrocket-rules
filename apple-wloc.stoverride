@@ -1,0 +1,188 @@
+name: 'Apple WLOC 定位修改（Stash 专用修正版）'
+desc: '修复通用 WLOC 脚本在 Stash 中响应被嵌套、日志成功但定位不生效的问题'
+category: 'Tools'
+version: '2.0.0'
+
+http:
+  mitm:
+    - 'gs-loc.apple.com'
+    - 'gs-loc-cn.apple.com'
+
+  script:
+    - match: '^https?:\/\/gs-loc(-cn)?\.apple\.com\/clls\/wloc'
+      name: 'Apple WLOC Stash Fix'
+      type: response
+      require-body: true
+      binary-mode: true
+      max-size: 0
+      timeout: 30
+      debug: false
+
+    - match: '^https?:\/\/gs-loc(-cn)?\.apple\.com\/wloc-settings\/save'
+      name: 'WLOC Settings'
+      type: request
+      require-body: false
+      max-size: 0
+      timeout: 10
+      debug: false
+
+script-providers:
+  'Apple WLOC Stash Fix':
+    interval: 86400
+    payload: |
+      /*
+       * Apple WLOC — Stash 专用响应适配器
+       * 将通用脚本返回的 { response: {...} } 转换为
+       * Stash 响应脚本要求的 { status, headers, body }。
+       */
+      (function () {
+        "use strict";
+      
+        const SOURCE_URL =
+          "https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/wloc.js";
+        const CACHE_KEY = "wloc_stash_upstream_source_v2";
+        const CACHE_TIME_KEY = "wloc_stash_upstream_time_v2";
+        const CACHE_TTL = 24 * 60 * 60 * 1000;
+      
+        const nativeDone = $done;
+        let finished = false;
+      
+        function doneForStash(value) {
+          if (finished) return;
+          finished = true;
+      
+          try {
+            if (
+              value &&
+              typeof value === "object" &&
+              value.response &&
+              typeof value.response === "object"
+            ) {
+              const response = value.response;
+              const result = {};
+      
+              if (response.status != null) {
+                result.status = response.status;
+              } else if (response.statusCode != null) {
+                result.status = response.statusCode;
+              }
+      
+              if (response.headers) {
+                result.headers = Object.assign({}, response.headers);
+                delete result.headers["Transfer-Encoding"];
+                delete result.headers["transfer-encoding"];
+                delete result.headers["Content-Length"];
+                delete result.headers["content-length"];
+              }
+      
+              if (response.body != null) {
+                result.body = response.body;
+              } else if (response.bodyBytes != null) {
+                result.body = response.bodyBytes;
+              } else if (response.rawBody != null) {
+                result.body = response.rawBody;
+              }
+      
+              console.log(
+                "[wloc-stash-fix] 已把嵌套 response 转换为 Stash 原生响应"
+              );
+              nativeDone(result);
+              return;
+            }
+      
+            nativeDone(value || {});
+          } catch (error) {
+            console.log(
+              "[wloc-stash-fix] 返回失败: " +
+                (error && error.message ? error.message : error)
+            );
+            nativeDone({});
+          }
+        }
+      
+        function runSource(source) {
+          try {
+            if (!source || typeof source !== "string") {
+              throw new Error("上游脚本内容为空");
+            }
+      
+            // 用适配后的 $done 执行原 WLOC 脚本。
+            const runner = new Function("$done", source);
+            runner(doneForStash);
+          } catch (error) {
+            console.log(
+              "[wloc-stash-fix] 执行上游脚本失败: " +
+                (error && error.message ? error.message : error)
+            );
+            doneForStash({});
+          }
+        }
+      
+        function saveCache(source) {
+          try {
+            $persistentStore.write(source, CACHE_KEY);
+            $persistentStore.write(String(Date.now()), CACHE_TIME_KEY);
+          } catch (error) {
+            console.log(
+              "[wloc-stash-fix] 缓存失败: " +
+                (error && error.message ? error.message : error)
+            );
+          }
+        }
+      
+        function updateSource(fallback) {
+          $httpClient.get(
+            {
+              url: SOURCE_URL,
+              timeout: 15,
+              headers: {
+                Accept: "application/javascript,text/plain,*/*",
+                "User-Agent": "Stash-WLOC-Adapter"
+              }
+            },
+            function (error, response, data) {
+              if (!error && data && typeof data === "string") {
+                console.log("[wloc-stash-fix] 已下载并缓存原 WLOC 脚本");
+                saveCache(data);
+                runSource(data);
+                return;
+              }
+      
+              console.log(
+                "[wloc-stash-fix] 下载失败，尝试缓存: " +
+                  (error || "返回内容为空")
+              );
+      
+              if (fallback) runSource(fallback);
+              else doneForStash({});
+            }
+          );
+        }
+      
+        let cached = null;
+        let cachedAt = 0;
+      
+        try {
+          cached = $persistentStore.read(CACHE_KEY);
+          cachedAt = parseInt(
+            $persistentStore.read(CACHE_TIME_KEY) || "0",
+            10
+          );
+        } catch (error) {
+          console.log(
+            "[wloc-stash-fix] 读取缓存失败: " +
+              (error && error.message ? error.message : error)
+          );
+        }
+      
+        if (cached && Date.now() - cachedAt < CACHE_TTL) {
+          console.log("[wloc-stash-fix] 使用已缓存的原 WLOC 脚本");
+          runSource(cached);
+        } else {
+          updateSource(cached);
+        }
+      })();
+
+  'WLOC Settings':
+    url: 'https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/wloc-settings.js'
+    interval: 86400
