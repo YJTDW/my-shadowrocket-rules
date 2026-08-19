@@ -10,29 +10,33 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-19"
-version: "3.3.2"
+version: "3.4.0"
 
 mode: rule
 ipv6: false
 
-# Two encrypted resolvers are enough for stable daily use without excessive
-# parallel DNS queries. Fallback DoH prevents DNS leaks for international domains.
+# Zero-Leak DNS Architecture:
+# Default nameserver is strictly Cloudflare/Google DoH.
+# Domestic Alidns/DNSPod is strictly isolated to geosite:cn domains via nameserver-policy.
 dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
   nameserver: #!replace
-    - "https://dns.alidns.com/dns-query"
-    - "https://doh.pub/dns-query"
-  fallback: #!replace
     - "https://1.1.1.1/dns-query"
     - "https://8.8.8.8/dns-query"
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
-  follow-rule: false
+  nameserver-policy: #!replace
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "*.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+  follow-rule: true
   skip-cert-verify: false
   fake-ip-filter: #!replace
     - "*.lan"
