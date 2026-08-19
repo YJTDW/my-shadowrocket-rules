@@ -9,14 +9,14 @@ desc: |-
   适用于直接导入订阅并叠加“四策略组”私有覆写的 Stash。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-14"
-version: "3.3.1"
+date: "2026-08-19"
+version: "3.3.2"
 
 mode: rule
 ipv6: false
 
 # Two encrypted resolvers are enough for stable daily use without excessive
-# parallel DNS queries.
+# parallel DNS queries. Fallback DoH prevents DNS leaks for international domains.
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -24,6 +24,14 @@ dns:
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
+  fallback: #!replace
+    - "https://1.1.1.1/dns-query"
+    - "https://8.8.8.8/dns-query"
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
   follow-rule: false
   skip-cert-verify: false
   fake-ip-filter: #!replace
