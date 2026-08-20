@@ -1,10 +1,10 @@
 # Stash Override (YAML)
-# Apple 轻量直连修正版 (v5.0.3)
+# Apple 轻量直连修正版 (v5.0.4)
 # 参考 v3.5 的简洁结构，仅保留 Apple 必要直连项，不影响其他分流
 
 name: "正式版"
 desc: |-
-  Apple 轻量直连修正版 (v5.0.3)：
+  Apple 轻量直连修正版 (v5.0.4)：
   - 修复 Apple 流量在命中分流前被全局 QUIC 规则拦截的问题；
   - 参考 v3.5 精简 Apple 规则，移除 Apple Geosite 与重复子域；
   - Apple ID、App Store、iCloud、Apple Intelligence、News 与 APNs 保持直连；
@@ -15,7 +15,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "5.0.3"
+version: "5.0.4"
 
 mode: rule
 ipv6: false
@@ -47,6 +47,7 @@ dns:
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
+    webrtc-ports: "(dst_port >= 3478 and dst_port <= 3481) or (dst_port >= 5349 and dst_port <= 5350) or (dst_port >= 19302 and dst_port <= 19309)"
 
 rules: #!replace
   # ==================== [0. 局域网与内网直连] ====================
@@ -70,9 +71,7 @@ rules: #!replace
   - "DOMAIN-REGEX,(^|\\.)stun[0-9-]*\\..+$,REJECT"
   - "DOMAIN-REGEX,(^|\\.)turn[0-9-]*\\..+$,REJECT"
   - "DOMAIN-KEYWORD,webrtc,REJECT"
-  - "DST-PORT,3478-3481,REJECT"
-  - "DST-PORT,5349-5350,REJECT"
-  - "DST-PORT,19302-19309,REJECT"
+  - "SCRIPT,webrtc-ports,REJECT,no-track"
   - "NETWORK,UDP,REJECT"
 
   # ==================== [2. Apple 轻量全直连] ====================
