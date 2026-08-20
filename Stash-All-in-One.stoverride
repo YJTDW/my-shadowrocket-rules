@@ -5,18 +5,16 @@
 name: "正式版"
 desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
-  Google、OpenAI/ChatGPT/Codex 与 Twitter/X 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
-  适用于直接导入订阅并叠加“四策略组”私有覆写的 Stash。
+  Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
+  国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.1.1"
+version: "3.2.0"
 
 mode: rule
 ipv6: false
 
-# Two encrypted resolvers are enough for stable daily use without excessive
-# parallel DNS queries.
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -27,6 +25,9 @@ dns:
   follow-rule: false
   skip-cert-verify: false
   fake-ip-filter: #!replace
+    - "stun.*.*"
+    - "stun.*.*.*"
+    - "*.stun.*.*"
     - "*.lan"
     - "+.local"
     - "+.localhost"
@@ -39,15 +40,13 @@ dns:
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
-# Block QUIC so HTTP/3 falls back to TCP and follows the selected proxy path.
+# Block QUIC so HTTP/3 falls back to TCP and follows the high-speed XTLS proxy path.
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
 
-# Replace the subscription rule array while leaving its nodes and proxy groups
-# untouched. The separate four-group override supplies “🚀节点选择”.
 rules: #!replace
-  # Local/private traffic always stays direct.
+  # 1. 局域网与内网 UDP/TCP 绝对直连
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
@@ -62,8 +61,45 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # Apple Private Relay must use the selected proxy before the broader Apple
-  # direct rules below.
+  # 2. ChatGPT 官方高级实时语音 UDP 3478 专线 (Article 9247338 官方网段放行)
+  - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🚀节点选择"
+
+  # 3. WebRTC STUN 探测通道 (保障 WebRTC 正常工作且 0 泄露)
+  - "DOMAIN-KEYWORD,stun,🚀节点选择"
+  - "DOMAIN-KEYWORD,turn,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun1.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun2.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun3.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun4.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.cloudflare.com,🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
+
+  # 4. Apple 双轨分流 (隐私中继走节点，下载与系统服务极速直连)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
@@ -72,7 +108,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
 
-  # Twitter / X (置顶放行，防止被广告规则误杀 t.co / twimg)
+  # 5. Twitter / X 全家桶置顶放行 (免疫广告误杀)
   - "GEOSITE,twitter,🚀节点选择"
   - "DOMAIN-KEYWORD,twitter,🚀节点选择"
   - "DOMAIN-KEYWORD,x.com,🚀节点选择"
@@ -83,7 +119,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
   - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
 
-  # Force the complete Google ecosystem through the selected proxy
+  # 6. Google 全生态走节点
   - "GEOSITE,google,🚀节点选择"
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
@@ -109,17 +145,16 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # OpenAI / ChatGPT / Codex core services
+  # 7. OpenAI / ChatGPT / Codex
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
-  - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
   - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
 
-  # Qihang Education website
+  # 8. 国内音视频流与教育直播 (保利威/阿里云/企航网校 100% 满速直连)
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -129,10 +164,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # Block non-Google ads
+  # 9. 广告拦截
   - "GEOSITE,category-ads-all,REJECT"
 
-  # China domains and IPs stay direct
+  # 10. 大陆全域网站/IP 极速直连
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -143,8 +178,8 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
+  # 11. 拦截 QUIC (UDP 443)，解决 YouTube/Google 旁路限速，强制走高性能 TCP TLS 1.3
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # Everything else follows the user's selected normal or chained exit.
+  # 12. 全局兜底
   - "MATCH,🚀节点选择"
