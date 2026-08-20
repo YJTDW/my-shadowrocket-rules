@@ -7,12 +7,12 @@ desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
   Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
-  实验性关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
+  恢复兼容型 Fake IP：保留局域网、时间同步与系统连通性域名的真实解析。
   与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-21"
-version: "3.2.3"
+version: "3.3.0"
 
 mode: rule
 ipv6: false
@@ -27,7 +27,17 @@ dns:
   follow-rule: false
   skip-cert-verify: false
   fake-ip-filter: #!replace
-    - "*"
+    - "*.lan"
+    - "+.local"
+    - "+.localhost"
+    - "+.home.arpa"
+    - "captive.apple.com"
+    - "time.*.com"
+    - "time.*.gov"
+    - "time.*.edu.cn"
+    - "time.*.apple.com"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
 
 # Block QUIC so HTTP/3 falls back to TCP and follows the high-speed XTLS proxy path.
 script:
