@@ -1,20 +1,21 @@
 # Stash Override (YAML)
-# Apple 全生态直连修正版 (v5.0.2)
-# App Store、iCloud、Apple Intelligence、News、APNs 与 Apple 自有 IP 全部直连
+# Apple 轻量直连修正版 (v5.0.3)
+# 参考 v3.5 的简洁结构，仅保留 Apple 必要直连项，不影响其他分流
 
 name: "正式版"
 desc: |-
-  Apple 全生态直连修正版 (v5.0.2)：
+  Apple 轻量直连修正版 (v5.0.3)：
   - 修复 Apple 流量在命中分流前被全局 QUIC 规则拦截的问题；
-  - Apple ID、App Store、iCloud、Apple Intelligence、News 与 APNs 全部直连；
-  - Apple 自有 17.0.0.0/8 和官方 Store/CDN 域名明确直连；
+  - 参考 v3.5 精简 Apple 规则，移除 Apple Geosite 与重复子域；
+  - Apple ID、App Store、iCloud、Apple Intelligence、News 与 APNs 保持直连；
   - Google / OpenAI / Claude 全生态强制走“🚀节点选择”；
   - 国内日常、微信、学习、企航网校极速直连；
+  - 局域网以外的 WebRTC、STUN/TURN 与全部 UDP 严格拒绝；
   - 保持纯净轻量 DoH，不增加激进的分域 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "5.0.2"
+version: "5.0.3"
 
 mode: rule
 ipv6: false
@@ -63,47 +64,45 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # ==================== [1. Apple ID 登录与认证 (稳定直连)] ====================
-  - "DOMAIN,account.apple.com,DIRECT"
-  - "DOMAIN,appleid.cdn-apple.com,DIRECT"
-  - "DOMAIN,idmsa.apple.com,DIRECT"
-  - "DOMAIN,gsa.apple.com,DIRECT"
+  # ==================== [1. WebRTC 与公网 UDP 严格关闭] ====================
+  # 局域网已经在上方直连；其余 UDP 以及常见 STUN/TURN 通道全部拒绝。
+  - "DOMAIN-SUFFIX,livekit.cloud,REJECT"
+  - "DOMAIN-REGEX,(^|\\.)stun[0-9-]*\\..+$,REJECT"
+  - "DOMAIN-REGEX,(^|\\.)turn[0-9-]*\\..+$,REJECT"
+  - "DOMAIN-KEYWORD,webrtc,REJECT"
+  - "DST-PORT,3478-3481,REJECT"
+  - "DST-PORT,5349-5350,REJECT"
+  - "DST-PORT,19302-19309,REJECT"
+  - "NETWORK,UDP,REJECT"
 
-  # ==================== [2. Apple Intelligence / Private Cloud Compute / News (全部直连)] ====================
-  - "DOMAIN,apple-relay.apple.com,DIRECT"
-  - "DOMAIN,apple-relay.cloudflare.com,DIRECT"
-  - "DOMAIN,apple-relay.fastly-edge.com,DIRECT"
-  - "DOMAIN,cp4.cloudflare.com,DIRECT"
-  # 历史兼容兜底；当前 Apple 官方清单主要使用上面的 Fastly/Cloudflare 主机。
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
-  - "DOMAIN-SUFFIX,apple.news,DIRECT"
-  - "DOMAIN-SUFFIX,news.apple.com,DIRECT"
-
-  # ==================== [3. Apple 全生态 / App Store / iCloud / APNs (全部直连)] ====================
-  # 两套 Geosite 互补：apple 主表不包含 apple-intelligence。
-  - "GEOSITE,apple-intelligence,DIRECT"
-  - "GEOSITE,apple,DIRECT"
+  # ==================== [2. Apple 轻量全直连] ====================
+  # apple.com 已覆盖 Apple ID、App Store、Siri、News 与 APNs 主域。
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apzones.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-dns.net,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
   - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-dns.net,DIRECT"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apzones.com,DIRECT"
   - "DOMAIN-SUFFIX,appstore.com,DIRECT"
-  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,me.com,DIRECT"
   - "DOMAIN-SUFFIX,apple,DIRECT"
   - "DOMAIN-SUFFIX,itunes.com,DIRECT"
   - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
+
+  # Apple Intelligence / Private Cloud Compute 使用的第三方专用主机。
+  - "DOMAIN,apple-relay.cloudflare.com,DIRECT"
+  - "DOMAIN,apple-relay.fastly-edge.com,DIRECT"
+  - "DOMAIN,cp4.cloudflare.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
+  - "DOMAIN-SUFFIX,apple.news,DIRECT"
+
+  # Apple 官方列出的外部精确主机与 Apple 自有 IPv4；不扩大到共享 CDN 泛域。
   - "DOMAIN,appldnld.apple.com.edgesuite.net,DIRECT"
-  # Apple 官方确认整个 17.0.0.0/8 分配给 Apple；兜底 APNs 与仅显示 IP 的 Apple 连接。
   - "IP-CIDR,17.0.0.0/8,DIRECT,no-resolve"
 
   # ==================== [4. Google 全生态 (强制走节点)] ====================
@@ -136,7 +135,6 @@ rules: #!replace
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
-  - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
   - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
