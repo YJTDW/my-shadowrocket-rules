@@ -1,20 +1,20 @@
 # Stash Override (YAML)
-# 稳态修正版 (v5.0.1)
-# 修复 Stash Apple UDP/443 规则优先级，并保持轻量 DNS 与 APNs 原策略
+# Apple 全生态直连修正版 (v5.0.2)
+# App Store、iCloud、Apple Intelligence、News、APNs 与 Apple 自有 IP 全部直连
 
 name: "正式版"
 desc: |-
-  稳态修正版 (v5.0.1)：
+  Apple 全生态直连修正版 (v5.0.2)：
   - 修复 Apple 流量在命中分流前被全局 QUIC 规则拦截的问题；
-  - Apple ID、App Store、普通 iCloud 与国内 CDN 保持直连；
-  - Apple Intelligence、Private Cloud Compute 与 Apple News 走节点；
+  - Apple ID、App Store、iCloud、Apple Intelligence、News 与 APNs 全部直连；
+  - Apple 自有 17.0.0.0/8 和官方 Store/CDN 域名明确直连；
   - Google / OpenAI / Claude 全生态强制走“🚀节点选择”；
   - 国内日常、微信、学习、企航网校极速直连；
   - 保持纯净轻量 DoH，不增加激进的分域 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "5.0.1"
+version: "5.0.2"
 
 mode: rule
 ipv6: false
@@ -69,17 +69,20 @@ rules: #!replace
   - "DOMAIN,idmsa.apple.com,DIRECT"
   - "DOMAIN,gsa.apple.com,DIRECT"
 
-  # ==================== [2. Apple Intelligence / Private Cloud Compute / News (走节点)] ====================
-  - "DOMAIN,apple-relay.apple.com,🚀节点选择"
-  - "DOMAIN,apple-relay.cloudflare.com,🚀节点选择"
-  - "DOMAIN,apple-relay.fastly-edge.com,🚀节点选择"
-  - "DOMAIN,cp4.cloudflare.com,🚀节点选择"
+  # ==================== [2. Apple Intelligence / Private Cloud Compute / News (全部直连)] ====================
+  - "DOMAIN,apple-relay.apple.com,DIRECT"
+  - "DOMAIN,apple-relay.cloudflare.com,DIRECT"
+  - "DOMAIN,apple-relay.fastly-edge.com,DIRECT"
+  - "DOMAIN,cp4.cloudflare.com,DIRECT"
   # 历史兼容兜底；当前 Apple 官方清单主要使用上面的 Fastly/Cloudflare 主机。
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple.news,🚀节点选择"
-  - "DOMAIN-SUFFIX,news.apple.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
+  - "DOMAIN-SUFFIX,apple.news,DIRECT"
+  - "DOMAIN-SUFFIX,news.apple.com,DIRECT"
 
-  # ==================== [3. Apple / App Store / 普通 iCloud / 国内 CDN (直连)] ====================
+  # ==================== [3. Apple 全生态 / App Store / iCloud / APNs (全部直连)] ====================
+  # 两套 Geosite 互补：apple 主表不包含 apple-intelligence。
+  - "GEOSITE,apple-intelligence,DIRECT"
+  - "GEOSITE,apple,DIRECT"
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com.cn,DIRECT"
@@ -96,6 +99,12 @@ rules: #!replace
   - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,me.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
+  - "DOMAIN,appldnld.apple.com.edgesuite.net,DIRECT"
+  # Apple 官方确认整个 17.0.0.0/8 分配给 Apple；兜底 APNs 与仅显示 IP 的 Apple 连接。
+  - "IP-CIDR,17.0.0.0/8,DIRECT,no-resolve"
 
   # ==================== [4. Google 全生态 (强制走节点)] ====================
   - "GEOSITE,google,🚀节点选择"
