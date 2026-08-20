@@ -8,7 +8,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.9.0"
+version: "3.9.1"
 
 mode: rule
 ipv6: false
@@ -28,22 +28,12 @@ dns:
     - 1.1.1.1
     - 8.8.8.8
   fake-ip-filter: #!replace
-    - "+.apple.com"
-    - "+.icloud.com"
-    - "+.itunes.com"
-    - "+.mzstatic.com"
-    - "+.cdn-apple.com"
-    - "+.aaplimg.com"
-    - "+.apple-cloudkit.com"
-    - "+.apple-livephotoskit.com"
-    - "+.apple-mapkit.com"
-    - "+.appstore.com"
-    - "captive.apple.com"
-    - "time.*.apple.com"
     - "*.lan"
     - "+.local"
     - "+.localhost"
     - "+.home.arpa"
+    - "captive.apple.com"
+    - "time.*.apple.com"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
