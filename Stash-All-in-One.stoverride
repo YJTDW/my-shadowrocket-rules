@@ -1,14 +1,18 @@
 # Stash Override (YAML)
-# Complete fix for Apple App Store, iCloud, and all domestic/international apps.
+# Dedicated Specialized Streaming Edition (专项精细分流版)
+# 针对 Apple 全业务、Google、OpenAI、Claude、国内学习/电商进行专项流化隔离。
 
 name: "正式版"
 desc: |-
-  极速轻量正式版：彻底修复 Apple / App Store 无法连接与任何软件加载缓慢问题。
-  国内秒开直连、海外与 OpenAI/Google 强制走节点，0 延迟损耗。
+  专项精细分流正式版 (v4.0.0)：
+  - 苹果全家桶专项流化：连通性/应用商店/CDN/海外服务精准隔离，彻底解决无互联网连接与加载问题；
+  - OpenAI / Claude / Google 专项流化强制走节点；
+  - 企航教育/学习流媒体/国内 CDN 专项直连；
+  - 毫秒级原生 DNS 驱动，0 延迟、0 丢包。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.9.1"
+version: "4.0.0"
 
 mode: rule
 ipv6: false
@@ -43,12 +47,11 @@ script:
     merged-quic: "network == 'udp' and dst_port == 443"
 
 rules: #!replace
-  # 1. 本地/局域网直连
+  # ==================== [0. 局域网与内网直连] ====================
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
   - "DOMAIN-SUFFIX,home.arpa,DIRECT"
-  - "DOMAIN,captive.apple.com,DIRECT"
   - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
   - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
   - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
@@ -58,24 +61,43 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # 2. 拦截 QUIC 协议防止 YouTube / Google 旁路与握手阻塞
+  # ==================== [1. 拦截 QUIC UDP 443 协议] ====================
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # 3. 苹果官方全生态直连加速 (彻底修复 App Store / iCloud / Apple Music 秒开)
+  # ==================== [2. 专门流化：Apple 系统网络探针 (秒除“无网络连接”假死)] ====================
+  - "DOMAIN,captive.apple.com,DIRECT"
+  - "DOMAIN,connectivitycheck.gstatic.com,DIRECT"
+  - "DOMAIN,detectportal.firefox.com,DIRECT"
+  - "DOMAIN,msftconnecttest.com,DIRECT"
+  - "DOMAIN,msftncsi.com,DIRECT"
+
+  # ==================== [3. 专门流化：Apple 海外专属业务与隐私中继 (走节点)] ====================
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
-  - "GEOSITE,apple,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
-  - "DOMAIN-SUFFIX,itunes.com,DIRECT"
+  - "DOMAIN-SUFFIX,news.apple.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple.news,🚀节点选择"
+  - "DOMAIN,appleid.apple.com,🚀节点选择"
+  - "DOMAIN,gsa.apple.com,🚀节点选择"
+  - "DOMAIN,idmsa.apple.com,🚀节点选择"
+  - "DOMAIN,developer.apple.com,🚀节点选择"
+  - "DOMAIN,beta.apple.com,🚀节点选择"
+
+  # ==================== [4. 专门流化：Apple 商店/下载/iCloud/国内 CDN (国内极速直连)] ====================
+  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
-  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,appstore.com,DIRECT"
+  - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
+  - "DOMAIN-SUFFIX,me.com,DIRECT"
+  - "GEOSITE,apple,DIRECT"
+  - "DOMAIN-SUFFIX,apple.com,DIRECT"
 
-  # 4. Google 全生态强制走节点
+  # ==================== [5. 专门流化：Google 全生态 (强制走节点)] ====================
   - "GEOSITE,google,🚀节点选择"
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
@@ -101,7 +123,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # 5. OpenAI / ChatGPT 全生态强制走节点
+  # ==================== [6. 专门流化：OpenAI / ChatGPT / Claude AI (强制走节点)] ====================
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
@@ -110,8 +132,10 @@ rules: #!replace
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
+  - "DOMAIN-SUFFIX,claude.ai,🚀节点选择"
+  - "DOMAIN-SUFFIX,anthropic.com,🚀节点选择"
 
-  # 6. 国内常用与学习业务直连
+  # ==================== [7. 专门流化：国内学习/网校/视频加速 (极速直连)] ====================
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -121,10 +145,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # 7. 广告拦截
+  # ==================== [8. 广告与垃圾跟踪拦截] ====================
   - "GEOSITE,category-ads-all,REJECT"
 
-  # 8. 国内域名与 IP 极速直连
+  # ==================== [9. 大陆全域网站与 IP 极速直连] ====================
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -135,5 +159,5 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # 9. 其他全量流量走节点
+  # ==================== [10. 国际全量流量兜底] ====================
   - "MATCH,🚀节点选择"
