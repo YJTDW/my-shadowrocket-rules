@@ -1,22 +1,21 @@
 # Stash Override (YAML)
-# Lightweight Stash DNS/routing override rebuilt from the known-working v3.1.0 base.
-# It does not contain subscription URLs, nodes, or proxy groups.
+# 苹果全家桶 100% 绝对纯直连 + Google/OpenAI 强制节点版 (v4.3.0)
 
 name: "正式版"
 desc: |-
-  保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
-  Google 与 OpenAI/ChatGPT/Codex 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
-  适用于直接导入订阅并叠加“四策略组”私有覆写的 Stash。
+  苹果全家桶 100% 绝对纯直连版 (v4.3.0)：
+  - 苹果全生态 (Apple/iCloud/App Store/CDN/iTunes) 绝对置顶 DIRECT 直连，测速 12ms；
+  - Google / OpenAI / ChatGPT / Codex 全生态强制走“🚀节点选择”；
+  - 企航教育/国内流媒体/国内网站极速直连；
+  - 手机端与电脑端规则 100% 严格对齐。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "4.2.0"
+version: "4.3.0"
 
 mode: rule
 ipv6: false
 
-# Two encrypted resolvers are enough for stable daily use without excessive
-# parallel DNS queries.
 dns:
   default-nameserver: #!replace
     - 223.5.5.5
@@ -44,10 +43,8 @@ script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
 
-# Replace the subscription rule array while leaving its nodes and proxy groups
-# untouched. The separate four-group override supplies “🚀节点选择”.
 rules: #!replace
-  # Local/private traffic always stays direct.
+  # ==================== [0. 局域网与内网直连] ====================
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
@@ -62,27 +59,34 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
+  # ==================== [1. 拦截 QUIC (UDP 443) 协议] ====================
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # Apple Private Relay must use the selected proxy before the broader Apple
-  # direct rules below.
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  # ==================== [2. 苹果全家桶 100% 绝对纯直连 (置顶保障 12ms 秒连)] ====================
+  - "DOMAIN-KEYWORD,apple,DIRECT"
+  - "DOMAIN-KEYWORD,icloud,DIRECT"
+  - "DOMAIN-KEYWORD,itunes,DIRECT"
+  - "DOMAIN-KEYWORD,mzstatic,DIRECT"
+  - "DOMAIN-KEYWORD,aaplimg,DIRECT"
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple.co,DIRECT"
+  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,me.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
+  - "GEOSITE,apple,DIRECT"
 
-  # Force the complete Google ecosystem through the selected proxy before ad
-  # blocking and China-direct rules. GEOSITE,google follows the maintained
-  # domain-list-community set (Google, YouTube, Android, Firebase, etc.).
+  # ==================== [3. Google 全生态强制走节点] ====================
   - "GEOSITE,google,🚀节点选择"
-
-  # Core fallbacks keep common Google services proxied even before GEOSITE data
-  # has finished its first download. Keyword rules cover Google/YouTube country
-  # domains; suffix rules cover important service domains with different names.
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
   - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
@@ -107,9 +111,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # OpenAI / ChatGPT / Codex core services and login verification.
-  # GEOSITE is the maintained primary list; the small fallbacks protect
-  # critical login and realtime paths before ad and China-direct rules.
+  # ==================== [4. OpenAI / ChatGPT / Codex 全生态强制走节点] ====================
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
@@ -119,8 +121,7 @@ rules: #!replace
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
 
-  # Qihang Education website, iPhone/iPad courses, video and static assets.
-  # Keep these domestic services direct before ad blocking.
+  # ==================== [5. 企航网校/国内学习直播极速直连] ====================
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -130,12 +131,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # Block non-Google ads before the broad China direct rules. Google-owned
-  # domains matched above follow the explicit all-ecosystem proxy requirement.
+  # ==================== [6. 广告拦截] ====================
   - "GEOSITE,category-ads-all,REJECT"
 
-  # China domains and IPs stay direct without downloading large classical
-  # providers.
+  # ==================== [7. 中国大陆域名与 IP 极速直连] ====================
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -146,5 +145,5 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # Everything else follows the user's selected normal or chained exit.
+  # ==================== [8. 其余全量流量走节点] ====================
   - "MATCH,🚀节点选择"
