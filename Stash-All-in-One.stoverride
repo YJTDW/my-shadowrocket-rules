@@ -1,17 +1,19 @@
 # Stash Override (YAML)
-# 苹果全家桶 100% 绝对纯直连 + Google/OpenAI 强制节点版 (v4.3.0)
+# 100% 稳态黄金标准版 (v5.0.0)
+# 彻底修复 Apple ID 登录、App Store、iCloud 同步与海外 AI 访问
 
 name: "正式版"
 desc: |-
-  苹果全家桶 100% 绝对纯直连版 (v4.3.0)：
-  - 苹果全生态 (Apple/iCloud/App Store/CDN/iTunes) 绝对置顶 DIRECT 直连，测速 12ms；
-  - Google / OpenAI / ChatGPT / Codex 全生态强制走“🚀节点选择”；
-  - 企航教育/国内流媒体/国内网站极速直连；
-  - 手机端与电脑端规则 100% 严格对齐。
+  稳态黄金标准版 (v5.0.0)：
+  - 修复 Apple ID / iCloud 登录与认证通道；
+  - 苹果应用商店与下载走国内 CDN 直连，隐私中继与海外服务走节点；
+  - Google / OpenAI / Claude 全生态强制走“🚀节点选择”；
+  - 国内日常、微信、学习、企航网校极速直连；
+  - 纯净轻量 DoH，0 延迟、0 丢包。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "4.3.0"
+version: "5.0.0"
 
 mode: rule
 ipv6: false
@@ -62,30 +64,26 @@ rules: #!replace
   # ==================== [1. 拦截 QUIC (UDP 443) 协议] ====================
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # ==================== [2. 苹果全家桶 100% 绝对纯直连 (置顶保障 12ms 秒连)] ====================
-  - "DOMAIN-KEYWORD,apple,DIRECT"
-  - "DOMAIN-KEYWORD,icloud,DIRECT"
-  - "DOMAIN-KEYWORD,itunes,DIRECT"
-  - "DOMAIN-KEYWORD,mzstatic,DIRECT"
-  - "DOMAIN-KEYWORD,aaplimg,DIRECT"
+  # ==================== [2. Apple 海外专属业务与隐私中继 (走节点，保障 Apple ID 登录与认证)] ====================
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple.news,🚀节点选择"
+  - "DOMAIN-SUFFIX,news.apple.com,🚀节点选择"
+
+  # ==================== [3. Apple 国内基础服务/App Store/iCloud/CDN (极速直连)] ====================
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple.co,DIRECT"
-  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
-  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
-  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
   - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,me.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
-  - "GEOSITE,apple,DIRECT"
 
-  # ==================== [3. Google 全生态强制走节点] ====================
+  # ==================== [4. Google 全生态 (强制走节点)] ====================
   - "GEOSITE,google,🚀节点选择"
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
@@ -111,7 +109,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # ==================== [4. OpenAI / ChatGPT / Codex 全生态强制走节点] ====================
+  # ==================== [5. OpenAI / ChatGPT / Codex / Claude (强制走节点)] ====================
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
@@ -120,8 +118,10 @@ rules: #!replace
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
+  - "DOMAIN-SUFFIX,claude.ai,🚀节点选择"
+  - "DOMAIN-SUFFIX,anthropic.com,🚀节点选择"
 
-  # ==================== [5. 企航网校/国内学习直播极速直连] ====================
+  # ==================== [6. 企航网校/国内学习/直播视频 (极速直连)] ====================
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -131,10 +131,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # ==================== [6. 广告拦截] ====================
+  # ==================== [7. 广告拦截] ====================
   - "GEOSITE,category-ads-all,REJECT"
 
-  # ==================== [7. 中国大陆域名与 IP 极速直连] ====================
+  # ==================== [8. 大陆全域网站与 IP 极速直连] ====================
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -145,5 +145,5 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # ==================== [8. 其余全量流量走节点] ====================
+  # ==================== [9. 国际全量流量兜底] ====================
   - "MATCH,🚀节点选择"
