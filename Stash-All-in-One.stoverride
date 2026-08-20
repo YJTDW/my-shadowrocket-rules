@@ -1,6 +1,5 @@
 # Stash Override (YAML)
-# High-speed lightweight zero-lag Stash override.
-# Fully fixes Apple services, removes DNS timeout, and restores instant app opening.
+# Complete fix for Apple App Store, iCloud, and all domestic/international apps.
 
 name: "正式版"
 desc: |-
@@ -9,7 +8,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.8.0"
+version: "3.9.0"
 
 mode: rule
 ipv6: false
@@ -23,28 +22,28 @@ dns:
     - 223.5.5.5
     - 119.29.29.29
   nameserver: #!replace
-    - "https://dns.alidns.com/dns-query"
-    - "https://doh.pub/dns-query"
+    - 223.5.5.5
+    - 119.29.29.29
   fallback: #!replace
-    - "https://1.1.1.1/dns-query"
-    - "https://8.8.8.8/dns-query"
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
+    - 1.1.1.1
+    - 8.8.8.8
   fake-ip-filter: #!replace
-    - "*.apple.com"
-    - "*.icloud.com"
-    - "*.cdn-apple.com"
-    - "*.mzstatic.com"
-    - "*.aaplimg.com"
+    - "+.apple.com"
+    - "+.icloud.com"
+    - "+.itunes.com"
+    - "+.mzstatic.com"
+    - "+.cdn-apple.com"
+    - "+.aaplimg.com"
+    - "+.apple-cloudkit.com"
+    - "+.apple-livephotoskit.com"
+    - "+.apple-mapkit.com"
+    - "+.appstore.com"
+    - "captive.apple.com"
+    - "time.*.apple.com"
     - "*.lan"
     - "+.local"
     - "+.localhost"
     - "+.home.arpa"
-    - "captive.apple.com"
-    - "time.*.apple.com"
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
@@ -69,18 +68,22 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # 2. 拦截 QUIC 协议防止 YouTube / Google 旁路
+  # 2. 拦截 QUIC 协议防止 YouTube / Google 旁路与握手阻塞
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # 3. 苹果官方直连与加速 (修复 App Store / iCloud 秒开)
+  # 3. 苹果官方全生态直连加速 (彻底修复 App Store / iCloud / Apple Music 秒开)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  - "GEOSITE,apple,DIRECT"
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
   - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
 
   # 4. Google 全生态强制走节点
   - "GEOSITE,google,🚀节点选择"
