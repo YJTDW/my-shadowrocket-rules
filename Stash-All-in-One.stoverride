@@ -8,10 +8,11 @@ desc: |-
   Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
   实验性关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
+  与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.2.1"
+version: "3.2.2"
 
 mode: rule
 ipv6: false
@@ -34,6 +35,9 @@ script:
     merged-quic: "network == 'udp' and dst_port == 443"
 
 rules: #!replace
+  # 0. 严格阻断 IPv6 旁路，与电脑端规则保持一致
+  - "IP-CIDR6,::/0,REJECT,no-resolve"
+
   # 1. 局域网与内网 UDP/TCP 绝对直连
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
@@ -76,6 +80,7 @@ rules: #!replace
   - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🚀节点选择"
 
   # 3. WebRTC STUN 探测通道 (保障 WebRTC 正常工作且 0 泄露)
+  - "PROTOCOL,STUN,🚀节点选择"
   - "DOMAIN-KEYWORD,stun,🚀节点选择"
   - "DOMAIN-KEYWORD,turn,🚀节点选择"
   - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
@@ -92,9 +97,27 @@ rules: #!replace
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple.co,DIRECT"
+  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
+  - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,me.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
+  - "GEOSITE,apple,DIRECT"
+
+  # 境外检测与工具域名跟随节点，避免测试站误走直连
+  - "DOMAIN-KEYWORD,browserleaks,🚀节点选择"
+  - "DOMAIN-SUFFIX,browserleaks.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择"
+  - "DOMAIN-SUFFIX,ipleak.net,🚀节点选择"
 
   # 5. Twitter / X 全家桶置顶放行 (免疫广告误杀)
   - "GEOSITE,twitter,🚀节点选择"
@@ -134,13 +157,35 @@ rules: #!replace
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
   # 7. OpenAI / ChatGPT / Codex
+  - "DOMAIN-SUFFIX,chatgpt.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,openai.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaistatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,openaimerge.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,statsig.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,statsigapi.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,featuregates.org,🚀节点选择"
+  - "DOMAIN-SUFFIX,auth0.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,arkoselabs.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,webpubsub.azure.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,workos.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,workoscdn.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,intercom.io,🚀节点选择"
+  - "DOMAIN-SUFFIX,intercomcdn.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,launchdarkly.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,segment.io,🚀节点选择"
   - "GEOSITE,openai,🚀节点选择"
-  - "DOMAIN-KEYWORD,openai,🚀节点选择"
-  - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
   - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
-  - "DOMAIN-KEYWORD,workos,🚀节点选择"
+  - "DOMAIN,turnstile.cloudflare.com,🚀节点选择"
+  - "DOMAIN,cdn.openaimerge.com,🚀节点选择"
+  - "DOMAIN,cdn.workos.com,🚀节点选择"
+  - "DOMAIN,forwarder.workos.com,🚀节点选择"
+  - "DOMAIN,images.workoscdn.com,🚀节点选择"
+  - "DOMAIN,setup.workos.com,🚀节点选择"
+  - "DOMAIN,workos.imgix.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,browser-intake-datadoghq.com,🚀节点选择"
 
   # 8. 国内音视频流与教育直播 (保利威/阿里云/企航网校 100% 满速直连)
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
