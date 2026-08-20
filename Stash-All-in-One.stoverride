@@ -7,8 +7,8 @@ desc: |-
   海外域名与测漏站强制走加密代理 DoH (#🚀节点选择)，彻底杜绝 Wi-Fi / 5G DNS 泄露。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-19"
-version: "3.5.0"
+date: "2026-08-20"
+version: "3.6.0"
 
 mode: rule
 ipv6: false
@@ -73,6 +73,10 @@ script:
     merged-quic: "network == 'udp' and dst_port == 443"
 
 rules: #!replace
+  # 1. 严格阻断 iOS 蜂窝网络 IPv6 旁路逃逸 (彻底杜绝 5G+Wi-Fi 双开时的 IPv6 泄露)
+  - "IP-CIDR6,::/0,REJECT,no-track"
+
+  # 2. 本地局域网流量保持直连
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
