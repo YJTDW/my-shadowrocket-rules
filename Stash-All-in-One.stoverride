@@ -1,19 +1,20 @@
 # Stash Override (YAML)
-# 100% 稳态黄金标准版 (v5.0.0)
-# 彻底修复 Apple ID 登录、App Store、iCloud 同步与海外 AI 访问
+# 稳态修正版 (v5.0.1)
+# 修复 Stash Apple UDP/443 规则优先级，并保持轻量 DNS 与 APNs 原策略
 
 name: "正式版"
 desc: |-
-  稳态黄金标准版 (v5.0.0)：
-  - 修复 Apple ID / iCloud 登录与认证通道；
-  - 苹果应用商店与下载走国内 CDN 直连，隐私中继与海外服务走节点；
+  稳态修正版 (v5.0.1)：
+  - 修复 Apple 流量在命中分流前被全局 QUIC 规则拦截的问题；
+  - Apple ID、App Store、普通 iCloud 与国内 CDN 保持直连；
+  - Apple Intelligence、Private Cloud Compute 与 Apple News 走节点；
   - Google / OpenAI / Claude 全生态强制走“🚀节点选择”；
   - 国内日常、微信、学习、企航网校极速直连；
-  - 纯净轻量 DoH，0 延迟、0 丢包。
+  - 保持纯净轻量 DoH，不增加激进的分域 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "5.0.0"
+version: "5.0.1"
 
 mode: rule
 ipv6: false
@@ -40,7 +41,8 @@ dns:
     - "+.msftconnecttest.com"
     - "+.msftncsi.com"
 
-# Block QUIC so HTTP/3 falls back to TCP and follows the selected proxy path.
+# Identify UDP/443; the rule near the end only rejects traffic that has not
+# already matched Apple, AI, education, or domestic routing.
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
@@ -61,19 +63,31 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # ==================== [1. 拦截 QUIC (UDP 443) 协议] ====================
-  - "SCRIPT,merged-quic,REJECT,no-track"
+  # ==================== [1. Apple ID 登录与认证 (稳定直连)] ====================
+  - "DOMAIN,account.apple.com,DIRECT"
+  - "DOMAIN,appleid.cdn-apple.com,DIRECT"
+  - "DOMAIN,idmsa.apple.com,DIRECT"
+  - "DOMAIN,gsa.apple.com,DIRECT"
 
-  # ==================== [2. Apple 海外专属业务与隐私中继 (走节点，保障 Apple ID 登录与认证)] ====================
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
+  # ==================== [2. Apple Intelligence / Private Cloud Compute / News (走节点)] ====================
+  - "DOMAIN,apple-relay.apple.com,🚀节点选择"
+  - "DOMAIN,apple-relay.cloudflare.com,🚀节点选择"
+  - "DOMAIN,apple-relay.fastly-edge.com,🚀节点选择"
+  - "DOMAIN,cp4.cloudflare.com,🚀节点选择"
+  # 历史兼容兜底；当前 Apple 官方清单主要使用上面的 Fastly/Cloudflare 主机。
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
   - "DOMAIN-SUFFIX,apple.news,🚀节点选择"
   - "DOMAIN-SUFFIX,news.apple.com,🚀节点选择"
 
-  # ==================== [3. Apple 国内基础服务/App Store/iCloud/CDN (极速直连)] ====================
+  # ==================== [3. Apple / App Store / 普通 iCloud / 国内 CDN (直连)] ====================
   - "DOMAIN-SUFFIX,apple.com,DIRECT"
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud.com.cn,DIRECT"
+  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
+  - "DOMAIN-SUFFIX,apzones.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-dns.net,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
   - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
@@ -145,5 +159,9 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # ==================== [9. 国际全量流量兜底] ====================
+  # ==================== [9. 未分类境外 QUIC (UDP 443) 拒绝] ====================
+  # Apple、Google、OpenAI、企航和国内流量已在前面先完成分流。
+  - "SCRIPT,merged-quic,REJECT,no-track"
+
+  # ==================== [10. 国际全量流量兜底] ====================
   - "MATCH,🚀节点选择"
