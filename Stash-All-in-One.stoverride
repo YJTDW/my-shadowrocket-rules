@@ -5,12 +5,12 @@
 name: "正式版"
 desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
-  Google 与 OpenAI/ChatGPT/Codex 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
+  Google、OpenAI/ChatGPT/Codex 与 Twitter/X 强制跟随“🚀节点选择”，不增加分域 DNS 或远程规则源。
   适用于直接导入订阅并叠加“四策略组”私有覆写的 Stash。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.1.0"
+version: "3.1.1"
 
 mode: rule
 ipv6: false
@@ -62,9 +62,6 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
-  - "SCRIPT,merged-quic,REJECT,no-track"
-
   # Apple Private Relay must use the selected proxy before the broader Apple
   # direct rules below.
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
@@ -75,14 +72,19 @@ rules: #!replace
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
 
-  # Force the complete Google ecosystem through the selected proxy before ad
-  # blocking and China-direct rules. GEOSITE,google follows the maintained
-  # domain-list-community set (Google, YouTube, Android, Firebase, etc.).
-  - "GEOSITE,google,🚀节点选择"
+  # Twitter / X (置顶放行，防止被广告规则误杀 t.co / twimg)
+  - "GEOSITE,twitter,🚀节点选择"
+  - "DOMAIN-KEYWORD,twitter,🚀节点选择"
+  - "DOMAIN-KEYWORD,x.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twimg.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,t.co,🚀节点选择"
+  - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
+  - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
 
-  # Core fallbacks keep common Google services proxied even before GEOSITE data
-  # has finished its first download. Keyword rules cover Google/YouTube country
-  # domains; suffix rules cover important service domains with different names.
+  # Force the complete Google ecosystem through the selected proxy
+  - "GEOSITE,google,🚀节点选择"
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
   - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
@@ -107,9 +109,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # OpenAI / ChatGPT / Codex core services and login verification.
-  # GEOSITE is the maintained primary list; the small fallbacks protect
-  # critical login and realtime paths before ad and China-direct rules.
+  # OpenAI / ChatGPT / Codex core services
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
@@ -119,8 +119,7 @@ rules: #!replace
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
 
-  # Qihang Education website, iPhone/iPad courses, video and static assets.
-  # Keep these domestic services direct before ad blocking.
+  # Qihang Education website
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -130,12 +129,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # Block non-Google ads before the broad China direct rules. Google-owned
-  # domains matched above follow the explicit all-ecosystem proxy requirement.
+  # Block non-Google ads
   - "GEOSITE,category-ads-all,REJECT"
 
-  # China domains and IPs stay direct without downloading large classical
-  # providers.
+  # China domains and IPs stay direct
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -145,6 +142,9 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
+
+  # Leak prevention: reject UDP/443 and let applications fall back to TCP.
+  - "SCRIPT,merged-quic,REJECT,no-track"
 
   # Everything else follows the user's selected normal or chained exit.
   - "MATCH,🚀节点选择"
