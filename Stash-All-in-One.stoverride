@@ -1,14 +1,15 @@
 # Stash Override (YAML)
-# Complete zero-leak DNS override aligned 100% with Clash Verge Rev script.
+# High-speed lightweight zero-lag Stash override.
+# Fully fixes Apple services, removes DNS timeout, and restores instant app opening.
 
 name: "正式版"
 desc: |-
-  与电脑端 Clash Verge Rev 完全对齐的零泄露版。
-  海外域名与测漏站强制走加密代理 DoH (#🚀节点选择)，彻底杜绝 Wi-Fi / 5G DNS 泄露。
+  极速轻量正式版：彻底修复 Apple / App Store 无法连接与任何软件加载缓慢问题。
+  国内秒开直连、海外与 OpenAI/Google 强制走节点，0 延迟损耗。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.7.0"
+version: "3.8.0"
 
 mode: rule
 ipv6: false
@@ -21,46 +22,23 @@ dns:
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
-    - 114.114.114.114
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
-  proxy-server-nameserver: #!replace
-    - 223.5.5.5
-    - 119.29.29.29
-  direct-nameserver: #!replace
-    - "https://dns.alidns.com/dns-query"
-    - "https://doh.pub/dns-query"
-  nameserver-policy: #!replace
-    "geosite:geolocation-!cn":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "geosite:gfw":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "geosite:google":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "geosite:openai":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "+.browserleaks.com":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "+.ipleak.net":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "+.ipcheck.ing":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-    "+.ip.net.coffee":
-      - "https://dns.google/dns-query#🚀节点选择"
-      - "https://cloudflare-dns.com/dns-query#🚀节点选择"
-  respect-rules: true
+  fallback: #!replace
+    - "https://1.1.1.1/dns-query"
+    - "https://8.8.8.8/dns-query"
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
   fake-ip-filter: #!replace
-    - "stun.*.*"
-    - "stun.*.*.*"
-    - "*.stun.*.*"
+    - "*.apple.com"
+    - "*.icloud.com"
+    - "*.cdn-apple.com"
+    - "*.mzstatic.com"
+    - "*.aaplimg.com"
     - "*.lan"
     - "+.local"
     - "+.localhost"
@@ -76,22 +54,7 @@ script:
     merged-quic: "network == 'udp' and dst_port == 443"
 
 rules: #!replace
-  # 1. 严格阻断 iOS 蜂窝网络 IPv6 旁路逃逸 (彻底杜绝 5G+Wi-Fi 双开时的 IPv6 泄露)
-  - "IP-CIDR6,::/0,REJECT,no-track"
-
-  # 2. WebRTC STUN 探测专属极速通道 (确保 5G 与 Wi-Fi 下 WebRTC 均秒级呈现 179.253.238.125 且 0 泄漏)
-  - "DOMAIN-KEYWORD,stun,🚀节点选择"
-  - "DOMAIN-KEYWORD,turn,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun1.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun2.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun3.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun4.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun.cloudflare.com,🚀节点选择"
-  - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
-  - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
-
-  # 3. 本地局域网流量保持直连
+  # 1. 本地/局域网直连
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
@@ -106,8 +69,10 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
+  # 2. 拦截 QUIC 协议防止 YouTube / Google 旁路
   - "SCRIPT,merged-quic,REJECT,no-track"
 
+  # 3. 苹果官方直连与加速 (修复 App Store / iCloud 秒开)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
@@ -115,7 +80,9 @@ rules: #!replace
   - "DOMAIN-SUFFIX,icloud.com,DIRECT"
   - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
   - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
 
+  # 4. Google 全生态强制走节点
   - "GEOSITE,google,🚀节点选择"
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
@@ -141,6 +108,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
+  # 5. OpenAI / ChatGPT 全生态强制走节点
   - "GEOSITE,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
@@ -150,6 +118,7 @@ rules: #!replace
   - "DOMAIN,challenges.cloudflare.com,🚀节点选择"
   - "DOMAIN-KEYWORD,workos,🚀节点选择"
 
+  # 6. 国内常用与学习业务直连
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -159,8 +128,10 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
+  # 7. 广告拦截
   - "GEOSITE,category-ads-all,REJECT"
 
+  # 8. 国内域名与 IP 极速直连
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -171,4 +142,5 @@ rules: #!replace
   - "GEOSITE,cn,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
+  # 9. 其他全量流量走节点
   - "MATCH,🚀节点选择"
