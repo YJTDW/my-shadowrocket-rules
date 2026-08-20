@@ -8,7 +8,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "3.6.1"
+version: "3.7.0"
 
 mode: rule
 ipv6: false
@@ -58,6 +58,9 @@ dns:
       - "https://cloudflare-dns.com/dns-query#🚀节点选择"
   respect-rules: true
   fake-ip-filter: #!replace
+    - "stun.*.*"
+    - "stun.*.*.*"
+    - "*.stun.*.*"
     - "*.lan"
     - "+.local"
     - "+.localhost"
@@ -76,7 +79,19 @@ rules: #!replace
   # 1. 严格阻断 iOS 蜂窝网络 IPv6 旁路逃逸 (彻底杜绝 5G+Wi-Fi 双开时的 IPv6 泄露)
   - "IP-CIDR6,::/0,REJECT,no-track"
 
-  # 2. 本地局域网流量保持直连
+  # 2. WebRTC STUN 探测专属极速通道 (确保 5G 与 Wi-Fi 下 WebRTC 均秒级呈现 179.253.238.125 且 0 泄漏)
+  - "DOMAIN-KEYWORD,stun,🚀节点选择"
+  - "DOMAIN-KEYWORD,turn,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun1.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun2.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun3.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun4.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.cloudflare.com,🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
+
+  # 3. 本地局域网流量保持直连
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
