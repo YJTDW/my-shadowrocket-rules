@@ -1,18 +1,16 @@
 # Stash Override (YAML)
-# Dedicated Specialized Streaming Edition (专项精细分流版)
-# 针对 Apple 全业务、Google、OpenAI、Claude、国内学习/电商进行专项流化隔离。
+# 100% 自包含零依赖极速版 (彻底根除 GEOSITE 404 与 gateway.icloud 无法解析假死)
 
 name: "正式版"
 desc: |-
-  专项精细分流正式版 (v4.0.0)：
-  - 苹果全家桶专项流化：连通性/应用商店/CDN/海外服务精准隔离，彻底解决无互联网连接与加载问题；
-  - OpenAI / Claude / Google 专项流化强制走节点；
-  - 企航教育/学习流媒体/国内 CDN 专项直连；
-  - 毫秒级原生 DNS 驱动，0 延迟、0 丢包。
+  极速正式版 (v4.1.0)：
+  - 彻底移除任何外部 GEOSITE 远程规则依赖 (解决 jsdelivr 404 导致 App 全面假死)；
+  - 修复 gateway.icloud.com.cn / Apple 系统直连域名解析错误；
+  - 纯本地原生规则匹配，0 远程下载、0 解析错误、瞬间秒开！
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-20"
-version: "4.0.0"
+version: "4.1.0"
 
 mode: rule
 ipv6: false
@@ -28,6 +26,8 @@ dns:
   nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
+    - "https://doh.pub/dns-query"
+    - "https://dns.alidns.com/dns-query"
   fallback: #!replace
     - 1.1.1.1
     - 8.8.8.8
@@ -61,46 +61,46 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # ==================== [1. 拦截 QUIC UDP 443 协议] ====================
+  # ==================== [1. 拦截 QUIC 协议] ====================
   - "SCRIPT,merged-quic,REJECT,no-track"
 
-  # ==================== [2. 专门流化：Apple 系统网络探针 (秒除“无网络连接”假死)] ====================
+  # ==================== [2. Apple 系统网络探针直连] ====================
   - "DOMAIN,captive.apple.com,DIRECT"
   - "DOMAIN,connectivitycheck.gstatic.com,DIRECT"
   - "DOMAIN,detectportal.firefox.com,DIRECT"
   - "DOMAIN,msftconnecttest.com,DIRECT"
   - "DOMAIN,msftncsi.com,DIRECT"
 
-  # ==================== [3. 专门流化：Apple 海外专属业务与隐私中继 (走节点)] ====================
+  # ==================== [3. Apple 隐私中继与网关专属通道 (走节点)] ====================
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  - "DOMAIN,gateway.icloud.com,🚀节点选择"
+  - "DOMAIN,gateway.icloud.com.cn,🚀节点选择"
   - "DOMAIN-SUFFIX,news.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple.news,🚀节点选择"
   - "DOMAIN,appleid.apple.com,🚀节点选择"
-  - "DOMAIN,gsa.apple.com,🚀节点选择"
-  - "DOMAIN,idmsa.apple.com,🚀节点选择"
   - "DOMAIN,developer.apple.com,🚀节点选择"
   - "DOMAIN,beta.apple.com,🚀节点选择"
 
-  # ==================== [4. 专门流化：Apple 商店/下载/iCloud/国内 CDN (国内极速直连)] ====================
-  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  # ==================== [4. Apple 全系列应用商店/下载/iCloud (本地纯直连)] ====================
+  - "DOMAIN-SUFFIX,apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
+  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
   - "DOMAIN-SUFFIX,itunes.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,apps.apple.com,DIRECT"
   - "DOMAIN-SUFFIX,appstore.com,DIRECT"
+  - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
+  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
   - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
-  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
   - "DOMAIN-SUFFIX,me.com,DIRECT"
-  - "GEOSITE,apple,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com,DIRECT"
 
-  # ==================== [5. 专门流化：Google 全生态 (强制走节点)] ====================
-  - "GEOSITE,google,🚀节点选择"
+  # ==================== [5. Google 全生态 (强制走节点)] ====================
   - "DOMAIN-KEYWORD,google,🚀节点选择"
   - "DOMAIN-KEYWORD,youtube,🚀节点选择"
+  - "DOMAIN-SUFFIX,google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,youtube.com,🚀节点选择"
   - "DOMAIN-SUFFIX,1e100.net,🚀节点选择"
   - "DOMAIN-SUFFIX,android.com,🚀节点选择"
   - "DOMAIN-SUFFIX,appspot.com,🚀节点选择"
@@ -123,10 +123,13 @@ rules: #!replace
   - "DOMAIN-SUFFIX,yt.be,🚀节点选择"
   - "DOMAIN-SUFFIX,ytimg.com,🚀节点选择"
 
-  # ==================== [6. 专门流化：OpenAI / ChatGPT / Claude AI (强制走节点)] ====================
-  - "GEOSITE,openai,🚀节点选择"
+  # ==================== [6. OpenAI / ChatGPT / Claude AI (强制走节点)] ====================
   - "DOMAIN-KEYWORD,openai,🚀节点选择"
   - "DOMAIN-KEYWORD,chatgpt,🚀节点选择"
+  - "DOMAIN-SUFFIX,openai.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,chatgpt.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaistatic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,oaiusercontent.com,🚀节点选择"
   - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
   - "DOMAIN,client-api.arkoselabs.com,🚀节点选择"
   - "DOMAIN,openai-api.arkoselabs.com,🚀节点选择"
@@ -135,7 +138,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,claude.ai,🚀节点选择"
   - "DOMAIN-SUFFIX,anthropic.com,🚀节点选择"
 
-  # ==================== [7. 专门流化：国内学习/网校/视频加速 (极速直连)] ====================
+  # ==================== [7. 国内学习/网校/视频加速 (极速直连)] ====================
   - "DOMAIN-SUFFIX,iqihang.com,DIRECT"
   - "DOMAIN-SUFFIX,iqihangedu.com.cn,DIRECT"
   - "DOMAIN-SUFFIX,qihang.com.cn,DIRECT"
@@ -145,10 +148,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "DOMAIN,iqh-zt.oss-cn-beijing.aliyuncs.com,DIRECT"
 
-  # ==================== [8. 广告与垃圾跟踪拦截] ====================
-  - "GEOSITE,category-ads-all,REJECT"
-
-  # ==================== [9. 大陆全域网站与 IP 极速直连] ====================
+  # ==================== [8. 大陆全域网站与 IP 极速直连] ====================
   - "DOMAIN-SUFFIX,cn,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
   - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
@@ -156,8 +156,13 @@ rules: #!replace
   - "DOMAIN-SUFFIX,xn--io0a7i,DIRECT"
   - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
   - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
-  - "GEOSITE,cn,DIRECT"
+  - "DOMAIN-SUFFIX,baidu.com,DIRECT"
+  - "DOMAIN-SUFFIX,qq.com,DIRECT"
+  - "DOMAIN-SUFFIX,taobao.com,DIRECT"
+  - "DOMAIN-SUFFIX,jd.com,DIRECT"
+  - "DOMAIN-SUFFIX,bilibili.com,DIRECT"
+  - "DOMAIN-SUFFIX,163.com,DIRECT"
   - "GEOIP,CN,DIRECT,no-resolve"
 
-  # ==================== [10. 国际全量流量兜底] ====================
+  # ==================== [9. 国际全量流量兜底] ====================
   - "MATCH,🚀节点选择"
