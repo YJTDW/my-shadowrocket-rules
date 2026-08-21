@@ -5,14 +5,14 @@
 name: "正式版"
 desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
-  Google、OpenAI/ChatGPT/Codex 与 Twitter/X 强制跟随“🚀节点选择”。
+  Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
   实验性关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
-  WebRTC/STUN/TURN 完全阻断，并与电脑端保持等价行为。
+  与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-21"
-version: "3.2.4"
+version: "3.2.3"
 
 mode: rule
 ipv6: false
@@ -33,9 +33,7 @@ dns:
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
-    webrtc-standard-ports: "dst_port >= 3478 and dst_port <= 3481"
-    webrtc-turn-tls: "dst_port == 5349"
-    webrtc-google-ports: "dst_port >= 19302 and dst_port <= 19309"
+    webrtc-ports: "network == 'udp' and dst_port >= 3478 and dst_port <= 3481"
 
 rules: #!replace
   # 0. 严格阻断 IPv6 旁路，与电脑端规则保持一致
@@ -56,16 +54,47 @@ rules: #!replace
   - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
   - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
 
-  # 2. 完全阻断 WebRTC/STUN/TURN；不采用全局 UDP REJECT，避免节点集体超时
-  - "PROTOCOL,STUN,REJECT,no-track"
-  - "DOMAIN-KEYWORD,stun,REJECT,no-track"
-  - "DOMAIN-KEYWORD,turn,REJECT,no-track"
-  - "DOMAIN-SUFFIX,livekit.cloud,REJECT,no-track"
-  - "SCRIPT,webrtc-standard-ports,REJECT,no-track"
-  - "SCRIPT,webrtc-turn-tls,REJECT,no-track"
-  - "SCRIPT,webrtc-google-ports,REJECT,no-track"
+  # 2. ChatGPT 官方高级实时语音 UDP 3478 专线 (Article 9247338 官方网段放行)
+  - "DOMAIN-SUFFIX,livekit.cloud,🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🚀节点选择"
 
-  # 3. Apple 双轨分流 (隐私中继走节点，下载与系统服务极速直连)
+  # 3. WebRTC STUN 探测通道 (保障 WebRTC 正常工作且 0 泄露)
+  - "PROTOCOL,STUN,🚀节点选择"
+  - "DOMAIN-KEYWORD,stun,🚀节点选择"
+  - "DOMAIN-KEYWORD,turn,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun1.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun2.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun3.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun4.l.google.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,stun.cloudflare.com,🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
+  - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
+  - "SCRIPT,webrtc-ports,🚀节点选择"
+
+  # 4. Apple 双轨分流 (隐私中继走节点，下载与系统服务极速直连)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
   - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
