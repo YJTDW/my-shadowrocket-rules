@@ -13,7 +13,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-21"
-version: "3.2.4"
+version: "3.2.5"
 
 mode: rule
 ipv6: false
@@ -29,6 +29,34 @@ dns:
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
   nameserver-policy: #!replace
+    # Apple 普通服务优先国内解析，避免被境外总分类提前接管。
+    "geosite:apple":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.apple.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.icloud.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.icloud-content.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.appstore.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.cdn-apple.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.mzstatic.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.aaplimg.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.me.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
     "geosite:geolocation-!cn":
       - "https://dns.google/dns-query"
       - "https://cloudflare-dns.com/dns-query"
