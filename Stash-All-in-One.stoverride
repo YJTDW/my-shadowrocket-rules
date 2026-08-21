@@ -7,12 +7,13 @@ desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
   Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
-  实验性关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
+  关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
+  DNS 等价同步电脑端：国内解析直连，境外解析经当前节点，兼顾 CDN 与泄露防护。
   与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-08-21"
-version: "3.2.3"
+version: "3.2.4"
 
 mode: rule
 ipv6: false
@@ -21,10 +22,59 @@ dns:
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
+  proxy-server-nameserver: #!replace
+    - 223.5.5.5
+    - 119.29.29.29
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
-  follow-rule: false
+  nameserver-policy: #!replace
+    "geosite:geolocation-!cn":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:gfw":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:google":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:openai":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.google.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.googleapis.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.googleusercontent.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.googlevideo.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.gstatic.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.youtube.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.openai.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.chatgpt.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.oaistatic.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.oaiusercontent.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.livekit.cloud":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+  follow-rule: true
   skip-cert-verify: false
   fake-ip-filter: #!replace
     - "*"
@@ -36,6 +86,12 @@ script:
     webrtc-ports: "network == 'udp' and dst_port >= 3478 and dst_port <= 3481"
 
 rules: #!replace
+  # DNS 出口与电脑端等价：国内 DoH 直连，境外 DoH 跟随当前节点。
+  - "DOMAIN,dns.alidns.com,DIRECT"
+  - "DOMAIN,doh.pub,DIRECT"
+  - "DOMAIN,dns.google,🚀节点选择"
+  - "DOMAIN,cloudflare-dns.com,🚀节点选择"
+
   # 0. 严格阻断 IPv6 旁路，与电脑端规则保持一致
   - "IP-CIDR6,::/0,REJECT,no-resolve"
 
