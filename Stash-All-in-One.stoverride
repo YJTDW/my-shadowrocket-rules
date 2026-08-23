@@ -9,11 +9,12 @@ desc: |-
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
   关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
   DNS 等价同步电脑端：国内解析直连，境外解析经当前节点，兼顾 CDN 与泄露防护。
+  强制替换订阅遗留的 UDP DNS fallback，避免普通节点或链式出口解析死循环。
   与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-22"
-version: "3.2.6"
+date: "2026-08-23"
+version: "3.2.7"
 
 mode: rule
 ipv6: false
@@ -35,6 +36,11 @@ dns:
   nameserver: #!replace
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
+  # Do not inherit UDP fallbacks such as 1.1.1.1:53 or 8.8.8.8:53 from subscriptions.
+  # Keep fallback encrypted over HTTPS so it can traverse normal and chained TCP proxies.
+  fallback: #!replace
+    - "https://dns.google/dns-query"
+    - "https://cloudflare-dns.com/dns-query"
   nameserver-policy: #!replace
     # Apple 普通服务优先国内解析，避免被境外总分类提前接管。
     "geosite:apple":
