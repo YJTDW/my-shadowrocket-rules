@@ -16,7 +16,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-02"
-version: "3.4.1"
+version: "3.4.2"
 
 mode: rule
 ipv6: false
@@ -30,23 +30,26 @@ tun:
 
 # 订阅只负责提供节点。通用覆写自动装载全部节点并完整替换订阅自带策略组。
 proxy-groups: #!replace
-  - name: "🚀节点选择"
-    type: select
-    proxies:
-      - "♻️自动选择"
-    include-all: true
-
+  # 先声明自动组，确保后续手动组引用时 Stash 已经识别该策略组。
   - name: "♻️自动选择"
     type: url-test
     include-all: true
     interval: 3600
     lazy: true
 
+  - name: "🚀节点选择"
+    type: select
+    proxies:
+      - "♻️自动选择"
+    include-all: true
+    interval: -1
+
   - name: "📺 YouTube"
     type: select
     proxies:
       - "🚀节点选择"
     include-all: true
+    interval: -1
 
 dns: #!replace
   enable: true
