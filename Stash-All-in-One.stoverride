@@ -13,8 +13,8 @@ desc: |-
   与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-23"
-version: "3.2.8"
+date: "2026-08-31"
+version: "3.2.9"
 
 mode: rule
 ipv6: false
@@ -127,6 +127,7 @@ script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
     webrtc-ports: "network == 'udp' and dst_port >= 3478 and dst_port <= 3481"
+    webrtc-turn-tls: "network == 'udp' and dst_port == 5349"
 
 rules: #!replace
   # DNS 出口与电脑端等价：国内 DoH 直连，境外 DoH 跟随当前节点。
@@ -192,6 +193,7 @@ rules: #!replace
   - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
   - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
   - "SCRIPT,webrtc-ports,🚀节点选择"
+  - "SCRIPT,webrtc-turn-tls,🚀节点选择"
 
   # 4. Apple 双轨分流 (隐私中继走节点，下载与系统服务极速直连)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
