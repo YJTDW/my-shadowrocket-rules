@@ -17,7 +17,10 @@
 ## Stash
  
 - WLOC 定位修改覆写：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/apple-wloc-stash.stoverride`
-- 三合一防泄露分流：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/Stash-All-in-One.stoverride`
+- 通用节点/DNS/YouTube 分流覆写：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/Stash-All-in-One.stoverride`
+  - 不包含任何节点、订阅地址或访问凭据。
+  - 自动载入当前订阅中的全部节点，并生成 `🚀节点选择`、`♻️自动选择`、`📺 YouTube` 三个策略组。
+  - YouTube 的专用加密 DNS 与网页、视频流量共同跟随 `📺 YouTube`。
 - Sub-Store 通用链式脚本：`https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/SubStore-Stash-Chain.js`
 - Sub-Store 使用说明：`https://github.com/YJTDW/my-shadowrocket-rules/blob/main/SubStore-Stash-Chain-Guide.md`
 
