@@ -15,8 +15,8 @@ desc: |-
   与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-02"
-version: "3.4.2"
+date: "2026-09-03"
+version: "3.4.3"
 
 mode: rule
 ipv6: false
@@ -42,14 +42,12 @@ proxy-groups: #!replace
     proxies:
       - "♻️自动选择"
     include-all: true
-    interval: -1
 
   - name: "📺 YouTube"
     type: select
     proxies:
       - "🚀节点选择"
     include-all: true
-    interval: -1
 
 dns: #!replace
   enable: true
