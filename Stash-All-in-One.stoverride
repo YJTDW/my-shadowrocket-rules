@@ -7,14 +7,14 @@ desc: |-
   保留轻量 DNS、IPv6/QUIC 防泄露、国内直连、Apple 分流与广告拦截。
   Google、OpenAI/ChatGPT/Codex、Twitter/X 与 ChatGPT 高级语音 UDP 3478 强制跟随“🚀节点选择”。
   国内音视频流媒体 (企航/保利威/微信) 绝对置顶直连，取流分流最优。
-  关闭 Fake IP：所有域名返回真实 IP，不使用电脑端 Mihomo 专属字段。
-  DNS 等价同步电脑端：国内解析直连，境外解析经当前节点，兼顾 CDN 与泄露防护。
-  完整替换订阅自带 DNS，避免遗留 fallback、Fake IP 模式或过滤条件引发解析死循环。
-  与电脑端同步 Apple、OpenAI、泄露检测、WebRTC/STUN、IPv6 与 QUIC 的等价行为。
+  开启 Fake-IP (198.18.0.1/16)，对齐 sing-box 客户端架构，国内/Apple 白名单真实 IP 直连。
+  DNS 等价同步电脑端与 sing-box：国内解析直连，境外解析经当前节点，兼顾 CDN 与泄露防护。
+  外部 WebRTC/STUN/TURN 探测全拦截阻断，防真实公网 IP 旁路泄露，仅精准放行 OpenAI LiveKit 官方语音 CIDR。
+  完整替换订阅自带 DNS，避免遗留 fallback 或非安全配置引发解析异常。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-08-31"
-version: "3.2.9"
+date: "2026-09-05"
+version: "3.3.0"
 
 mode: rule
 ipv6: false
@@ -29,6 +29,8 @@ tun:
 dns: #!replace
   enable: true
   ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
   default-nameserver: #!replace
     - 223.5.5.5
     - 119.29.29.29
@@ -43,6 +45,49 @@ dns: #!replace
   fallback: #!replace
     - "https://dns.google/dns-query"
     - "https://cloudflare-dns.com/dns-query"
+  fallback-filter: #!replace
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+  fake-ip-filter: #!replace
+    - "*.lan"
+    - "*.local"
+    - "*.arpa"
+    - "time.*"
+    - "ntp.*"
+    - "*.apple.com"
+    - "*.apple.co"
+    - "*.appstore.com"
+    - "*.icloud.com"
+    - "*.icloud-content.com"
+    - "*.cdn-apple.com"
+    - "*.mzstatic.com"
+    - "*.aaplimg.com"
+    - "*.swcdn.apple.com"
+    - "*.me.com"
+    - "*.apple-cloudkit.com"
+    - "*.apple-livephotoskit.com"
+    - "*.apple-mapkit.com"
+    - "captive.apple.com"
+    - "*.wechat.com"
+    - "*.weixin.com"
+    - "*.servicewechat.com"
+    - "*.qq.com"
+    - "*.qpic.cn"
+    - "*.qlogo.cn"
+    - "*.gtimg.com"
+    - "*.cn"
+    - "*.xn--fiqs8s"
+    - "*.xn--fiqz9s"
+    - "*.xn--55qx5d"
+    - "*.qihangjiaoyu.com"
+    - "*.polyv.net"
+    - "*.polyv.cn"
+    - "*.alicdn.com"
+    - "+.pool.ntp.org"
+    - "*.msftncsi.com"
+    - "*.msftconnecttest.com"
   nameserver-policy: #!replace
     # Apple 普通服务优先国内解析，避免被境外总分类提前接管。
     "geosite:apple":
@@ -72,6 +117,26 @@ dns: #!replace
     "+.me.com":
       - "https://dns.alidns.com/dns-query"
       - "https://doh.pub/dns-query"
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qq.com":
+      - "https://doh.pub/dns-query"
+    "+.weixin.com":
+      - "https://doh.pub/dns-query"
+    "+.wechat.com":
+      - "https://doh.pub/dns-query"
+    "+.qihangjiaoyu.com":
+      - "https://dns.alidns.com/dns-query"
+    "+.polyv.net":
+      - "https://dns.alidns.com/dns-query"
+    "+.polyv.cn":
+      - "https://dns.alidns.com/dns-query"
+    "+.alicdn.com":
+      - "https://dns.alidns.com/dns-query"
     "geosite:geolocation-!cn":
       - "https://dns.google/dns-query"
       - "https://cloudflare-dns.com/dns-query"
@@ -117,10 +182,7 @@ dns: #!replace
     "+.livekit.cloud":
       - "https://dns.google/dns-query"
       - "https://cloudflare-dns.com/dns-query"
-  follow-rule: true
   skip-cert-verify: false
-  fake-ip-filter: #!replace
-    - "*"
 
 # Block QUIC so HTTP/3 falls back to TCP and follows the high-speed XTLS proxy path.
 script:
@@ -136,7 +198,7 @@ rules: #!replace
   - "DOMAIN,dns.google,🚀节点选择"
   - "DOMAIN,cloudflare-dns.com,🚀节点选择"
 
-  # 0. 严格阻断 IPv6 旁路，与电脑端规则保持一致
+  # 0. 严格阻断 IPv6 旁路，与电脑端及 sing-box 规则保持一致
   - "IP-CIDR6,::/0,REJECT,no-resolve"
 
   # 1. 局域网与内网 UDP/TCP 绝对直连
@@ -180,20 +242,25 @@ rules: #!replace
   - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🚀节点选择"
   - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🚀节点选择"
 
-  # 3. WebRTC STUN 探测通道 (保障 WebRTC 正常工作且 0 泄露)
-  - "PROTOCOL,STUN,🚀节点选择"
-  - "DOMAIN-KEYWORD,stun,🚀节点选择"
-  - "DOMAIN-KEYWORD,turn,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun1.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun2.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun3.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun4.l.google.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,stun.cloudflare.com,🚀节点选择"
-  - "AND,((NETWORK,UDP),(DST-PORT,19302)),🚀节点选择"
-  - "AND,((NETWORK,UDP),(DST-PORT,19305)),🚀节点选择"
-  - "SCRIPT,webrtc-ports,🚀节点选择"
-  - "SCRIPT,webrtc-turn-tls,🚀节点选择"
+  # 3. 拦截外部 WebRTC / STUN / TURN 探测，防止真实公网 IP 旁路泄露 (对齐 sing-box 架构)
+  - "PROTOCOL,STUN,REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3479)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3480)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3481)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT"
+  - "DOMAIN-KEYWORD,stun,REJECT"
+  - "DOMAIN-KEYWORD,turn,REJECT"
+  - "DOMAIN-SUFFIX,stun.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun1.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun2.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun3.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun4.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun.cloudflare.com,REJECT"
+  - "SCRIPT,webrtc-ports,REJECT"
+  - "SCRIPT,webrtc-turn-tls,REJECT"
 
   # 4. Apple 双轨分流 (隐私中继走节点，下载与系统服务极速直连)
   - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
