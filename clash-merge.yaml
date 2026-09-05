@@ -1,4 +1,6 @@
-# Manual Merge override: IPv4-only, DNS leak resistant and strict TUN routing.
+# Manual Merge override: IPv4-only, DNS leak resistant, STUN reject and strict TUN routing.
+# 企业级跨平台客户端与服务端标准配置模板库 - Clash 规则覆写合并配置
+
 proxies: []
 ipv6: false
 tcp-concurrent: true
@@ -9,12 +11,176 @@ dns:
   ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  use-hosts: true
   use-system-hosts: false
   respect-rules: true
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "*.arpa"
+    - "localhost"
+    - "+.home.arpa"
+    - "time.*"
+    - "ntp.*"
+    - "+.pool.ntp.org"
+    - "*.apple.com"
+    - "*.apple.co"
+    - "*.appstore.com"
+    - "*.icloud.com"
+    - "*.icloud-content.com"
+    - "*.cdn-apple.com"
+    - "*.mzstatic.com"
+    - "*.aaplimg.com"
+    - "*.swcdn.apple.com"
+    - "*.me.com"
+    - "*.apple-cloudkit.com"
+    - "*.apple-livephotoskit.com"
+    - "*.apple-mapkit.com"
+    - "captive.apple.com"
+    - "*.wechat.com"
+    - "*.weixin.com"
+    - "*.servicewechat.com"
+    - "*.qq.com"
+    - "*.qpic.cn"
+    - "*.qlogo.cn"
+    - "*.gtimg.com"
+    - "*.cn"
+    - "*.xn--fiqs8s"
+    - "*.xn--fiqz9s"
+    - "*.xn--55qx5d"
+    - "*.qihangjiaoyu.com"
+    - "*.polyv.net"
+    - "*.polyv.cn"
+    - "*.alicdn.com"
+    - "*.msftncsi.com"
+    - "*.msftconnecttest.com"
+  nameserver-policy:
+    "geosite:apple":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.apple.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.apple.co":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.appstore.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.icloud.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.icloud-content.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.cdn-apple.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.mzstatic.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.aaplimg.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.me.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "geosite:cn":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.cn":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.qq.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.weixin.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.wechat.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.servicewechat.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.qpic.cn":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.qlogo.cn":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.gtimg.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.qihangjiaoyu.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.polyv.net":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.polyv.cn":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "+.alicdn.com":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "geosite:geolocation-!cn":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "geosite:gfw":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "geosite:google":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "geosite:openai":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.google.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.googleapis.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.googleusercontent.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.openai.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.chatgpt.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.oaistatic.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.oaiusercontent.com":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
+    "+.livekit.cloud":
+      - https://dns.google/dns-query
+      - https://cloudflare-dns.com/dns-query
 
 tun:
   enable: true
-  stack: gvisor
+  stack: mixed
   auto-route: true
   auto-detect-interface: true
   dns-hijack:
@@ -25,7 +191,25 @@ tun:
   mtu: 1500
 
 prepend-rules:
-  # === OpenAI / ChatGPT / Sora / Codex 核心与周边服务 ===
+  # 0. 严格阻断 IPv6 旁路，与 sing-box 及 Stash 规则保持一致
+  - IP-CIDR6,::/0,REJECT,no-resolve
+
+  # 1. 局域网直连放行
+  - DOMAIN-SUFFIX,local,DIRECT
+  - DOMAIN-SUFFIX,localhost,DIRECT
+  - DOMAIN-SUFFIX,lan,DIRECT
+  - DOMAIN-SUFFIX,home.arpa,DIRECT
+  - DOMAIN,captive.apple.com,DIRECT
+  - IP-CIDR,0.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,224.0.0.0/4,DIRECT,no-resolve
+
+  # 2. === OpenAI / ChatGPT / Sora / Codex 核心与周边服务 ===
   - DOMAIN-SUFFIX,chatgpt.com,PROXY
   - DOMAIN-SUFFIX,openai.com,PROXY
   - DOMAIN-SUFFIX,chat.com,PROXY
@@ -38,5 +222,51 @@ prepend-rules:
   - DOMAIN-SUFFIX,chatgpt.livekit.cloud,PROXY
   - DOMAIN-SUFFIX,host.livekit.cloud,PROXY
   - DOMAIN-SUFFIX,turn.livekit.cloud,PROXY
+  - DOMAIN-SUFFIX,livekit.cloud,PROXY
   - DOMAIN-SUFFIX,o33249.ingest.sentry.io,PROXY
   - DOMAIN-SUFFIX,browser-intake-datadoghq.com,PROXY
+
+  # 3. ChatGPT 官方高级实时语音 UDP 3478 专线 (Article 9247338 官方网段放行)
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),PROXY
+  - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),PROXY
+
+  # 4. 彻底阻断外部 WebRTC STUN/TURN 探测，防止真实公网 IP 旁路泄露 (对齐 sing-box 与 Stash 架构)
+  - DST-PORT,3478,REJECT
+  - DST-PORT,3479,REJECT
+  - DST-PORT,3480,REJECT
+  - DST-PORT,3481,REJECT
+  - DST-PORT,19302,REJECT
+  - DST-PORT,19305,REJECT
+  - DST-PORT,5349,REJECT
+  - DOMAIN-KEYWORD,stun,REJECT
+  - DOMAIN-KEYWORD,turn,REJECT
+  - DOMAIN-SUFFIX,stun.l.google.com,REJECT
+  - DOMAIN-SUFFIX,stun1.l.google.com,REJECT
+  - DOMAIN-SUFFIX,stun2.l.google.com,REJECT
+  - DOMAIN-SUFFIX,stun3.l.google.com,REJECT
+  - DOMAIN-SUFFIX,stun4.l.google.com,REJECT
+  - DOMAIN-SUFFIX,stun.cloudflare.com,REJECT
+
+  # 5. 拦截 QUIC (UDP 443)，解决 YouTube/Google 旁路限速，强制走高性能 TCP TLS 1.3
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
