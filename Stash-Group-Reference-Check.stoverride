@@ -1,0 +1,25 @@
+# 临时诊断：数组正常合并，不使用 #!replace；不会替换现有策略组。
+name: 组引用对照检查 0906
+desc: 临时检查，不参与分流。保留现有正式覆写，在其后启用。查看检查A、检查B中是否能看到检查目标；测试后停用本覆写。
+version: 1.0.0
+author: YJTDW
+date: '2026-09-06'
+proxy-groups:
+- name: 🔎 检查A｜手写列表
+  type: select
+  proxies:
+  - 🔎 检查目标
+  - DIRECT
+  interval: -1
+- name: 🔎 检查B｜自动纳入
+  type: select
+  include-all: true
+  proxies:
+  - 🔎 检查目标
+  - DIRECT
+  interval: -1
+- name: 🔎 检查目标
+  type: select
+  proxies:
+  - DIRECT
+  interval: -1
