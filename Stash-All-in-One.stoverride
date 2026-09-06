@@ -13,8 +13,8 @@ desc: |-
   6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-05"
-version: "3.4.0"
+date: "2026-09-06"
+version: "3.4.1"
 
 mode: rule
 ipv6: false
@@ -61,6 +61,7 @@ proxy-groups: #!replace
     exclude-filter: "(?i)剩余|流量|套餐|到期|重置|官网|客服"
 
 dns: #!replace
+  follow-rule: true
   enable: true
   ipv6: false
   enhanced-mode: fake-ip
@@ -316,8 +317,8 @@ rules: #!replace
   - "AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT"
   - "AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT"
   - "AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT"
-  - "DOMAIN-KEYWORD,stun,REJECT"
-  - "DOMAIN-KEYWORD,turn,REJECT"
+  # Match STUN/TURN host labels without blocking unrelated domains.
+  - "DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$),REJECT"
   - "DOMAIN-SUFFIX,stun.l.google.com,REJECT"
   - "DOMAIN-SUFFIX,stun1.l.google.com,REJECT"
   - "DOMAIN-SUFFIX,stun2.l.google.com,REJECT"
