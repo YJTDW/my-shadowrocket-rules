@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-06"
-version: "3.5.0"
+version: "3.6.0"
 
 mode: rule
 ipv6: false
@@ -29,7 +29,7 @@ tun:
 proxy-groups: #!replace
   - name: "🚀节点选择"
     type: select
-    proxies:
+    proxies: #!replace
       - "♻️自动选择"
       - "DIRECT"
     include-all: true
@@ -46,7 +46,7 @@ proxy-groups: #!replace
 
   - name: "📺 YouTube"
     type: select
-    proxies:
+    proxies: #!replace
       - "🚀节点选择"
       - "♻️自动选择"
     include-all: true
@@ -54,7 +54,7 @@ proxy-groups: #!replace
 
   - name: "🤖 AI平台"
     type: select
-    proxies:
+    proxies: #!replace
       - "🚀节点选择"
       - "♻️自动选择"
     include-all: true
