@@ -1,11 +1,11 @@
 # Stash Override (YAML)
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
-# 仅适用于当前三台 VPS 的八条路径，固定国家/地区顺序。
+# 仅适用于当前最终保留的六个节点，保留子策略组入口。
 
 name: "VPS 正式版 · 按地区排序"
 desc: |-
   【全面看齐 sing-box 架构与策略组规范】
-  1. 当前八条 VPS 路径按美国、香港、新加坡、中转排列；替换原正式覆写使用。
+  1. 当前最终六个节点与合一订阅保持一致；替换原正式覆写使用。
   2. 4 大核心策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择 (Apple 官方低延迟测速)。
   3. 铁壁防泄露：全域拦截 WebRTC / STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
   4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内/Apple 白名单真实 IP 直连，海外与 AI 域名 100% 透传防真实 IP 泄露。
@@ -32,10 +32,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-IPv4
-  - ISVORO-HKLite-IPv6
-  - Skyline-SG-IPv4
-  - Skyline-SG-IPv6
+  - ISVORO-HKLite-HY2-IPv6
+  - Skyline-SG-HY2-IPv6
+  - HK-Lumen-SS2022-IPv6
+  - Skyline-SG-家宽-HY2
   - DIRECT
 - name: ♻️自动选择
   type: url-test
@@ -46,10 +46,10 @@ proxy-groups: #!replace
   proxies:
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-IPv4
-  - ISVORO-HKLite-IPv6
-  - Skyline-SG-IPv4
-  - Skyline-SG-IPv6
+  - ISVORO-HKLite-HY2-IPv6
+  - Skyline-SG-HY2-IPv6
+  - HK-Lumen-SS2022-IPv6
+  - Skyline-SG-家宽-HY2
 - name: 📺 YouTube
   type: select
   proxies:
@@ -57,10 +57,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-IPv4
-  - ISVORO-HKLite-IPv6
-  - Skyline-SG-IPv4
-  - Skyline-SG-IPv6
+  - ISVORO-HKLite-HY2-IPv6
+  - Skyline-SG-HY2-IPv6
+  - HK-Lumen-SS2022-IPv6
+  - Skyline-SG-家宽-HY2
 - name: 🤖 AI平台
   type: select
   proxies:
@@ -68,11 +68,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-IPv4
-  - ISVORO-HKLite-IPv6
-  - Skyline-SG-IPv4
-  - Skyline-SG-IPv6
-
+  - ISVORO-HKLite-HY2-IPv6
+  - Skyline-SG-HY2-IPv6
+  - HK-Lumen-SS2022-IPv6
+  - Skyline-SG-家宽-HY2
 
 dns: #!replace
   follow-rule: true
