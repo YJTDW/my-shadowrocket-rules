@@ -14,8 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-06"
-version: "3.6.0"
-
+version: 3.6.1
 mode: rule
 ipv6: false
 
@@ -37,8 +36,6 @@ proxy-groups: #!replace
   - ISVORO-HKLite-IPv6
   - Skyline-SG-IPv4
   - Skyline-SG-IPv6
-  - 🇭🇰转接-🇸🇬-v4➔v4
-  - 🇭🇰转接-🇸🇬-v6➔v4
   - DIRECT
 - name: ♻️自动选择
   type: url-test
@@ -53,8 +50,6 @@ proxy-groups: #!replace
   - ISVORO-HKLite-IPv6
   - Skyline-SG-IPv4
   - Skyline-SG-IPv6
-  - 🇭🇰转接-🇸🇬-v4➔v4
-  - 🇭🇰转接-🇸🇬-v6➔v4
 - name: 📺 YouTube
   type: select
   proxies:
@@ -66,8 +61,6 @@ proxy-groups: #!replace
   - ISVORO-HKLite-IPv6
   - Skyline-SG-IPv4
   - Skyline-SG-IPv6
-  - 🇭🇰转接-🇸🇬-v4➔v4
-  - 🇭🇰转接-🇸🇬-v6➔v4
 - name: 🤖 AI平台
   type: select
   proxies:
@@ -79,8 +72,6 @@ proxy-groups: #!replace
   - ISVORO-HKLite-IPv6
   - Skyline-SG-IPv4
   - Skyline-SG-IPv6
-  - 🇭🇰转接-🇸🇬-v4➔v4
-  - 🇭🇰转接-🇸🇬-v6➔v4
 
 
 dns: #!replace
