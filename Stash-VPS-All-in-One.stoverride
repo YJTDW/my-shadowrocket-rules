@@ -1649,6 +1649,7 @@ rules: #!replace
   - "DOMAIN-SUFFIX,x.ai,🤖 AI平台"
   - "DOMAIN-SUFFIX,grokipedia.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台"
+  - "DOMAIN-SUFFIX,pixpix.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,pplx.ai,🤖 AI平台"
   - "DOMAIN-SUFFIX,cursor.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,cursor.sh,🤖 AI平台"
