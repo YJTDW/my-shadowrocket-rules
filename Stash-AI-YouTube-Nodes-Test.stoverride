@@ -1,0 +1,393 @@
+# Stash Override (YAML)
+# 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
+# 支持任何机场 / 私有聚合订阅，全自动生成 4 大标准策略组并自动过滤流量信息节点。
+
+name: "正式版-AI与YouTube节点测试"
+desc: |-
+  【全面看齐 sing-box 架构与策略组规范】
+  1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
+  2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
+  3. 铁壁防泄露：全域拦截 WebRTC / STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
+  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内/Apple 白名单真实 IP 直连，海外与 AI 域名 100% 透传防真实 IP 泄露。
+  5. DNS 智能分流：阿里/腾讯 DoH 国内直连，Google/Cloudflare DoH 节点代理解析。
+  6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
+author: YJTDW
+homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
+date: "2026-09-14"
+version: "3.7.2-test"
+
+mode: rule
+ipv6: false
+
+tun:
+  enable: true
+  stack: mixed
+  mtu: 1400
+  auto-route: true
+  strict-route: true
+
+proxy-groups: #!replace
+- name: 🚀节点选择
+  type: select
+  proxies: #!replace
+  - ♻️自动选择
+  - 🖐手动节点
+  - DIRECT
+- name: ♻️自动选择
+  type: url-test
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+  url: http://www.apple.com/library/test/success.html
+  interval: 900
+  tolerance: 3
+  lazy: true
+- name: 🖐手动节点
+  type: select
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+- name: 📺 YouTube
+  type: select
+  proxies: #!replace
+  - 🚀节点选择
+  - ♻️自动选择
+  - 🖐手动节点
+  include-all: true
+  filter: ^(?!.*(?:剩余|流量|套餐|到期|重置|官网|客服)).*$
+- name: 🤖 AI平台
+  type: select
+  proxies: #!replace
+  - 🚀节点选择
+  - ♻️自动选择
+  - 🖐手动节点
+  include-all: true
+  filter: ^(?!.*(?:剩余|流量|套餐|到期|重置|官网|客服)).*$
+
+dns: #!replace
+  follow-rule: true
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver: #!replace
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver: #!replace
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver: #!replace
+    - "https://dns.alidns.com/dns-query"
+    - "https://doh.pub/dns-query"
+  fallback: #!replace
+    - "https://dns.google/dns-query"
+    - "https://cloudflare-dns.com/dns-query"
+  fallback-filter: #!replace
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+  fake-ip-filter: #!replace
+    - "*.lan"
+    - "*.local"
+    - "*.arpa"
+    - "time.*"
+    - "ntp.*"
+    - "+.pool.ntp.org"
+    - "localhost"
+    - "+.home.arpa"
+    - "*.apple.com"
+    - "*.apple.co"
+    - "*.appstore.com"
+    - "*.icloud.com"
+    - "*.icloud-content.com"
+    - "*.cdn-apple.com"
+    - "*.mzstatic.com"
+    - "*.aaplimg.com"
+    - "*.swcdn.apple.com"
+    - "*.me.com"
+    - "*.apple-cloudkit.com"
+    - "*.apple-livephotoskit.com"
+    - "*.apple-mapkit.com"
+    - "captive.apple.com"
+    - "*.wechat.com"
+    - "*.weixin.com"
+    - "*.servicewechat.com"
+    - "*.qq.com"
+    - "*.qpic.cn"
+    - "*.qlogo.cn"
+    - "*.gtimg.com"
+    - "*.cn"
+    - "*.xn--fiqs8s"
+    - "*.xn--fiqz9s"
+    - "*.xn--55qx5d"
+    - "*.xn--io0a7i"
+    - "*.xn--zfr164b"
+    - "*.xn--55qw42g"
+    - "*.qihangjiaoyu.com"
+    - "*.polyv.net"
+    - "*.polyv.cn"
+    - "*.alicdn.com"
+    - "*.msftncsi.com"
+    - "*.msftconnecttest.com"
+  nameserver-policy: #!replace
+    "geosite:apple":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.apple.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.icloud.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.icloud-content.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.appstore.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.cdn-apple.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.mzstatic.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.aaplimg.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.me.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "geosite:cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qq.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.weixin.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.wechat.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.servicewechat.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qpic.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qlogo.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.gtimg.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.qihangjiaoyu.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.polyv.net":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.polyv.cn":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "+.alicdn.com":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    "geosite:geolocation-!cn":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:gfw":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:google":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "geosite:openai":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.google.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.googleapis.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.googleusercontent.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.openai.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.chatgpt.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.oaistatic.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.oaiusercontent.com":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+    "+.livekit.cloud":
+      - "https://dns.google/dns-query"
+      - "https://cloudflare-dns.com/dns-query"
+  skip-cert-verify: false
+
+script:
+  shortcuts:
+    merged-quic: "network == 'udp' and dst_port == 443"
+    webrtc-ports: "network == 'udp' and dst_port >= 3478 and dst_port <= 3481"
+    webrtc-turn-tls: "network == 'udp' and dst_port == 5349"
+
+# Indexed domain sets; original rule order and coverage preserved.
+rule-providers:
+  vps-domain-96021d255b1e4213:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/96021d255b1e42134de823c9a8bbcf88713609d0e804f2f2cd64362838e8845b.yaml
+    interval: 86400
+  vps-domain-70845adfa1a4e7a5:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/70845adfa1a4e7a5ead970810d6a5e847c5aab5f15332ada365def8c2a8a80fb.yaml
+    interval: 86400
+  vps-domain-84ae868c1dec6dc4:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/84ae868c1dec6dc487877256446867bcfd71b3976f2174589eff4646d2f64ce0.yaml
+    interval: 86400
+  vps-domain-083863a0da25b445:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/083863a0da25b4458c47476ff1613559342b2e03ee4a9b49aa46e651382f483c.yaml
+    interval: 86400
+  vps-domain-1e9db824fb228459:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/1e9db824fb228459f7e8a34a9ddc8dfc3c954e4409e46178455177f769d73d25.yaml
+    interval: 86400
+  vps-domain-0a8e99d063901310:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/0a8e99d06390131050c9238df009202185a57d77712704c0c77315c4f6d9da22.yaml
+    interval: 86400
+  vps-domain-e8e6f448a3e8ad3a:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/e8e6f448a3e8ad3aa722f0e998c05c14b4e1d9ce765181596f53007c1cd5915c.yaml
+    interval: 86400
+  vps-domain-7454c3e8328d3448:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
+    interval: 86400
+
+rules: #!replace
+  - "DOMAIN,dns.alidns.com,DIRECT"
+  - "DOMAIN,doh.pub,DIRECT"
+  - "DOMAIN,dns.google,🚀节点选择"
+  - "DOMAIN,cloudflare-dns.com,🚀节点选择"
+  - "IP-CIDR6,::/0,REJECT,no-resolve"
+  - "DOMAIN-SUFFIX,local,DIRECT"
+  - "DOMAIN-SUFFIX,localhost,DIRECT"
+  - "DOMAIN-SUFFIX,lan,DIRECT"
+  - "DOMAIN-SUFFIX,home.arpa,DIRECT"
+  - "DOMAIN,captive.apple.com,DIRECT"
+  - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
+  - "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve"
+  - "IP-CIDR,169.254.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
+  - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
+  - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
+  - "RULE-SET,vps-domain-96021d255b1e4213,DIRECT"
+  - "DOMAIN-SUFFIX,livekit.cloud,🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🤖 AI平台"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🤖 AI平台"
+  - "PROTOCOL,STUN,REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3479)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3480)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,3481)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT"
+  - "AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT"
+  - "DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$),REJECT"
+  - "DOMAIN-SUFFIX,stun.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun1.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun2.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun3.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun4.l.google.com,REJECT"
+  - "DOMAIN-SUFFIX,stun.cloudflare.com,REJECT"
+  - "SCRIPT,webrtc-ports,REJECT"
+  - "SCRIPT,webrtc-turn-tls,REJECT"
+  - "RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台"
+  - "RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube"
+  - "GEOSITE,youtube,📺 YouTube"
+  - "RULE-SET,vps-domain-083863a0da25b445,🤖 AI平台"
+  - "DOMAIN-REGEX,^r+[0-9]+(---|\\.)sn-(2x3|ni5|j5o)\\w{5}\\.xn--ngstr-lra8j\\.com$,🤖 AI平台"
+  - "DOMAIN-REGEX,^r+[0-9]+(---|\\.)sn-(2x3|ni5|j5o)\\w{5}\\.googlevideo\\.com$,🤖 AI平台"
+  - "GEOSITE,google,🤖 AI平台"
+  - "GEOSITE,openai,🤖 AI平台"
+  - "RULE-SET,vps-domain-1e9db824fb228459,🤖 AI平台"
+  - "DOMAIN-KEYWORD,youtube,📺 YouTube"
+  - "DOMAIN-SUFFIX,youtube.com,📺 YouTube"
+  - "DOMAIN-SUFFIX,googlevideo.com,📺 YouTube"
+  - "DOMAIN-SUFFIX,youtu.be,📺 YouTube"
+  - "DOMAIN-SUFFIX,yt.be,📺 YouTube"
+  - "DOMAIN-SUFFIX,ytimg.com,📺 YouTube"
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  - "RULE-SET,vps-domain-0a8e99d063901310,DIRECT"
+  - "GEOSITE,apple,DIRECT"
+  - "GEOSITE,twitter,🚀节点选择"
+  - "DOMAIN-KEYWORD,twitter,🚀节点选择"
+  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twimg.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,t.co,🚀节点选择"
+  - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
+  - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
+  - "GEOSITE,google,🤖 AI平台"
+  - "DOMAIN-KEYWORD,google,🤖 AI平台"
+  - "RULE-SET,vps-domain-e8e6f448a3e8ad3a,🤖 AI平台"
+  - "DOMAIN-KEYWORD,browserleaks,🚀节点选择"
+  - "DOMAIN-SUFFIX,browserleaks.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择"
+  - "DOMAIN-SUFFIX,ipleak.net,🚀节点选择"
+  - "RULE-SET,vps-domain-7454c3e8328d3448,DIRECT"
+  - "GEOSITE,category-ads-all,REJECT"
+  - "DOMAIN-SUFFIX,cn,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qx5d,DIRECT"
+  - "DOMAIN-SUFFIX,xn--io0a7i,DIRECT"
+  - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
+  - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
+  - "GEOSITE,cn,DIRECT"
+  - "GEOIP,CN,DIRECT,no-resolve"
+  - "SCRIPT,merged-quic,REJECT,no-track"
+  - "MATCH,🚀节点选择"
