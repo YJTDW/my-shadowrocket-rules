@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-14"
-version: "3.7.3"
+version: "3.7.4"
 
 mode: rule
 ipv6: false
@@ -274,6 +274,15 @@ rule-providers:
     interval: 86400
 
 rules: #!replace
+  - "DOMAIN,workos.imgix.net,🤖 AI平台"
+  - "DOMAIN,js.stripe.com,🤖 AI平台"
+  - "DOMAIN,o207216.ingest.sentry.io,🤖 AI平台"
+  - "DOMAIN,o33249.ingest.sentry.io,🤖 AI平台"
+  - "DOMAIN,rum.browser-intake-datadoghq.com,🤖 AI平台"
+  - "DOMAIN,browser-intake-datadoghq.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,ct.sendgrid.net,🤖 AI平台"
+  - "DOMAIN-SUFFIX,oaistatsig.com,🤖 AI平台"
+
   - "DOMAIN,dns.alidns.com,DIRECT"
   - "DOMAIN,doh.pub,DIRECT"
   - "DOMAIN,dns.google,🚀节点选择"
