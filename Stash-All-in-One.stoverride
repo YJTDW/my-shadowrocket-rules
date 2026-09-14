@@ -6,7 +6,7 @@ name: "正式版"
 desc: |-
   【全面看齐 sing-box 架构与策略组规范】
   1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
-  2. 4 大核心策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择 (Apple 官方低延迟测速)。
+  2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
   3. 铁壁防泄露：全域拦截 WebRTC / STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
   4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内/Apple 白名单真实 IP 直连，海外与 AI 域名 100% 透传防真实 IP 泄露。
   5. DNS 智能分流：阿里/腾讯 DoH 国内直连，Google/Cloudflare DoH 节点代理解析。
@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-14"
-version: "3.7.0"
+version: "3.7.1"
 
 mode: rule
 ipv6: false
@@ -27,38 +27,36 @@ tun:
   strict-route: true
 
 proxy-groups: #!replace
-  - name: "🚀节点选择"
-    type: select
-    proxies: #!replace
-      - "♻️自动选择"
-      - "DIRECT"
-    include-all: true
-    exclude-filter: "(?i)剩余|流量|套餐|到期|重置|官网|客服"
-
-  - name: "♻️自动选择"
-    type: url-test
-    include-all: true
-    exclude-filter: "(?i)剩余|流量|套餐|到期|重置|官网|客服"
-    url: "http://www.apple.com/library/test/success.html"
-    interval: 900
-    tolerance: 3
-    lazy: true
-
-  - name: "📺 YouTube"
-    type: select
-    proxies: #!replace
-      - "🚀节点选择"
-      - "♻️自动选择"
-    include-all: true
-    exclude-filter: "(?i)剩余|流量|套餐|到期|重置|官网|客服"
-
-  - name: "🤖 AI平台"
-    type: select
-    proxies: #!replace
-      - "🚀节点选择"
-      - "♻️自动选择"
-    include-all: true
-    exclude-filter: "(?i)剩余|流量|套餐|到期|重置|官网|客服"
+- name: 🚀节点选择
+  type: select
+  proxies: #!replace
+  - ♻️自动选择
+  - 🖐手动节点
+  - DIRECT
+- name: ♻️自动选择
+  type: url-test
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+  url: http://www.apple.com/library/test/success.html
+  interval: 900
+  tolerance: 3
+  lazy: true
+- name: 🖐手动节点
+  type: select
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+- name: 📺 YouTube
+  type: select
+  proxies: #!replace
+  - 🚀节点选择
+  - ♻️自动选择
+  - 🖐手动节点
+- name: 🤖 AI平台
+  type: select
+  proxies: #!replace
+  - 🚀节点选择
+  - ♻️自动选择
+  - 🖐手动节点
 
 dns: #!replace
   follow-rule: true
