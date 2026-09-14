@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-14"
-version: "3.7.4"
+version: "3.7.5"
 
 mode: rule
 ipv6: false
@@ -282,7 +282,6 @@ rules: #!replace
   - "DOMAIN,browser-intake-datadoghq.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,ct.sendgrid.net,🤖 AI平台"
   - "DOMAIN-SUFFIX,oaistatsig.com,🤖 AI平台"
-
   - "DOMAIN,dns.alidns.com,DIRECT"
   - "DOMAIN,doh.pub,DIRECT"
   - "DOMAIN,dns.google,🚀节点选择"
@@ -358,9 +357,11 @@ rules: #!replace
   - "DOMAIN-SUFFIX,youtu.be,📺 YouTube"
   - "DOMAIN-SUFFIX,yt.be,📺 YouTube"
   - "DOMAIN-SUFFIX,ytimg.com,📺 YouTube"
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,apple-relay.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-relay.fastly-edge.com,DIRECT"
+  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
+  - "DOMAIN-SUFFIX,cp4.cloudflare.com,DIRECT"
   - "RULE-SET,vps-domain-0a8e99d063901310,DIRECT"
   - "GEOSITE,apple,DIRECT"
   - "GEOSITE,twitter,🚀节点选择"
