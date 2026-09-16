@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-14"
-version: "3.7.5"
+version: "3.7.6"
 
 mode: rule
 ipv6: false
@@ -59,169 +59,189 @@ dns: #!replace
   ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  default-nameserver: #!replace
-    - 223.5.5.5
-    - 119.29.29.29
-  proxy-server-nameserver: #!replace
-    - 223.5.5.5
-    - 119.29.29.29
-  nameserver: #!replace
-    - "https://dns.alidns.com/dns-query"
-    - "https://doh.pub/dns-query"
-  fallback: #!replace
-    - "https://dns.google/dns-query"
-    - "https://cloudflare-dns.com/dns-query"
-  fallback-filter: #!replace
+  default-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  proxy-server-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  nameserver:
+  - https://dns.alidns.com/dns-query
+  - https://doh.pub/dns-query
+  fallback:
+  - https://dns.google/dns-query
+  - https://cloudflare-dns.com/dns-query
+  fallback-filter:
     geoip: true
     geoip-code: CN
     ipcidr:
-      - 240.0.0.0/4
-  fake-ip-filter: #!replace
-    - "*.lan"
-    - "*.local"
-    - "*.arpa"
-    - "time.*"
-    - "ntp.*"
-    - "+.pool.ntp.org"
-    - "localhost"
-    - "+.home.arpa"
-    - "*.apple.com"
-    - "*.apple.co"
-    - "*.appstore.com"
-    - "*.icloud.com"
-    - "*.icloud-content.com"
-    - "*.cdn-apple.com"
-    - "*.mzstatic.com"
-    - "*.aaplimg.com"
-    - "*.swcdn.apple.com"
-    - "*.me.com"
-    - "*.apple-cloudkit.com"
-    - "*.apple-livephotoskit.com"
-    - "*.apple-mapkit.com"
-    - "captive.apple.com"
-    - "*.wechat.com"
-    - "*.weixin.com"
-    - "*.servicewechat.com"
-    - "*.qq.com"
-    - "*.qpic.cn"
-    - "*.qlogo.cn"
-    - "*.gtimg.com"
-    - "*.cn"
-    - "*.xn--fiqs8s"
-    - "*.xn--fiqz9s"
-    - "*.xn--55qx5d"
-    - "*.xn--io0a7i"
-    - "*.xn--zfr164b"
-    - "*.xn--55qw42g"
-    - "*.qihangjiaoyu.com"
-    - "*.polyv.net"
-    - "*.polyv.cn"
-    - "*.alicdn.com"
-    - "*.msftncsi.com"
-    - "*.msftconnecttest.com"
-  nameserver-policy: #!replace
-    "geosite:apple":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.apple.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.icloud.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.icloud-content.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.appstore.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.cdn-apple.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.mzstatic.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.aaplimg.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.me.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "geosite:cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.qq.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.weixin.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.wechat.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.servicewechat.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.qpic.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.qlogo.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.gtimg.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.qihangjiaoyu.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.polyv.net":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.polyv.cn":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "+.alicdn.com":
-      - "https://dns.alidns.com/dns-query"
-      - "https://doh.pub/dns-query"
-    "geosite:geolocation-!cn":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "geosite:gfw":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "geosite:google":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "geosite:openai":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.google.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.googleapis.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.googleusercontent.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.openai.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.chatgpt.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.oaistatic.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.oaiusercontent.com":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
-    "+.livekit.cloud":
-      - "https://dns.google/dns-query"
-      - "https://cloudflare-dns.com/dns-query"
+    - 240.0.0.0/4
+  fake-ip-filter:
+  - alipay.com
+  - '*.alipay.com'
+  - alipayobjects.com
+  - '*.alipayobjects.com'
+  - alipay.com.cn
+  - '*.alipay.com.cn'
+  - alipay.net
+  - '*.alipay.net'
+  - '*.lan'
+  - '*.local'
+  - '*.arpa'
+  - time.*
+  - ntp.*
+  - +.pool.ntp.org
+  - localhost
+  - +.home.arpa
+  - '*.apple.com'
+  - '*.apple.co'
+  - '*.appstore.com'
+  - '*.icloud.com'
+  - '*.icloud-content.com'
+  - '*.cdn-apple.com'
+  - '*.mzstatic.com'
+  - '*.aaplimg.com'
+  - '*.swcdn.apple.com'
+  - '*.me.com'
+  - '*.apple-cloudkit.com'
+  - '*.apple-livephotoskit.com'
+  - '*.apple-mapkit.com'
+  - captive.apple.com
+  - '*.wechat.com'
+  - '*.weixin.com'
+  - '*.servicewechat.com'
+  - '*.qq.com'
+  - '*.qpic.cn'
+  - '*.qlogo.cn'
+  - '*.gtimg.com'
+  - '*.cn'
+  - '*.xn--fiqs8s'
+  - '*.xn--fiqz9s'
+  - '*.xn--55qx5d'
+  - '*.xn--io0a7i'
+  - '*.xn--zfr164b'
+  - '*.xn--55qw42g'
+  - '*.qihangjiaoyu.com'
+  - '*.polyv.net'
+  - '*.polyv.cn'
+  - '*.alicdn.com'
+  - '*.msftncsi.com'
+  - '*.msftconnecttest.com'
+  nameserver-policy:
+    +.alipay.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.alipayobjects.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.alipay.com.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.alipay.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    geosite:apple:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.icloud.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.icloud-content.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.appstore.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.cdn-apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.mzstatic.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.aaplimg.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.me.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    geosite:cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.qq.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.weixin.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.wechat.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.servicewechat.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.qpic.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.qlogo.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.gtimg.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.qihangjiaoyu.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.polyv.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.polyv.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.alicdn.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    geosite:geolocation-!cn:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    geosite:gfw:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    geosite:google:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    geosite:openai:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.google.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.googleapis.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.googleusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.openai.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.chatgpt.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.oaistatic.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.oaiusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.livekit.cloud:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
 
 script:
@@ -274,6 +294,10 @@ rule-providers:
     interval: 86400
 
 rules: #!replace
+  - "DOMAIN-SUFFIX,alipay.com,DIRECT"
+  - "DOMAIN-SUFFIX,alipayobjects.com,DIRECT"
+  - "DOMAIN-SUFFIX,alipay.com.cn,DIRECT"
+  - "DOMAIN-SUFFIX,alipay.net,DIRECT"
   - "DOMAIN,workos.imgix.net,🤖 AI平台"
   - "DOMAIN,js.stripe.com,🤖 AI平台"
   - "DOMAIN,o207216.ingest.sentry.io,🤖 AI平台"
