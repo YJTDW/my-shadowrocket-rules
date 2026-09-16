@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-14"
-version: "3.7.6"
+version: "3.7.7"
 
 mode: rule
 ipv6: false
@@ -77,6 +77,8 @@ dns: #!replace
     ipcidr:
     - 240.0.0.0/4
   fake-ip-filter:
+  - push.apple.com
+  - "*.push.apple.com"
   - alipay.com
   - '*.alipay.com'
   - alipayobjects.com
@@ -128,6 +130,9 @@ dns: #!replace
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
   nameserver-policy:
+    "+.push.apple.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     +.alipay.com:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
@@ -294,6 +299,17 @@ rule-providers:
     interval: 86400
 
 rules: #!replace
+  # APNs exceptions precede Apple DIRECT and the IPv6 reject rule.
+  - "DOMAIN-SUFFIX,push.apple.com,🚀节点选择"
+  - "IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.188.128.0/18,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.188.20.0/23,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2620:149:a44::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve"
   - "DOMAIN-SUFFIX,alipay.com,DIRECT"
   - "DOMAIN-SUFFIX,alipayobjects.com,DIRECT"
   - "DOMAIN-SUFFIX,alipay.com.cn,DIRECT"
