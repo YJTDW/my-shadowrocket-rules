@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-06"
-version: "3.6.4"
+version: "3.6.5"
 mode: rule
 ipv6: false
 
@@ -32,10 +32,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-HY2-IPv6
-  - Skyline-SG-HY2-IPv6
-  - HK-Lumen-SS2022-IPv6
-  - Skyline-SG-家宽-HY2
+  - HK-Lumen-VLESS-IPv6
+  - ISVORO-HKLite-VLESS-IPv6
+  - Skyline-SG-VLESS-IPv6
+  - StarHub-SG-VLESS
   - DIRECT
 - name: ♻️自动选择
   type: url-test
@@ -46,10 +46,10 @@ proxy-groups: #!replace
   proxies:
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-HY2-IPv6
-  - Skyline-SG-HY2-IPv6
-  - HK-Lumen-SS2022-IPv6
-  - Skyline-SG-家宽-HY2
+  - HK-Lumen-VLESS-IPv6
+  - ISVORO-HKLite-VLESS-IPv6
+  - Skyline-SG-VLESS-IPv6
+  - StarHub-SG-VLESS
 - name: 📺 YouTube
   type: select
   proxies:
@@ -57,10 +57,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-HY2-IPv6
-  - Skyline-SG-HY2-IPv6
-  - HK-Lumen-SS2022-IPv6
-  - Skyline-SG-家宽-HY2
+  - HK-Lumen-VLESS-IPv6
+  - ISVORO-HKLite-VLESS-IPv6
+  - Skyline-SG-VLESS-IPv6
+  - StarHub-SG-VLESS
 - name: 🤖 AI平台
   type: select
   proxies:
@@ -68,10 +68,10 @@ proxy-groups: #!replace
   - ♻️自动选择
   - DMIT-Reality-IPv4
   - DMIT-Reality-IPv6
-  - ISVORO-HKLite-HY2-IPv6
-  - Skyline-SG-HY2-IPv6
-  - HK-Lumen-SS2022-IPv6
-  - Skyline-SG-家宽-HY2
+  - HK-Lumen-VLESS-IPv6
+  - ISVORO-HKLite-VLESS-IPv6
+  - Skyline-SG-VLESS-IPv6
+  - StarHub-SG-VLESS
 
 dns: #!replace
   follow-rule: true
