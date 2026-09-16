@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-06"
-version: "3.6.3"
+version: "3.6.4"
 mode: rule
 ipv6: false
 
@@ -277,6 +277,8 @@ script:
 
 rules: #!replace
   # APNs exceptions precede Apple DIRECT and the IPv6 reject rule.
+  - "DOMAIN-SUFFIX,akadns.net,🚀节点选择"
+  - "DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择"
   - "DOMAIN-SUFFIX,push.apple.com,🚀节点选择"
   - "IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve"
   - "IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve"
