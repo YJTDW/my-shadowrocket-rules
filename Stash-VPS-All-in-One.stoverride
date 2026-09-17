@@ -7,14 +7,14 @@ desc: |-
   【全面看齐 sing-box 架构与策略组规范】
   1. 当前最终六个节点与合一订阅保持一致；替换原正式覆写使用。
   2. 4 大核心策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择 (Apple 官方低延迟测速)。
-  3. 铁壁防泄露：全域拦截 WebRTC / STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
-  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内/Apple 白名单真实 IP 直连，海外与 AI 域名 100% 透传防真实 IP 泄露。
+  3. WebRTC 防护：拦截已列出的 STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
+  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内域名按规则直连，Apple 推送独立代理；Fake-IP 配合分流，防泄露仍需设备实测。
   5. DNS 智能分流：阿里/腾讯 DoH 国内直连，Google/Cloudflare DoH 节点代理解析。
   6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-06"
-version: "3.6.5"
+date: "2026-09-17"
+version: "3.6.6"
 mode: rule
 ipv6: false
 
@@ -150,6 +150,39 @@ dns: #!replace
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
   nameserver-policy:
+    "+.ai.azure.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.perplexity.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.poecdn.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.replicate.delivery":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.together.xyz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "copilot-proxy.githubusercontent.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "copilot-workspace.githubnext.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "copilotprodattachments.blob.core.windows.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "ppl-ai-file-upload.s3.amazonaws.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "pplx-res.cloudinary.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "servd-anthropic-website.b-cdn.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     "+.push.apple.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -289,6 +322,18 @@ rules: #!replace
   - "IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve"
   - "IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve"
   - "IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve"
+  # AI service endpoints verified against current sing-box and live Stash routing.
+  - "DOMAIN-SUFFIX,ai.azure.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,perplexity.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,poecdn.net,🤖 AI平台"
+  - "DOMAIN-SUFFIX,replicate.delivery,🤖 AI平台"
+  - "DOMAIN-SUFFIX,together.xyz,🤖 AI平台"
+  - "DOMAIN,copilot-proxy.githubusercontent.com,🤖 AI平台"
+  - "DOMAIN,copilot-workspace.githubnext.com,🤖 AI平台"
+  - "DOMAIN,copilotprodattachments.blob.core.windows.net,🤖 AI平台"
+  - "DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,🤖 AI平台"
+  - "DOMAIN,pplx-res.cloudinary.com,🤖 AI平台"
+  - "DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI平台"
   - "DOMAIN-SUFFIX,alipay.com,DIRECT"
   - "DOMAIN-SUFFIX,alipayobjects.com,DIRECT"
   - "DOMAIN-SUFFIX,alipay.com.cn,DIRECT"
