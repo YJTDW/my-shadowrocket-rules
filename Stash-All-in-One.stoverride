@@ -4,17 +4,17 @@
 
 name: "正式版"
 desc: |-
-  【参照 sing-box 分流；Apple 服务与推送直连】
+  【全面看齐 sing-box 架构与策略组规范】
   1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
   2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
   3. WebRTC 防护：拦截已列出的 STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
-  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内域名按规则直连，Apple 服务与推送全部直连；Fake-IP 配合分流，防泄露仍需设备实测。
+  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内域名按规则直连，Apple 推送独立代理；Fake-IP 配合分流，防泄露仍需设备实测。
   5. DNS 智能分流：阿里/腾讯 DoH 国内直连，Google/Cloudflare DoH 节点代理解析。
   6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-17"
-version: "3.7.13"
+version: "3.7.12"
 
 mode: rule
 ipv6: false
@@ -130,54 +130,6 @@ dns: #!replace
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
   nameserver-policy:
-    "+.apple":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple.co":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple.com.cn":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.icloud.com.cn":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.swcdn.apple.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-cloudkit.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-livephotoskit.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-mapkit.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple.com.edgekey.net":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple.com.akadns.net":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.icloud.com.akadns.net":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-relay.apple.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-relay.cloudflare.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-relay.fastly-edge.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.apple-relay.akamaized.net":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    "+.cp4.cloudflare.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
     "+.ads-twitter.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -323,8 +275,8 @@ dns: #!replace
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.push.apple.com":
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     +.alipay.com:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
@@ -446,11 +398,6 @@ script:
 
 # Indexed domain sets; original rule order and coverage preserved.
 rule-providers:
-  apple-direct-d213de9d2b4d232c:
-    behavior: domain
-    format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/d213de9d2b4d232c777809c8835ba779ae6ebb437d369d4e8891eb38e6f8d9c2.yaml
-    interval: 86400
   vps-domain-96021d255b1e4213:
     behavior: domain
     format: yaml
@@ -493,38 +440,19 @@ rule-providers:
     interval: 86400
 
 rules: #!replace
-  # Apple domains and APNs DIRECT before the general IPv6 reject.
-  - "DOMAIN-SUFFIX,apple,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple.co,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com.cn,DIRECT"
-  - "DOMAIN-SUFFIX,icloud.com,DIRECT"
-  - "DOMAIN-SUFFIX,icloud.com.cn,DIRECT"
-  - "DOMAIN-SUFFIX,icloud-content.com,DIRECT"
-  - "DOMAIN-SUFFIX,appstore.com,DIRECT"
-  - "DOMAIN-SUFFIX,cdn-apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,mzstatic.com,DIRECT"
-  - "DOMAIN-SUFFIX,aaplimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,swcdn.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,me.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-livephotoskit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-mapkit.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com.edgekey.net,DIRECT"
-  - "DOMAIN-SUFFIX,apple.com.akadns.net,DIRECT"
-  - "DOMAIN-SUFFIX,icloud.com.akadns.net,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.fastly-edge.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
-  - "DOMAIN-SUFFIX,cp4.cloudflare.com,DIRECT"
-  - "DOMAIN-KEYWORD,apple.com.edgekey.net,DIRECT"
-  - "IP-CIDR,17.0.0.0/8,DIRECT,no-resolve"
-  - "IP-CIDR6,2620:149:a44::/48,DIRECT,no-resolve"
-  - "IP-CIDR6,2403:300:a42::/48,DIRECT,no-resolve"
-  - "IP-CIDR6,2403:300:a51::/48,DIRECT,no-resolve"
-  - "IP-CIDR6,2a01:b740:a42::/48,DIRECT,no-resolve"
-  - "RULE-SET,apple-direct-d213de9d2b4d232c,DIRECT"
+  # APNs exceptions precede Apple DIRECT and the IPv6 reject rule.
+  - "DOMAIN-SUFFIX,akadns.net,🚀节点选择"
+  - "DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,push.apple.com,🚀节点选择"
+  - "IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.188.128.0/18,🚀节点选择,no-resolve"
+  - "IP-CIDR,17.188.20.0/23,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2620:149:a44::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve"
+  - "IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve"
   # AI service endpoints verified against current sing-box and live Stash routing.
   - "DOMAIN-SUFFIX,ai.azure.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,perplexity.com,🤖 AI平台"
