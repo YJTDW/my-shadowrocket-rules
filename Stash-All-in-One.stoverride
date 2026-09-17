@@ -1,4 +1,4 @@
-# Stash Override (YAML)
+﻿# Stash Override (YAML)
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-17"
-version: "3.7.12"
+version: "3.7.14"
 
 mode: rule
 ipv6: false
@@ -108,6 +108,24 @@ dns: #!replace
   - '*.apple-cloudkit.com'
   - '*.apple-livephotoskit.com'
   - '*.apple-mapkit.com'
+  - '*.baichuan-ai.com'
+  - '*.chatglm.cn'
+  - '*.deepseek.com'
+  - '*.deepseeksvc.com'
+  - '*.doubao.com'
+  - '*.doubaocdn.com'
+  - '*.hailuoai.com'
+  - '*.kimi.ai'
+  - '*.kimi.com'
+  - '*.minimax.chat'
+  - '*.moonshot.ai'
+  - '*.moonshot.cn'
+  - '*.qwen.ai'
+  - '*.sensechat.cn'
+  - '*.sensetime.com'
+  - '*.stepfun.com'
+  - '*.yuewen.cn'
+  - '*.zhipuai.cn'
   - captive.apple.com
   - '*.wechat.com'
   - '*.weixin.com'
@@ -256,6 +274,9 @@ dns: #!replace
     "+.x.ai":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    grok.x.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     "+.pixpix.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -287,6 +308,60 @@ dns: #!replace
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
     +.alipay.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.baichuan-ai.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.chatglm.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.deepseek.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.deepseeksvc.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.doubao.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.doubaocdn.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.hailuoai.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.kimi.ai:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.kimi.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.minimax.chat:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.moonshot.ai:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.moonshot.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.qwen.ai:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.sensechat.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.sensetime.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.stepfun.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.yuewen.cn:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.zhipuai.cn:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
     geosite:apple:
@@ -472,6 +547,8 @@ rules: #!replace
   - "DOMAIN-SUFFIX,sora.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,grok.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,x.ai,🤖 AI平台"
+  - "DOMAIN,grok.x.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,grok.x.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,pixpix.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台"
   - "DOMAIN-SUFFIX,midjourney.com,🤖 AI平台"
@@ -526,6 +603,24 @@ rules: #!replace
   - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
   - "DOMAIN-SUFFIX,qqmail.com,DIRECT"
   - "DOMAIN-SUFFIX,idqqimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,baichuan-ai.com,DIRECT"
+  - "DOMAIN-SUFFIX,chatglm.cn,DIRECT"
+  - "DOMAIN-SUFFIX,deepseek.com,DIRECT"
+  - "DOMAIN-SUFFIX,deepseeksvc.com,DIRECT"
+  - "DOMAIN-SUFFIX,doubao.com,DIRECT"
+  - "DOMAIN-SUFFIX,doubaocdn.com,DIRECT"
+  - "DOMAIN-SUFFIX,hailuoai.com,DIRECT"
+  - "DOMAIN-SUFFIX,kimi.ai,DIRECT"
+  - "DOMAIN-SUFFIX,kimi.com,DIRECT"
+  - "DOMAIN-SUFFIX,minimax.chat,DIRECT"
+  - "DOMAIN-SUFFIX,moonshot.ai,DIRECT"
+  - "DOMAIN-SUFFIX,moonshot.cn,DIRECT"
+  - "DOMAIN-SUFFIX,qwen.ai,DIRECT"
+  - "DOMAIN-SUFFIX,sensechat.cn,DIRECT"
+  - "DOMAIN-SUFFIX,sensetime.com,DIRECT"
+  - "DOMAIN-SUFFIX,stepfun.com,DIRECT"
+  - "DOMAIN-SUFFIX,yuewen.cn,DIRECT"
+  - "DOMAIN-SUFFIX,zhipuai.cn,DIRECT"
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
