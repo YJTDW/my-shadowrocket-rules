@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-17"
-version: "3.7.9"
+version: "3.7.10"
 
 mode: rule
 ipv6: false
@@ -161,6 +161,45 @@ dns: #!replace
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "servd-anthropic-website.b-cdn.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.anthropic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openai.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chatgpt.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.sora.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.grok.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.x.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.pixpix.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.perplexity.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.midjourney.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gemini.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.aistudio.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.copilot.microsoft.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.push.apple.com":
@@ -357,6 +396,19 @@ rules: #!replace
   - "DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,🤖 AI平台"
   - "DOMAIN,pplx-res.cloudinary.com,🤖 AI平台"
   - "DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI平台"
+  - "DOMAIN-SUFFIX,anthropic.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,claude.ai,🤖 AI平台"
+  - "DOMAIN-SUFFIX,openai.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,chatgpt.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,sora.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,grok.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,x.ai,🤖 AI平台"
+  - "DOMAIN-SUFFIX,pixpix.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台"
+  - "DOMAIN-SUFFIX,midjourney.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,gemini.google.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,aistudio.google.com,🤖 AI平台"
+  - "DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI平台"
   - "DOMAIN-SUFFIX,alipay.com,DIRECT"
   - "DOMAIN-SUFFIX,alipayobjects.com,DIRECT"
   - "DOMAIN-SUFFIX,alipay.com.cn,DIRECT"
@@ -379,6 +431,17 @@ rules: #!replace
   - "DOMAIN-SUFFIX,lan,DIRECT"
   - "DOMAIN-SUFFIX,home.arpa,DIRECT"
   - "DOMAIN,captive.apple.com,DIRECT"
+  - "DOMAIN-SUFFIX,wechat.com,DIRECT"
+  - "DOMAIN-SUFFIX,weixin.com,DIRECT"
+  - "DOMAIN-SUFFIX,servicewechat.com,DIRECT"
+  - "DOMAIN-SUFFIX,qq.com,DIRECT"
+  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
+  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
+  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,qihangjiaoyu.com,DIRECT"
+  - "DOMAIN-SUFFIX,polyv.net,DIRECT"
+  - "DOMAIN-SUFFIX,polyv.cn,DIRECT"
+  - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
   - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
   - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
   - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
