@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-17"
-version: "3.7.11"
+version: "3.7.12"
 
 mode: rule
 ipv6: false
@@ -130,6 +130,84 @@ dns: #!replace
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
   nameserver-policy:
+    "+.ads-twitter.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cms-twdigitalassets.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.periscope.tv":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.pscp.tv":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.t.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.tellapart.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.tweetdeck.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twimg.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitpic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitter.biz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitter.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitter.jp":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitter.map.fastly.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twittercommunity.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitterflightschool.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitterinc.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitteroauth.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twitterstat.us":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twtrdns.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twttr.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twttr.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.twvid.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.vine.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.x.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.qqmail.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.idqqimg.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
     "+.ai.azure.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -280,9 +358,6 @@ dns: #!replace
     geosite:geolocation-!cn:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
-    geosite:gfw:
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
     geosite:google:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -420,6 +495,37 @@ rules: #!replace
   - "DOMAIN,dns.google,🚀节点选择"
   - "DOMAIN,cloudflare-dns.com,🚀节点选择"
   - "IP-CIDR6,::/0,REJECT,no-resolve"
+  # Explicit X and QQ routing before remote GEOSITE matching.
+  - "DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,cms-twdigitalassets.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
+  - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
+  - "DOMAIN-SUFFIX,t.co,🚀节点选择"
+  - "DOMAIN-SUFFIX,tellapart.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,tweetdeck.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twimg.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitpic.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.biz,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.jp,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitter.map.fastly.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,twittercommunity.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitterflightschool.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitterinc.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitteroauth.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twitterstat.us,🚀节点选择"
+  - "DOMAIN-SUFFIX,twtrdns.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,twttr.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,twttr.net,🚀节点选择"
+  - "DOMAIN-SUFFIX,twvid.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,vine.co,🚀节点选择"
+  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
+  - "DOMAIN-SUFFIX,qq.com,DIRECT"
+  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
+  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
+  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,qqmail.com,DIRECT"
+  - "DOMAIN-SUFFIX,idqqimg.com,DIRECT"
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "DOMAIN-SUFFIX,localhost,DIRECT"
   - "DOMAIN-SUFFIX,lan,DIRECT"
