@@ -14,7 +14,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-17"
-version: "3.7.10"
+version: "3.7.11"
 
 mode: rule
 ipv6: false
@@ -167,12 +167,6 @@ dns: #!replace
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.claude.ai":
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
-    "+.openai.com":
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
-    "+.chatgpt.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.sora.com":
