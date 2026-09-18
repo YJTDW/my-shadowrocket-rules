@@ -1,4 +1,4 @@
-﻿# Stash Override (YAML)
+# Stash Override (YAML)
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
@@ -13,8 +13,8 @@ desc: |-
   6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-17"
-version: "3.7.14"
+date: "2026-09-18"
+version: "3.7.15"
 
 mode: rule
 ipv6: false
@@ -571,6 +571,14 @@ rules: #!replace
   - "DOMAIN,doh.pub,DIRECT"
   - "DOMAIN,dns.google,🚀节点选择"
   - "DOMAIN,cloudflare-dns.com,🚀节点选择"
+  # WeChat and image CDN direct rules precede the IPv6 catch-all.
+  - "DOMAIN-SUFFIX,qq.com,DIRECT"
+  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
+  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
+  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
+  - "DOMAIN-SUFFIX,wechat.com,DIRECT"
+  - "DOMAIN-SUFFIX,weixin.com,DIRECT"
+  - "DOMAIN-SUFFIX,servicewechat.com,DIRECT"
   - "IP-CIDR6,::/0,REJECT,no-resolve"
   # Explicit X and QQ routing before remote GEOSITE matching.
   - "DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择"
@@ -597,10 +605,6 @@ rules: #!replace
   - "DOMAIN-SUFFIX,twvid.com,🚀节点选择"
   - "DOMAIN-SUFFIX,vine.co,🚀节点选择"
   - "DOMAIN-SUFFIX,x.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,qq.com,DIRECT"
-  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
-  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
-  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
   - "DOMAIN-SUFFIX,qqmail.com,DIRECT"
   - "DOMAIN-SUFFIX,idqqimg.com,DIRECT"
   - "DOMAIN-SUFFIX,baichuan-ai.com,DIRECT"
@@ -626,9 +630,6 @@ rules: #!replace
   - "DOMAIN-SUFFIX,lan,DIRECT"
   - "DOMAIN-SUFFIX,home.arpa,DIRECT"
   - "DOMAIN,captive.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,wechat.com,DIRECT"
-  - "DOMAIN-SUFFIX,weixin.com,DIRECT"
-  - "DOMAIN-SUFFIX,servicewechat.com,DIRECT"
   - "DOMAIN-SUFFIX,qq.com,DIRECT"
   - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
   - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
