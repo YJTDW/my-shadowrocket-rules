@@ -2,8 +2,9 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "正式版"
+name: "3.8 正式版"
 desc: |-
+  3.8｜Stash 通用正式版
   【全面看齐 sing-box 架构与策略组规范】
   1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
   2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
@@ -13,8 +14,8 @@ desc: |-
   6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-18"
-version: "3.7.15"
+date: "2026-09-19"
+version: "3.8"
 
 mode: rule
 ipv6: false
