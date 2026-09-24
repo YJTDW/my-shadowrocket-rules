@@ -2,9 +2,9 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8 正式版"
+name: "3.8.1 正式版"
 desc: |-
-  3.8｜Stash 通用正式版
+  3.8.1｜Stash 通用正式版
   【全面看齐 sing-box 架构与策略组规范】
   1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
   2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
@@ -15,7 +15,7 @@ desc: |-
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-09-19"
-version: "3.8"
+version: "3.8.1"
 
 mode: rule
 ipv6: false
@@ -516,6 +516,51 @@ rule-providers:
     interval: 86400
 
 rules: #!replace
+  - DOMAIN-SUFFIX,muse.ai,🤖 AI平台
+  - DOMAIN-SUFFIX,meta.ai,🤖 AI平台
+  - DOMAIN-SUFFIX,meta.com,🤖 AI平台
+  - DOMAIN-SUFFIX,atmeta.com,🤖 AI平台
+  - DOMAIN-SUFFIX,llama.com,🤖 AI平台
+  - DOMAIN-SUFFIX,facebook.com,🤖 AI平台
+  - DOMAIN-SUFFIX,facebook.net,🤖 AI平台
+  - DOMAIN-SUFFIX,fb.com,🤖 AI平台
+  - DOMAIN-SUFFIX,fb.me,🤖 AI平台
+  - DOMAIN-SUFFIX,fb.watch,🤖 AI平台
+  - DOMAIN-SUFFIX,fb.gg,🤖 AI平台
+  - DOMAIN-SUFFIX,fbcdn.com,🤖 AI平台
+  - DOMAIN-SUFFIX,fbcdn.net,🤖 AI平台
+  - DOMAIN-SUFFIX,fbsbx.com,🤖 AI平台
+  - DOMAIN-SUFFIX,fbsbx.net,🤖 AI平台
+  - DOMAIN-SUFFIX,facebookmail.com,🤖 AI平台
+  - DOMAIN-SUFFIX,facebook-hardware.com,🤖 AI平台
+  - DOMAIN-SUFFIX,facebookportal.com,🤖 AI平台
+  - DOMAIN-SUFFIX,facebookwork.com,🤖 AI平台
+  - DOMAIN-SUFFIX,workplace.com,🤖 AI平台
+  - DOMAIN-SUFFIX,workplaceusecases.com,🤖 AI平台
+  - DOMAIN-SUFFIX,instagram.com,🤖 AI平台
+  - DOMAIN-SUFFIX,cdninstagram.com,🤖 AI平台
+  - DOMAIN-SUFFIX,ig.me,🤖 AI平台
+  - DOMAIN-SUFFIX,igcdn.com,🤖 AI平台
+  - DOMAIN-SUFFIX,igsonar.com,🤖 AI平台
+  - DOMAIN-SUFFIX,igtv.com,🤖 AI平台
+  - DOMAIN-SUFFIX,threads.com,🤖 AI平台
+  - DOMAIN-SUFFIX,threads.net,🤖 AI平台
+  - DOMAIN-SUFFIX,messenger.com,🤖 AI平台
+  - DOMAIN-SUFFIX,fbmessenger.com,🤖 AI平台
+  - DOMAIN-SUFFIX,m.me,🤖 AI平台
+  - DOMAIN-SUFFIX,whatsapp.com,🤖 AI平台
+  - DOMAIN-SUFFIX,whatsapp.net,🤖 AI平台
+  - DOMAIN-SUFFIX,wa.me,🤖 AI平台
+  - DOMAIN-SUFFIX,whatsappbrand.com,🤖 AI平台
+  - DOMAIN-SUFFIX,oculus.com,🤖 AI平台
+  - DOMAIN-SUFFIX,oculuscdn.com,🤖 AI平台
+  - DOMAIN-SUFFIX,oculusvr.com,🤖 AI平台
+  - DOMAIN-SUFFIX,ocul.us,🤖 AI平台
+  - DOMAIN-SUFFIX,oculusforbusiness.com,🤖 AI平台
+  - DOMAIN-SUFFIX,metaquest.com,🤖 AI平台
+  - DOMAIN-SUFFIX,metacareers.com,🤖 AI平台
+  - DOMAIN,fbcdn-a.akamaihd.net,🤖 AI平台
+  - GEOSITE,meta,🤖 AI平台
   # APNs exceptions precede Apple DIRECT and the IPv6 reject rule.
   - "DOMAIN-SUFFIX,akadns.net,🚀节点选择"
   - "DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择"
