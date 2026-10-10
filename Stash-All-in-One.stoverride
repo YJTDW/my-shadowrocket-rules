@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.2 正式版"
+name: "3.8.3 正式版"
 desc: |-
-  3.8.2｜对齐 sing-box 的国内直连、微软普通服务、AI 和 YouTube 分流；修复国内纯 IPv6 TCP 被全局拒绝规则提前拦截。Copilot 保留 AI 分流，未知境外 IPv6 与现有 WebRTC/QUIC 防护保留。
+  3.8.3｜同步 sing-box 的支付宝、抖音碰一碰及轻 App 链路优先直连，使用国内真实 DNS，覆盖系统唤起、关联域名验证与资源加载。保留 3.8.2 微信、微软和 AI 分流修复，以及现有节点、推送和防护策略。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.2"
+version: "3.8.3"
 
 mode: rule
 ipv6: false
@@ -141,6 +141,33 @@ dns: #!replace
   - '*.alicdn.com'
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
+  - appclip.apple.com
+  - app-site-association.cdn-apple.com
+  - app-site-association.networking.apple
+  - +.alipay.com
+  - +.alipayobjects.com
+  - +.alipay.com.cn
+  - +.alipay.net
+  - douyin.com
+  - +.douyin.com
+  - douyinpay.com
+  - +.douyinpay.com
+  - douyinstatic.com
+  - +.douyinstatic.com
+  - douyincdn.com
+  - +.douyincdn.com
+  - douyinvod.com
+  - +.douyinvod.com
+  - iesdouyin.com
+  - +.iesdouyin.com
+  - amemv.com
+  - +.amemv.com
+  - itunes.apple.com
+  - +.itunes.apple.com
+  - apps.apple.com
+  - +.apps.apple.com
+  - mzstatic.com
+  - +.mzstatic.com
   nameserver-policy:
     "+.ads-twitter.com":
     - https://dns.google/dns-query
@@ -457,6 +484,42 @@ dns: #!replace
     +.livekit.cloud:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    appclip.apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    app-site-association.cdn-apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    app-site-association.networking.apple:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.douyin.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.douyinpay.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.douyinstatic.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.douyincdn.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.douyinvod.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.iesdouyin.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.amemv.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.itunes.apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.apps.apple.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -514,6 +577,23 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
     interval: 86400
 rules: #!replace
+- AND,((NETWORK,TCP),(DOMAIN,appclip.apple.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,app-site-association.cdn-apple.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,app-site-association.networking.apple)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,alipay.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,alipayobjects.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,alipay.com.cn)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,alipay.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,douyin.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,douyinpay.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,douyinstatic.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,douyincdn.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,douyinvod.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,iesdouyin.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,amemv.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,itunes.apple.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,apps.apple.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,mzstatic.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,turnstile.cloudflare.com)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN,copilotprodattachments.blob.core.windows.net)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN,openaiapi-site.azureedge.net)),🤖 AI平台
