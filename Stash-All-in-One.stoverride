@@ -2,20 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.1 正式版"
+name: "3.8.2 正式版"
 desc: |-
-  3.8.1｜Stash 通用正式版
-  【全面看齐 sing-box 架构与策略组规范】
-  1. 通用策略组注入：全自动接管任意机场/私有订阅，自动排除信息节点。
-  2. 5 个策略组：🤖 AI平台、📺 YouTube、🚀节点选择、♻️自动选择、🖐手动节点 (Apple 官方低延迟测速)。
-  3. WebRTC 防护：拦截已列出的 STUN / TURN 探测 (UDP 3478-3481/19302/19305/5349)，精准放行 OpenAI LiveKit 官方语音。
-  4. Fake-IP 域名透传：开启 198.18.0.1/16 虚拟地址池，国内域名按规则直连，Apple 推送独立代理；Fake-IP 配合分流，防泄露仍需设备实测。
-  5. DNS 智能分流：阿里/腾讯 DoH 国内直连，Google/Cloudflare DoH 节点代理解析。
-  6. QUIC 拦截：拦截 UDP 443，强制降级走高性能 TCP TLS 1.3 隧道。
+  3.8.2｜对齐 sing-box 的国内直连、微软普通服务、AI 和 YouTube 分流；修复国内纯 IPv6 TCP 被全局拒绝规则提前拦截。Copilot 保留 AI 分流，未知境外 IPv6 与现有 WebRTC/QUIC 防护保留。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-09-19"
-version: "3.8.1"
+date: "2026-10-11"
+version: "3.8.2"
 
 mode: rule
 ipv6: false
@@ -515,272 +508,321 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
 
+  aligned-managed-ai-b6f8d310ba5f495a:
+    behavior: classical
+    format: yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
+    interval: 86400
 rules: #!replace
-  - DOMAIN-SUFFIX,muse.ai,🤖 AI平台
-  - DOMAIN-SUFFIX,meta.ai,🤖 AI平台
-  - DOMAIN-SUFFIX,meta.com,🤖 AI平台
-  - DOMAIN-SUFFIX,atmeta.com,🤖 AI平台
-  - DOMAIN-SUFFIX,llama.com,🤖 AI平台
-  - DOMAIN-SUFFIX,facebook.com,🤖 AI平台
-  - DOMAIN-SUFFIX,facebook.net,🤖 AI平台
-  - DOMAIN-SUFFIX,fb.com,🤖 AI平台
-  - DOMAIN-SUFFIX,fb.me,🤖 AI平台
-  - DOMAIN-SUFFIX,fb.watch,🤖 AI平台
-  - DOMAIN-SUFFIX,fb.gg,🤖 AI平台
-  - DOMAIN-SUFFIX,fbcdn.com,🤖 AI平台
-  - DOMAIN-SUFFIX,fbcdn.net,🤖 AI平台
-  - DOMAIN-SUFFIX,fbsbx.com,🤖 AI平台
-  - DOMAIN-SUFFIX,fbsbx.net,🤖 AI平台
-  - DOMAIN-SUFFIX,facebookmail.com,🤖 AI平台
-  - DOMAIN-SUFFIX,facebook-hardware.com,🤖 AI平台
-  - DOMAIN-SUFFIX,facebookportal.com,🤖 AI平台
-  - DOMAIN-SUFFIX,facebookwork.com,🤖 AI平台
-  - DOMAIN-SUFFIX,workplace.com,🤖 AI平台
-  - DOMAIN-SUFFIX,workplaceusecases.com,🤖 AI平台
-  - DOMAIN-SUFFIX,instagram.com,🤖 AI平台
-  - DOMAIN-SUFFIX,cdninstagram.com,🤖 AI平台
-  - DOMAIN-SUFFIX,ig.me,🤖 AI平台
-  - DOMAIN-SUFFIX,igcdn.com,🤖 AI平台
-  - DOMAIN-SUFFIX,igsonar.com,🤖 AI平台
-  - DOMAIN-SUFFIX,igtv.com,🤖 AI平台
-  - DOMAIN-SUFFIX,threads.com,🤖 AI平台
-  - DOMAIN-SUFFIX,threads.net,🤖 AI平台
-  - DOMAIN-SUFFIX,messenger.com,🤖 AI平台
-  - DOMAIN-SUFFIX,fbmessenger.com,🤖 AI平台
-  - DOMAIN-SUFFIX,m.me,🤖 AI平台
-  - DOMAIN-SUFFIX,whatsapp.com,🤖 AI平台
-  - DOMAIN-SUFFIX,whatsapp.net,🤖 AI平台
-  - DOMAIN-SUFFIX,wa.me,🤖 AI平台
-  - DOMAIN-SUFFIX,whatsappbrand.com,🤖 AI平台
-  - DOMAIN-SUFFIX,oculus.com,🤖 AI平台
-  - DOMAIN-SUFFIX,oculuscdn.com,🤖 AI平台
-  - DOMAIN-SUFFIX,oculusvr.com,🤖 AI平台
-  - DOMAIN-SUFFIX,ocul.us,🤖 AI平台
-  - DOMAIN-SUFFIX,oculusforbusiness.com,🤖 AI平台
-  - DOMAIN-SUFFIX,metaquest.com,🤖 AI平台
-  - DOMAIN-SUFFIX,metacareers.com,🤖 AI平台
-  - DOMAIN,fbcdn-a.akamaihd.net,🤖 AI平台
-  - GEOSITE,meta,🤖 AI平台
-  # APNs exceptions precede Apple DIRECT and the IPv6 reject rule.
-  - "DOMAIN-SUFFIX,akadns.net,🚀节点选择"
-  - "DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,push.apple.com,🚀节点选择"
-  - "IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.188.128.0/18,🚀节点选择,no-resolve"
-  - "IP-CIDR,17.188.20.0/23,🚀节点选择,no-resolve"
-  - "IP-CIDR6,2620:149:a44::/48,🚀节点选择,no-resolve"
-  - "IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve"
-  - "IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve"
-  - "IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve"
-  # AI service endpoints verified against current sing-box and live Stash routing.
-  - "DOMAIN-SUFFIX,ai.azure.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,perplexity.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,poecdn.net,🤖 AI平台"
-  - "DOMAIN-SUFFIX,replicate.delivery,🤖 AI平台"
-  - "DOMAIN-SUFFIX,together.xyz,🤖 AI平台"
-  - "DOMAIN,copilot-proxy.githubusercontent.com,🤖 AI平台"
-  - "DOMAIN,copilot-workspace.githubnext.com,🤖 AI平台"
-  - "DOMAIN,copilotprodattachments.blob.core.windows.net,🤖 AI平台"
-  - "DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,🤖 AI平台"
-  - "DOMAIN,pplx-res.cloudinary.com,🤖 AI平台"
-  - "DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI平台"
-  - "DOMAIN-SUFFIX,anthropic.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,claude.ai,🤖 AI平台"
-  - "DOMAIN-SUFFIX,openai.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,chatgpt.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,sora.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,grok.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,x.ai,🤖 AI平台"
-  - "DOMAIN,grok.x.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,grok.x.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,pixpix.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台"
-  - "DOMAIN-SUFFIX,midjourney.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,gemini.google.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,aistudio.google.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,alipay.com,DIRECT"
-  - "DOMAIN-SUFFIX,alipayobjects.com,DIRECT"
-  - "DOMAIN-SUFFIX,alipay.com.cn,DIRECT"
-  - "DOMAIN-SUFFIX,alipay.net,DIRECT"
-  - "DOMAIN,workos.imgix.net,🤖 AI平台"
-  - "DOMAIN,js.stripe.com,🤖 AI平台"
-  - "DOMAIN,o207216.ingest.sentry.io,🤖 AI平台"
-  - "DOMAIN,o33249.ingest.sentry.io,🤖 AI平台"
-  - "DOMAIN,rum.browser-intake-datadoghq.com,🤖 AI平台"
-  - "DOMAIN,browser-intake-datadoghq.com,🤖 AI平台"
-  - "DOMAIN-SUFFIX,ct.sendgrid.net,🤖 AI平台"
-  - "DOMAIN-SUFFIX,oaistatsig.com,🤖 AI平台"
-  - "DOMAIN,dns.alidns.com,DIRECT"
-  - "DOMAIN,doh.pub,DIRECT"
-  - "DOMAIN,dns.google,🚀节点选择"
-  - "DOMAIN,cloudflare-dns.com,🚀节点选择"
-  # WeChat and image CDN direct rules precede the IPv6 catch-all.
-  - "DOMAIN-SUFFIX,qq.com,DIRECT"
-  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
-  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
-  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,wechat.com,DIRECT"
-  - "DOMAIN-SUFFIX,weixin.com,DIRECT"
-  - "DOMAIN-SUFFIX,servicewechat.com,DIRECT"
-  - "IP-CIDR6,::/0,REJECT,no-resolve"
-  # Explicit X and QQ routing before remote GEOSITE matching.
-  - "DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,cms-twdigitalassets.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
-  - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
-  - "DOMAIN-SUFFIX,t.co,🚀节点选择"
-  - "DOMAIN-SUFFIX,tellapart.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,tweetdeck.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twimg.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitpic.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitter.biz,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitter.jp,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitter.map.fastly.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,twittercommunity.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitterflightschool.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitterinc.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitteroauth.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitterstat.us,🚀节点选择"
-  - "DOMAIN-SUFFIX,twtrdns.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,twttr.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twttr.net,🚀节点选择"
-  - "DOMAIN-SUFFIX,twvid.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,vine.co,🚀节点选择"
-  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,qqmail.com,DIRECT"
-  - "DOMAIN-SUFFIX,idqqimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,baichuan-ai.com,DIRECT"
-  - "DOMAIN-SUFFIX,chatglm.cn,DIRECT"
-  - "DOMAIN-SUFFIX,deepseek.com,DIRECT"
-  - "DOMAIN-SUFFIX,deepseeksvc.com,DIRECT"
-  - "DOMAIN-SUFFIX,doubao.com,DIRECT"
-  - "DOMAIN-SUFFIX,doubaocdn.com,DIRECT"
-  - "DOMAIN-SUFFIX,hailuoai.com,DIRECT"
-  - "DOMAIN-SUFFIX,kimi.ai,DIRECT"
-  - "DOMAIN-SUFFIX,kimi.com,DIRECT"
-  - "DOMAIN-SUFFIX,minimax.chat,DIRECT"
-  - "DOMAIN-SUFFIX,moonshot.ai,DIRECT"
-  - "DOMAIN-SUFFIX,moonshot.cn,DIRECT"
-  - "DOMAIN-SUFFIX,qwen.ai,DIRECT"
-  - "DOMAIN-SUFFIX,sensechat.cn,DIRECT"
-  - "DOMAIN-SUFFIX,sensetime.com,DIRECT"
-  - "DOMAIN-SUFFIX,stepfun.com,DIRECT"
-  - "DOMAIN-SUFFIX,yuewen.cn,DIRECT"
-  - "DOMAIN-SUFFIX,zhipuai.cn,DIRECT"
-  - "DOMAIN-SUFFIX,local,DIRECT"
-  - "DOMAIN-SUFFIX,localhost,DIRECT"
-  - "DOMAIN-SUFFIX,lan,DIRECT"
-  - "DOMAIN-SUFFIX,home.arpa,DIRECT"
-  - "DOMAIN,captive.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,qq.com,DIRECT"
-  - "DOMAIN-SUFFIX,qpic.cn,DIRECT"
-  - "DOMAIN-SUFFIX,qlogo.cn,DIRECT"
-  - "DOMAIN-SUFFIX,gtimg.com,DIRECT"
-  - "DOMAIN-SUFFIX,qihangjiaoyu.com,DIRECT"
-  - "DOMAIN-SUFFIX,polyv.net,DIRECT"
-  - "DOMAIN-SUFFIX,polyv.cn,DIRECT"
-  - "DOMAIN-SUFFIX,alicdn.com,DIRECT"
-  - "IP-CIDR,0.0.0.0/8,DIRECT,no-resolve"
-  - "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve"
-  - "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve"
-  - "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve"
-  - "IP-CIDR,169.254.0.0/16,DIRECT,no-resolve"
-  - "IP-CIDR,172.16.0.0/12,DIRECT,no-resolve"
-  - "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve"
-  - "IP-CIDR,224.0.0.0/4,DIRECT,no-resolve"
-  - "RULE-SET,vps-domain-96021d255b1e4213,DIRECT"
-  - "DOMAIN-SUFFIX,livekit.cloud,🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🤖 AI平台"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🤖 AI平台"
-  - "PROTOCOL,STUN,REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,3479)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,3480)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,3481)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT"
-  - "AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT"
-  - "DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$),REJECT"
-  - "DOMAIN-SUFFIX,stun.l.google.com,REJECT"
-  - "DOMAIN-SUFFIX,stun1.l.google.com,REJECT"
-  - "DOMAIN-SUFFIX,stun2.l.google.com,REJECT"
-  - "DOMAIN-SUFFIX,stun3.l.google.com,REJECT"
-  - "DOMAIN-SUFFIX,stun4.l.google.com,REJECT"
-  - "DOMAIN-SUFFIX,stun.cloudflare.com,REJECT"
-  - "SCRIPT,webrtc-ports,REJECT"
-  - "SCRIPT,webrtc-turn-tls,REJECT"
-  - "RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台"
-  - "RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube"
-  - "GEOSITE,youtube,📺 YouTube"
-  - "RULE-SET,vps-domain-083863a0da25b445,🤖 AI平台"
-  - "DOMAIN-REGEX,^r+[0-9]+(---|\\.)sn-(2x3|ni5|j5o)\\w{5}\\.xn--ngstr-lra8j\\.com$,🤖 AI平台"
-  - "DOMAIN-REGEX,^r+[0-9]+(---|\\.)sn-(2x3|ni5|j5o)\\w{5}\\.googlevideo\\.com$,🤖 AI平台"
-  - "GEOSITE,google,🤖 AI平台"
-  - "GEOSITE,openai,🤖 AI平台"
-  - "RULE-SET,vps-domain-1e9db824fb228459,🤖 AI平台"
-  - "DOMAIN-KEYWORD,youtube,📺 YouTube"
-  - "DOMAIN-SUFFIX,youtube.com,📺 YouTube"
-  - "DOMAIN-SUFFIX,googlevideo.com,📺 YouTube"
-  - "DOMAIN-SUFFIX,youtu.be,📺 YouTube"
-  - "DOMAIN-SUFFIX,yt.be,📺 YouTube"
-  - "DOMAIN-SUFFIX,ytimg.com,📺 YouTube"
-  - "DOMAIN-SUFFIX,apple-relay.apple.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.cloudflare.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.fastly-edge.com,DIRECT"
-  - "DOMAIN-SUFFIX,apple-relay.akamaized.net,DIRECT"
-  - "DOMAIN-SUFFIX,cp4.cloudflare.com,DIRECT"
-  - "RULE-SET,vps-domain-0a8e99d063901310,DIRECT"
-  - "GEOSITE,apple,DIRECT"
-  - "GEOSITE,twitter,🚀节点选择"
-  - "DOMAIN-KEYWORD,twitter,🚀节点选择"
-  - "DOMAIN-SUFFIX,x.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twitter.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,twimg.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,t.co,🚀节点选择"
-  - "DOMAIN-SUFFIX,pscp.tv,🚀节点选择"
-  - "DOMAIN-SUFFIX,periscope.tv,🚀节点选择"
-  - "GEOSITE,google,🤖 AI平台"
-  - "DOMAIN-KEYWORD,google,🤖 AI平台"
-  - "RULE-SET,vps-domain-e8e6f448a3e8ad3a,🤖 AI平台"
-  - "DOMAIN-KEYWORD,browserleaks,🚀节点选择"
-  - "DOMAIN-SUFFIX,browserleaks.com,🚀节点选择"
-  - "DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择"
-  - "DOMAIN-SUFFIX,ipleak.net,🚀节点选择"
-  - "RULE-SET,vps-domain-7454c3e8328d3448,DIRECT"
-  - "GEOSITE,category-ads-all,REJECT"
-  - "DOMAIN-SUFFIX,cn,DIRECT"
-  - "DOMAIN-SUFFIX,xn--fiqs8s,DIRECT"
-  - "DOMAIN-SUFFIX,xn--fiqz9s,DIRECT"
-  - "DOMAIN-SUFFIX,xn--55qx5d,DIRECT"
-  - "DOMAIN-SUFFIX,xn--io0a7i,DIRECT"
-  - "DOMAIN-SUFFIX,xn--zfr164b,DIRECT"
-  - "DOMAIN-SUFFIX,xn--55qw42g,DIRECT"
-  - "GEOSITE,cn,DIRECT"
-  - "GEOIP,CN,DIRECT,no-resolve"
-  - "SCRIPT,merged-quic,REJECT,no-track"
-  - "MATCH,🚀节点选择"
+- AND,((NETWORK,TCP),(DOMAIN,turnstile.cloudflare.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,copilotprodattachments.blob.core.windows.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,openaiapi-site.azureedge.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,openaiassets.blob.core.windows.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,openaicomproductionae4b.blob.core.windows.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,production-openaicom-storage.azureedge.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN,sydney.bing.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,grok.x.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,copilot.microsoft.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,sydney.bing.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ai.azure.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,cloudflareinsights.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,featuregates.org)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,grazie.aws.intellij.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,intercom.io)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,intercomcdn.com)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,recaptcha.net)),🤖 AI平台
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,microsoft.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,microsoftonline.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,microsoftonline-p.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,microsoft365.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msauth.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msauthimages.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msftauth.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msftauthimages.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,office.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,office.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,office365.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,onedrive.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,live.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,outlook.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,windows.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,windows.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,windowsupdate.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,s-microsoft.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msn.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msftconnecttest.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msftncsi.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,azureedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bing.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,dns.alidns.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,doh.pub)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,dns.google)),🚀节点选择
+- AND,((NETWORK,TCP),(DOMAIN,cloudflare-dns.com)),🚀节点选择
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,vipqihang.com)),DIRECT
+- DOMAIN-SUFFIX,muse.ai,🤖 AI平台
+- DOMAIN-SUFFIX,meta.ai,🤖 AI平台
+- DOMAIN-SUFFIX,meta.com,🤖 AI平台
+- DOMAIN-SUFFIX,atmeta.com,🤖 AI平台
+- DOMAIN-SUFFIX,llama.com,🤖 AI平台
+- DOMAIN-SUFFIX,facebook.com,🤖 AI平台
+- DOMAIN-SUFFIX,facebook.net,🤖 AI平台
+- DOMAIN-SUFFIX,fb.com,🤖 AI平台
+- DOMAIN-SUFFIX,fb.me,🤖 AI平台
+- DOMAIN-SUFFIX,fb.watch,🤖 AI平台
+- DOMAIN-SUFFIX,fb.gg,🤖 AI平台
+- DOMAIN-SUFFIX,fbcdn.com,🤖 AI平台
+- DOMAIN-SUFFIX,fbcdn.net,🤖 AI平台
+- DOMAIN-SUFFIX,fbsbx.com,🤖 AI平台
+- DOMAIN-SUFFIX,fbsbx.net,🤖 AI平台
+- DOMAIN-SUFFIX,facebookmail.com,🤖 AI平台
+- DOMAIN-SUFFIX,facebook-hardware.com,🤖 AI平台
+- DOMAIN-SUFFIX,facebookportal.com,🤖 AI平台
+- DOMAIN-SUFFIX,facebookwork.com,🤖 AI平台
+- DOMAIN-SUFFIX,workplace.com,🤖 AI平台
+- DOMAIN-SUFFIX,workplaceusecases.com,🤖 AI平台
+- DOMAIN-SUFFIX,instagram.com,🤖 AI平台
+- DOMAIN-SUFFIX,cdninstagram.com,🤖 AI平台
+- DOMAIN-SUFFIX,ig.me,🤖 AI平台
+- DOMAIN-SUFFIX,igcdn.com,🤖 AI平台
+- DOMAIN-SUFFIX,igsonar.com,🤖 AI平台
+- DOMAIN-SUFFIX,igtv.com,🤖 AI平台
+- DOMAIN-SUFFIX,threads.com,🤖 AI平台
+- DOMAIN-SUFFIX,threads.net,🤖 AI平台
+- DOMAIN-SUFFIX,messenger.com,🤖 AI平台
+- DOMAIN-SUFFIX,fbmessenger.com,🤖 AI平台
+- DOMAIN-SUFFIX,m.me,🤖 AI平台
+- DOMAIN-SUFFIX,whatsapp.com,🤖 AI平台
+- DOMAIN-SUFFIX,whatsapp.net,🤖 AI平台
+- DOMAIN-SUFFIX,wa.me,🤖 AI平台
+- DOMAIN-SUFFIX,whatsappbrand.com,🤖 AI平台
+- DOMAIN-SUFFIX,oculus.com,🤖 AI平台
+- DOMAIN-SUFFIX,oculuscdn.com,🤖 AI平台
+- DOMAIN-SUFFIX,oculusvr.com,🤖 AI平台
+- DOMAIN-SUFFIX,ocul.us,🤖 AI平台
+- DOMAIN-SUFFIX,oculusforbusiness.com,🤖 AI平台
+- DOMAIN-SUFFIX,metaquest.com,🤖 AI平台
+- DOMAIN-SUFFIX,metacareers.com,🤖 AI平台
+- DOMAIN,fbcdn-a.akamaihd.net,🤖 AI平台
+- GEOSITE,meta,🤖 AI平台
+- DOMAIN-SUFFIX,akadns.net,🚀节点选择
+- DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择
+- DOMAIN-SUFFIX,push.apple.com,🚀节点选择
+- IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve
+- IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve
+- IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve
+- IP-CIDR,17.188.128.0/18,🚀节点选择,no-resolve
+- IP-CIDR,17.188.20.0/23,🚀节点选择,no-resolve
+- IP-CIDR6,2620:149:a44::/48,🚀节点选择,no-resolve
+- IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve
+- IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve
+- IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve
+- DOMAIN-SUFFIX,ai.azure.com,🤖 AI平台
+- DOMAIN-SUFFIX,perplexity.com,🤖 AI平台
+- DOMAIN-SUFFIX,poecdn.net,🤖 AI平台
+- DOMAIN-SUFFIX,replicate.delivery,🤖 AI平台
+- DOMAIN-SUFFIX,together.xyz,🤖 AI平台
+- DOMAIN,copilot-proxy.githubusercontent.com,🤖 AI平台
+- DOMAIN,copilot-workspace.githubnext.com,🤖 AI平台
+- DOMAIN,copilotprodattachments.blob.core.windows.net,🤖 AI平台
+- DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,🤖 AI平台
+- DOMAIN,pplx-res.cloudinary.com,🤖 AI平台
+- DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI平台
+- DOMAIN-SUFFIX,anthropic.com,🤖 AI平台
+- DOMAIN-SUFFIX,claude.ai,🤖 AI平台
+- DOMAIN-SUFFIX,openai.com,🤖 AI平台
+- DOMAIN-SUFFIX,chatgpt.com,🤖 AI平台
+- DOMAIN-SUFFIX,sora.com,🤖 AI平台
+- DOMAIN-SUFFIX,grok.com,🤖 AI平台
+- DOMAIN-SUFFIX,x.ai,🤖 AI平台
+- DOMAIN,grok.x.com,🤖 AI平台
+- DOMAIN-SUFFIX,grok.x.com,🤖 AI平台
+- DOMAIN-SUFFIX,pixpix.com,🤖 AI平台
+- DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台
+- DOMAIN-SUFFIX,midjourney.com,🤖 AI平台
+- DOMAIN-SUFFIX,gemini.google.com,🤖 AI平台
+- DOMAIN-SUFFIX,aistudio.google.com,🤖 AI平台
+- DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI平台
+- DOMAIN-SUFFIX,alipay.com,DIRECT
+- DOMAIN-SUFFIX,alipayobjects.com,DIRECT
+- DOMAIN-SUFFIX,alipay.com.cn,DIRECT
+- DOMAIN-SUFFIX,alipay.net,DIRECT
+- DOMAIN,workos.imgix.net,🤖 AI平台
+- DOMAIN,js.stripe.com,🤖 AI平台
+- DOMAIN,o207216.ingest.sentry.io,🤖 AI平台
+- DOMAIN,o33249.ingest.sentry.io,🤖 AI平台
+- DOMAIN,rum.browser-intake-datadoghq.com,🤖 AI平台
+- DOMAIN,browser-intake-datadoghq.com,🤖 AI平台
+- DOMAIN-SUFFIX,ct.sendgrid.net,🤖 AI平台
+- DOMAIN-SUFFIX,oaistatsig.com,🤖 AI平台
+- DOMAIN,dns.alidns.com,DIRECT
+- DOMAIN,doh.pub,DIRECT
+- DOMAIN,dns.google,🚀节点选择
+- DOMAIN,cloudflare-dns.com,🚀节点选择
+- DOMAIN-SUFFIX,qq.com,DIRECT
+- DOMAIN-SUFFIX,qpic.cn,DIRECT
+- DOMAIN-SUFFIX,qlogo.cn,DIRECT
+- DOMAIN-SUFFIX,gtimg.com,DIRECT
+- DOMAIN-SUFFIX,wechat.com,DIRECT
+- DOMAIN-SUFFIX,weixin.com,DIRECT
+- DOMAIN-SUFFIX,servicewechat.com,DIRECT
+- AND,((NETWORK,TCP),(IP-CIDR6,::/0,no-resolve),(GEOIP,CN,no-resolve)),DIRECT
+- IP-CIDR6,::/0,REJECT,no-resolve
+- DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择
+- DOMAIN-SUFFIX,cms-twdigitalassets.com,🚀节点选择
+- DOMAIN-SUFFIX,periscope.tv,🚀节点选择
+- DOMAIN-SUFFIX,pscp.tv,🚀节点选择
+- DOMAIN-SUFFIX,t.co,🚀节点选择
+- DOMAIN-SUFFIX,tellapart.com,🚀节点选择
+- DOMAIN-SUFFIX,tweetdeck.com,🚀节点选择
+- DOMAIN-SUFFIX,twimg.com,🚀节点选择
+- DOMAIN-SUFFIX,twitpic.com,🚀节点选择
+- DOMAIN-SUFFIX,twitter.biz,🚀节点选择
+- DOMAIN-SUFFIX,twitter.com,🚀节点选择
+- DOMAIN-SUFFIX,twitter.jp,🚀节点选择
+- DOMAIN-SUFFIX,twitter.map.fastly.net,🚀节点选择
+- DOMAIN-SUFFIX,twittercommunity.com,🚀节点选择
+- DOMAIN-SUFFIX,twitterflightschool.com,🚀节点选择
+- DOMAIN-SUFFIX,twitterinc.com,🚀节点选择
+- DOMAIN-SUFFIX,twitteroauth.com,🚀节点选择
+- DOMAIN-SUFFIX,twitterstat.us,🚀节点选择
+- DOMAIN-SUFFIX,twtrdns.net,🚀节点选择
+- DOMAIN-SUFFIX,twttr.com,🚀节点选择
+- DOMAIN-SUFFIX,twttr.net,🚀节点选择
+- DOMAIN-SUFFIX,twvid.com,🚀节点选择
+- DOMAIN-SUFFIX,vine.co,🚀节点选择
+- DOMAIN-SUFFIX,x.com,🚀节点选择
+- DOMAIN-SUFFIX,qqmail.com,DIRECT
+- DOMAIN-SUFFIX,idqqimg.com,DIRECT
+- DOMAIN-SUFFIX,baichuan-ai.com,DIRECT
+- DOMAIN-SUFFIX,chatglm.cn,DIRECT
+- DOMAIN-SUFFIX,deepseek.com,DIRECT
+- DOMAIN-SUFFIX,deepseeksvc.com,DIRECT
+- DOMAIN-SUFFIX,doubao.com,DIRECT
+- DOMAIN-SUFFIX,doubaocdn.com,DIRECT
+- DOMAIN-SUFFIX,hailuoai.com,DIRECT
+- DOMAIN-SUFFIX,kimi.ai,DIRECT
+- DOMAIN-SUFFIX,kimi.com,DIRECT
+- DOMAIN-SUFFIX,minimax.chat,DIRECT
+- DOMAIN-SUFFIX,moonshot.ai,DIRECT
+- DOMAIN-SUFFIX,moonshot.cn,DIRECT
+- DOMAIN-SUFFIX,qwen.ai,DIRECT
+- DOMAIN-SUFFIX,sensechat.cn,DIRECT
+- DOMAIN-SUFFIX,sensetime.com,DIRECT
+- DOMAIN-SUFFIX,stepfun.com,DIRECT
+- DOMAIN-SUFFIX,yuewen.cn,DIRECT
+- DOMAIN-SUFFIX,zhipuai.cn,DIRECT
+- DOMAIN-SUFFIX,local,DIRECT
+- DOMAIN-SUFFIX,localhost,DIRECT
+- DOMAIN-SUFFIX,lan,DIRECT
+- DOMAIN-SUFFIX,home.arpa,DIRECT
+- DOMAIN,captive.apple.com,DIRECT
+- DOMAIN-SUFFIX,qq.com,DIRECT
+- DOMAIN-SUFFIX,qpic.cn,DIRECT
+- DOMAIN-SUFFIX,qlogo.cn,DIRECT
+- DOMAIN-SUFFIX,gtimg.com,DIRECT
+- DOMAIN-SUFFIX,qihangjiaoyu.com,DIRECT
+- DOMAIN-SUFFIX,polyv.net,DIRECT
+- DOMAIN-SUFFIX,polyv.cn,DIRECT
+- DOMAIN-SUFFIX,alicdn.com,DIRECT
+- IP-CIDR,0.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
+- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+- IP-CIDR,224.0.0.0/4,DIRECT,no-resolve
+- RULE-SET,vps-domain-96021d255b1e4213,DIRECT
+- DOMAIN-SUFFIX,livekit.cloud,🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,13.71.25.29/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,135.220.40.201/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.203.39.49/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.207.173.200/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,172.214.226.198/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,191.233.251.27/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.162.96.163/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.168.48.117/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.184.36.134/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.203.144.245/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,20.74.221.21/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.151.200.38/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.155.146.196/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.197.172.116/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.217.235.100/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,4.245.198.13/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,40.118.236.137/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,51.4.112.173/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,52.143.181.161/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🤖 AI平台
+- AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🤖 AI平台
+- PROTOCOL,STUN,REJECT
+- AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,3479)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,3480)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,3481)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT
+- DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$),REJECT
+- DOMAIN-SUFFIX,stun.l.google.com,REJECT
+- DOMAIN-SUFFIX,stun1.l.google.com,REJECT
+- DOMAIN-SUFFIX,stun2.l.google.com,REJECT
+- DOMAIN-SUFFIX,stun3.l.google.com,REJECT
+- DOMAIN-SUFFIX,stun4.l.google.com,REJECT
+- DOMAIN-SUFFIX,stun.cloudflare.com,REJECT
+- SCRIPT,webrtc-ports,REJECT
+- SCRIPT,webrtc-turn-tls,REJECT
+- RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台
+- RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube
+- GEOSITE,youtube,📺 YouTube
+- RULE-SET,vps-domain-083863a0da25b445,🤖 AI平台
+- DOMAIN-REGEX,^r+[0-9]+(---|\.)sn-(2x3|ni5|j5o)\w{5}\.xn--ngstr-lra8j\.com$,🤖 AI平台
+- DOMAIN-REGEX,^r+[0-9]+(---|\.)sn-(2x3|ni5|j5o)\w{5}\.googlevideo\.com$,🤖 AI平台
+- RULE-SET,aligned-managed-ai-b6f8d310ba5f495a,🤖 AI平台
+- GEOSITE,google,🤖 AI平台
+- GEOSITE,openai,🤖 AI平台
+- RULE-SET,vps-domain-1e9db824fb228459,🤖 AI平台
+- DOMAIN-KEYWORD,youtube,📺 YouTube
+- DOMAIN-SUFFIX,youtube.com,📺 YouTube
+- DOMAIN-SUFFIX,googlevideo.com,📺 YouTube
+- DOMAIN-SUFFIX,youtu.be,📺 YouTube
+- DOMAIN-SUFFIX,yt.be,📺 YouTube
+- DOMAIN-SUFFIX,ytimg.com,📺 YouTube
+- DOMAIN,apple-relay.apple.com,DIRECT
+- DOMAIN,apple-relay.cloudflare.com,DIRECT
+- DOMAIN,apple-relay.fastly-edge.com,DIRECT
+- DOMAIN,apple-relay.akamaized.net,DIRECT
+- DOMAIN,cp4.cloudflare.com,DIRECT
+- RULE-SET,vps-domain-0a8e99d063901310,DIRECT
+- GEOSITE,apple,DIRECT
+- GEOSITE,twitter,🚀节点选择
+- DOMAIN-KEYWORD,twitter,🚀节点选择
+- DOMAIN-SUFFIX,x.com,🚀节点选择
+- DOMAIN-SUFFIX,twitter.com,🚀节点选择
+- DOMAIN-SUFFIX,twimg.com,🚀节点选择
+- DOMAIN-SUFFIX,t.co,🚀节点选择
+- DOMAIN-SUFFIX,pscp.tv,🚀节点选择
+- DOMAIN-SUFFIX,periscope.tv,🚀节点选择
+- GEOSITE,google,🤖 AI平台
+- DOMAIN-KEYWORD,google,🤖 AI平台
+- RULE-SET,vps-domain-e8e6f448a3e8ad3a,🤖 AI平台
+- DOMAIN-KEYWORD,browserleaks,🚀节点选择
+- DOMAIN-SUFFIX,browserleaks.com,🚀节点选择
+- DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择
+- DOMAIN-SUFFIX,ipleak.net,🚀节点选择
+- RULE-SET,vps-domain-7454c3e8328d3448,DIRECT
+- GEOSITE,category-ads-all,REJECT
+- DOMAIN-SUFFIX,cn,DIRECT
+- DOMAIN-SUFFIX,xn--fiqs8s,DIRECT
+- DOMAIN-SUFFIX,xn--fiqz9s,DIRECT
+- DOMAIN-SUFFIX,xn--55qx5d,DIRECT
+- DOMAIN-SUFFIX,xn--io0a7i,DIRECT
+- DOMAIN-SUFFIX,xn--zfr164b,DIRECT
+- DOMAIN-SUFFIX,xn--55qw42g,DIRECT
+- GEOSITE,cn,DIRECT
+- GEOIP,CN,DIRECT,no-resolve
+- SCRIPT,merged-quic,REJECT,no-track
+- MATCH,🚀节点选择
