@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.8 正式版"
+name: "3.8.9 正式版"
 desc: |-
-  3.8.8｜Oracle 官网、登录、控制台、云服务与静态资源统一直连，配套国内 DNS；其余国内外分流保留 3.8.7 策略。
+  3.8.9｜修复国内 IP 兜底不解析导致未知国内站误走代理；微软/Oracle 指定直连域名使用真实 DNS，补齐 Edge 官网 CDN。保留国际 Bing/AI/国外代理及已有防护。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.8"
+version: "3.8.9"
 
 mode: rule
 ipv6: false
@@ -168,6 +168,79 @@ dns: #!replace
   - +.apps.apple.com
   - mzstatic.com
   - +.mzstatic.com
+  - microsoft.com
+  - +.microsoft.com
+  - microsoftonline.com
+  - +.microsoftonline.com
+  - microsoftonline-p.com
+  - +.microsoftonline-p.com
+  - microsoft365.com
+  - +.microsoft365.com
+  - msauth.net
+  - +.msauth.net
+  - msauthimages.net
+  - +.msauthimages.net
+  - msftauth.net
+  - +.msftauth.net
+  - msftauthimages.net
+  - +.msftauthimages.net
+  - office.com
+  - +.office.com
+  - office.net
+  - +.office.net
+  - office365.com
+  - +.office365.com
+  - onedrive.com
+  - +.onedrive.com
+  - live.com
+  - +.live.com
+  - outlook.com
+  - +.outlook.com
+  - windows.com
+  - +.windows.com
+  - windows.net
+  - +.windows.net
+  - windowsupdate.com
+  - +.windowsupdate.com
+  - s-microsoft.com
+  - +.s-microsoft.com
+  - msedge.net
+  - +.msedge.net
+  - msn.com
+  - +.msn.com
+  - msftconnecttest.com
+  - +.msftconnecttest.com
+  - msftncsi.com
+  - +.msftncsi.com
+  - azureedge.net
+  - +.azureedge.net
+  - oracle.com
+  - +.oracle.com
+  - oraclecloud.com
+  - +.oraclecloud.com
+  - oraclecloudapps.com
+  - +.oraclecloudapps.com
+  - oracleimg.com
+  - +.oracleimg.com
+  - oraclefoundation.org
+  - +.oraclefoundation.org
+  - oracleinfinity.io
+  - +.oracleinfinity.io
+  - ateam-oracle.com
+  - +.ateam-oracle.com
+  - oracle
+  - +.oracle
+  - oracle-tencent.com
+  - +.oracle-tencent.com
+  - oracle-tencent.net
+  - +.oracle-tencent.net
+  - oracle-tencent.org
+  - +.oracle-tencent.org
+  - cn.bing.com
+  - +.cn.bing.com
+  - vipqihang.com
+  - +.vipqihang.com
+  - edgecdn-embza6g8cacagcbn.z01.azurefd.net
   nameserver-policy:
     "+.ads-twitter.com":
     - https://dns.google/dns-query
@@ -691,6 +764,9 @@ dns: #!replace
     +.oracle-tencent.org:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    edgecdn-embza6g8cacagcbn.z01.azurefd.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -748,6 +824,7 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
     interval: 86400
 rules: #!replace
+- AND,((NETWORK,TCP),(DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloud.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloudapps.com)),DIRECT
@@ -1088,6 +1165,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择
 - DOMAIN-SUFFIX,ipleak.net,🚀节点选择
 - RULE-SET,vps-domain-7454c3e8328d3448,DIRECT
+- DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net,DIRECT
 - GEOSITE,category-ads-all,REJECT
 - DOMAIN-SUFFIX,cn,DIRECT
 - DOMAIN-SUFFIX,xn--fiqs8s,DIRECT
@@ -1097,6 +1175,6 @@ rules: #!replace
 - DOMAIN-SUFFIX,xn--zfr164b,DIRECT
 - DOMAIN-SUFFIX,xn--55qw42g,DIRECT
 - GEOSITE,cn,DIRECT
-- GEOIP,CN,DIRECT,no-resolve
+- GEOIP,CN,DIRECT
 - SCRIPT,merged-quic,REJECT,no-track
 - MATCH,🚀节点选择
