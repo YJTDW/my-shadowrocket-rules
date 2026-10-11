@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.6 正式版"
+name: "3.8.7 正式版"
 desc: |-
-  3.8.6｜Bing 国内外分流：cn.bing.com 使用国内 DNS 并直连，国际 bing.com 使用国外 DNS 与主代理；Copilot/Sydney 保留 AI 策略。保留微软商店、微信、碰一碰及其他规则。
+  3.8.7｜统一 sing-box/Stash 国内外分流与 DNS：国内直连，国际 Bing 及未知境外走代理；保留微软/Apple 直连例外与 Copilot/Sydney AI 分流，补齐直连例外的国内 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.6"
+version: "3.8.7"
 
 mode: rule
 ipv6: false
@@ -527,6 +527,135 @@ dns: #!replace
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     +.sydney.bing.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.microsoft.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.microsoftonline.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.microsoftonline-p.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.microsoft365.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msauth.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msauthimages.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msftauth.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msftauthimages.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.office.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.office.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.office365.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.onedrive.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.live.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.outlook.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.windows.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.windows.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.windowsupdate.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.s-microsoft.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msn.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msftconnecttest.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.msftncsi.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.azureedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.vipqihang.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--fiqs8s:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--fiqz9s:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--55qx5d:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--io0a7i:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--zfr164b:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.xn--55qw42g:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.grok.x.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.cloudflareinsights.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.featuregates.org:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.grazie.aws.intellij.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.intercom.io:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.intercomcdn.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.recaptcha.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    turnstile.cloudflare.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openaiapi-site.azureedge.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openaiassets.blob.core.windows.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openaicomproductionae4b.blob.core.windows.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-openaicom-storage.azureedge.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    sydney.bing.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
