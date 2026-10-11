@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.10 正式版"
+name: "3.8.11 正式版"
 desc: |-
-  3.8.10｜补齐已核实的 Oracle Infinity 与官网 CDN 别名直连、国内 DNS 和真实地址解析；保留 3.8.9 国内外分流、节点、广告及其他防护。
+  3.8.11｜补齐实测漏匹配的 Oracle 页面统计请求 oracle.sc.omtrdc.net 直连、国内 DNS 与真实地址解析；保留 3.8.10 分流与其他站点防护。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.10"
+version: "3.8.11"
 
 mode: rule
 ipv6: false
@@ -246,6 +246,7 @@ dns: #!replace
   - oracle.com.edgekey.net
   - +.oracle.com.edgekey.net
   - e2581.dscx.akamaiedge.net
+  - oracle.sc.omtrdc.net
   nameserver-policy:
     "+.ads-twitter.com":
     - https://dns.google/dns-query
@@ -781,6 +782,9 @@ dns: #!replace
     e2581.dscx.akamaiedge.net:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    oracle.sc.omtrdc.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -838,6 +842,7 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
     interval: 86400
 rules: #!replace
+- AND,((NETWORK,TCP),(DOMAIN,oracle.sc.omtrdc.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io.akadns.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com.edgekey.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,e2581.dscx.akamaiedge.net)),DIRECT
@@ -1186,6 +1191,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,oracleinfinity.io.akadns.net,DIRECT
 - DOMAIN-SUFFIX,oracle.com.edgekey.net,DIRECT
 - DOMAIN,e2581.dscx.akamaiedge.net,DIRECT
+- DOMAIN,oracle.sc.omtrdc.net,DIRECT
 - GEOSITE,category-ads-all,REJECT
 - DOMAIN-SUFFIX,cn,DIRECT
 - DOMAIN-SUFFIX,xn--fiqs8s,DIRECT
