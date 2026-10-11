@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.11 正式版"
+name: "3.8.12 正式版"
 desc: |-
-  3.8.11｜补齐实测漏匹配的 Oracle 页面统计请求 oracle.sc.omtrdc.net 直连、国内 DNS 与真实地址解析；保留 3.8.10 分流与其他站点防护。
+  3.8.12｜按 Oracle 官方控制台清单、官网脚本与实测 DNS 别名统一补全直连；与 sing-box 共用域名策略，覆盖官网、登录、云服务、Cookie 和已核实 CDN，保留其他分流与防护。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.11"
+version: "3.8.12"
 
 mode: rule
 ipv6: false
@@ -247,6 +247,70 @@ dns: #!replace
   - +.oracle.com.edgekey.net
   - e2581.dscx.akamaiedge.net
   - oracle.sc.omtrdc.net
+  - bronto.com
+  - +.bronto.com
+  - covid19-rx.org
+  - +.covid19-rx.org
+  - covid19rx.org
+  - +.covid19rx.org
+  - custhelp.com
+  - +.custhelp.com
+  - java
+  - +.java
+  - java.com
+  - +.java.com
+  - java.com.akadns.net
+  - +.java.com.akadns.net
+  - java.com.cdn.cloudflare.net
+  - +.java.com.cdn.cloudflare.net
+  - java.net
+  - +.java.net
+  - netsuite.com
+  - +.netsuite.com
+  - netsuite.com.edgekey.net
+  - +.netsuite.com.edgekey.net
+  - oracle.co.jp
+  - +.oracle.co.jp
+  - oracle.com.akadns.net
+  - +.oracle.com.akadns.net
+  - oracle.com.greylabeldelivery.com
+  - +.oracle.com.greylabeldelivery.com
+  - oracle.eu
+  - +.oracle.eu
+  - oraclecloud.com.edgekey.net
+  - +.oraclecloud.com.edgekey.net
+  - oraclehealthfoundation.org
+  - +.oraclehealthfoundation.org
+  - oraclehealthfoundation.org.akadns.net
+  - +.oraclehealthfoundation.org.akadns.net
+  - oraclehealthfoundation.org.cdn.cloudflare.net
+  - +.oraclehealthfoundation.org.cdn.cloudflare.net
+  - oracleinfinity.io.edgekey.net
+  - +.oracleinfinity.io.edgekey.net
+  - sun.com
+  - +.sun.com
+  - virtualbox.org
+  - +.virtualbox.org
+  - virtualbox.org.edgekey.net
+  - +.virtualbox.org.edgekey.net
+  - consent.trustarc.com
+  - ds-cloud.oracle.com-console.edgekey.net
+  - e101120.dscx.akamaiedge.net
+  - e120265.dscx.akamaiedge.net
+  - e130756.dscx.akamaiedge.net
+  - e14263.dscx.akamaiedge.net
+  - e192175.dscx.akamaiedge.net
+  - e204653.dscx.akamaiedge.net
+  - e212895.x.akamaiedge.net
+  - e2229.dscx.akamaiedge.net
+  - e244178.x.akamaiedge.net
+  - e2875.d.akamaiedge.net
+  - e40539.dscx.akamaiedge.net
+  - e870.dscx.akamaiedge.net
+  - oracle.112.2o7.net
+  - p03b.hs.eloqua.com
+  - rightnow.com
+  - s1973398186.hs.eloqua.com
   nameserver-policy:
     "+.ads-twitter.com":
     - https://dns.google/dns-query
@@ -785,6 +849,129 @@ dns: #!replace
     oracle.sc.omtrdc.net:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    +.bronto.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.covid19-rx.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.covid19rx.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.custhelp.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.java:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.java.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.java.com.akadns.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.java.com.cdn.cloudflare.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.java.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.netsuite.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.netsuite.com.edgekey.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle.co.jp:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle.com.akadns.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle.com.greylabeldelivery.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle.eu:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclecloud.com.edgekey.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclehealthfoundation.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclehealthfoundation.org.akadns.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclehealthfoundation.org.cdn.cloudflare.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracleinfinity.io.edgekey.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.sun.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.virtualbox.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.virtualbox.org.edgekey.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    consent.trustarc.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    ds-cloud.oracle.com-console.edgekey.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e101120.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e120265.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e130756.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e14263.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e192175.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e204653.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e212895.x.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e2229.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e244178.x.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e2875.d.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e40539.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    e870.dscx.akamaiedge.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    oracle.112.2o7.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    p03b.hs.eloqua.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    rightnow.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    s1973398186.hs.eloqua.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -842,22 +1029,64 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
     interval: 86400
 rules: #!replace
-- AND,((NETWORK,TCP),(DOMAIN,oracle.sc.omtrdc.net)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io.akadns.net)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com.edgekey.net)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN,e2581.dscx.akamaiedge.net)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloud.com)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloudapps.com)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleimg.com)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclefoundation.org)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io)),DIRECT
+# Oracle unified DIRECT policy: website, login, console, APIs and verified dependencies
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ateam-oracle.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bronto.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,covid19-rx.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,covid19rx.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,custhelp.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,java)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,java.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,java.com.akadns.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,java.com.cdn.cloudflare.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,java.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,netsuite.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,netsuite.com.edgekey.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.co.jp)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com.akadns.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com.edgekey.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com.greylabeldelivery.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.eu)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloud.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloud.com.edgekey.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloudapps.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclefoundation.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclehealthfoundation.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclehealthfoundation.org.akadns.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclehealthfoundation.org.cdn.cloudflare.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleimg.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io.akadns.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io.edgekey.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,sun.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,virtualbox.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,virtualbox.org.edgekey.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,consent.trustarc.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,ds-cloud.oracle.com-console.edgekey.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e101120.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e120265.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e130756.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e14263.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e192175.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e204653.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e212895.x.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e2229.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e244178.x.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e2581.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e2875.d.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e40539.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,e870.dscx.akamaiedge.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,oracle.112.2o7.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,oracle.sc.omtrdc.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,p03b.hs.eloqua.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,rightnow.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,s1973398186.hs.eloqua.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,appclip.apple.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,app-site-association.cdn-apple.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,app-site-association.networking.apple)),DIRECT
@@ -1137,17 +1366,62 @@ rules: #!replace
 - DOMAIN-SUFFIX,stun.cloudflare.com,REJECT
 - SCRIPT,webrtc-ports,REJECT
 - SCRIPT,webrtc-turn-tls,REJECT
-- DOMAIN-SUFFIX,oracle.com,DIRECT
-- DOMAIN-SUFFIX,oraclecloud.com,DIRECT
-- DOMAIN-SUFFIX,oraclecloudapps.com,DIRECT
-- DOMAIN-SUFFIX,oracleimg.com,DIRECT
-- DOMAIN-SUFFIX,oraclefoundation.org,DIRECT
-- DOMAIN-SUFFIX,oracleinfinity.io,DIRECT
 - DOMAIN-SUFFIX,ateam-oracle.com,DIRECT
+- DOMAIN-SUFFIX,bronto.com,DIRECT
+- DOMAIN-SUFFIX,covid19-rx.org,DIRECT
+- DOMAIN-SUFFIX,covid19rx.org,DIRECT
+- DOMAIN-SUFFIX,custhelp.com,DIRECT
+- DOMAIN-SUFFIX,java,DIRECT
+- DOMAIN-SUFFIX,java.com,DIRECT
+- DOMAIN-SUFFIX,java.com.akadns.net,DIRECT
+- DOMAIN-SUFFIX,java.com.cdn.cloudflare.net,DIRECT
+- DOMAIN-SUFFIX,java.net,DIRECT
+- DOMAIN-SUFFIX,netsuite.com,DIRECT
+- DOMAIN-SUFFIX,netsuite.com.edgekey.net,DIRECT
 - DOMAIN-SUFFIX,oracle,DIRECT
 - DOMAIN-SUFFIX,oracle-tencent.com,DIRECT
 - DOMAIN-SUFFIX,oracle-tencent.net,DIRECT
 - DOMAIN-SUFFIX,oracle-tencent.org,DIRECT
+- DOMAIN-SUFFIX,oracle.co.jp,DIRECT
+- DOMAIN-SUFFIX,oracle.com,DIRECT
+- DOMAIN-SUFFIX,oracle.com.akadns.net,DIRECT
+- DOMAIN-SUFFIX,oracle.com.edgekey.net,DIRECT
+- DOMAIN-SUFFIX,oracle.com.greylabeldelivery.com,DIRECT
+- DOMAIN-SUFFIX,oracle.eu,DIRECT
+- DOMAIN-SUFFIX,oraclecloud.com,DIRECT
+- DOMAIN-SUFFIX,oraclecloud.com.edgekey.net,DIRECT
+- DOMAIN-SUFFIX,oraclecloudapps.com,DIRECT
+- DOMAIN-SUFFIX,oraclefoundation.org,DIRECT
+- DOMAIN-SUFFIX,oraclehealthfoundation.org,DIRECT
+- DOMAIN-SUFFIX,oraclehealthfoundation.org.akadns.net,DIRECT
+- DOMAIN-SUFFIX,oraclehealthfoundation.org.cdn.cloudflare.net,DIRECT
+- DOMAIN-SUFFIX,oracleimg.com,DIRECT
+- DOMAIN-SUFFIX,oracleinfinity.io,DIRECT
+- DOMAIN-SUFFIX,oracleinfinity.io.akadns.net,DIRECT
+- DOMAIN-SUFFIX,oracleinfinity.io.edgekey.net,DIRECT
+- DOMAIN-SUFFIX,sun.com,DIRECT
+- DOMAIN-SUFFIX,virtualbox.org,DIRECT
+- DOMAIN-SUFFIX,virtualbox.org.edgekey.net,DIRECT
+- DOMAIN,consent.trustarc.com,DIRECT
+- DOMAIN,ds-cloud.oracle.com-console.edgekey.net,DIRECT
+- DOMAIN,e101120.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e120265.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e130756.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e14263.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e192175.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e204653.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e212895.x.akamaiedge.net,DIRECT
+- DOMAIN,e2229.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e244178.x.akamaiedge.net,DIRECT
+- DOMAIN,e2581.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e2875.d.akamaiedge.net,DIRECT
+- DOMAIN,e40539.dscx.akamaiedge.net,DIRECT
+- DOMAIN,e870.dscx.akamaiedge.net,DIRECT
+- DOMAIN,oracle.112.2o7.net,DIRECT
+- DOMAIN,oracle.sc.omtrdc.net,DIRECT
+- DOMAIN,p03b.hs.eloqua.com,DIRECT
+- DOMAIN,rightnow.com,DIRECT
+- DOMAIN,s1973398186.hs.eloqua.com,DIRECT
 - RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台
 - RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube
 - GEOSITE,youtube,📺 YouTube
@@ -1188,10 +1462,6 @@ rules: #!replace
 - DOMAIN-SUFFIX,ipleak.net,🚀节点选择
 - RULE-SET,vps-domain-7454c3e8328d3448,DIRECT
 - DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net,DIRECT
-- DOMAIN-SUFFIX,oracleinfinity.io.akadns.net,DIRECT
-- DOMAIN-SUFFIX,oracle.com.edgekey.net,DIRECT
-- DOMAIN,e2581.dscx.akamaiedge.net,DIRECT
-- DOMAIN,oracle.sc.omtrdc.net,DIRECT
 - GEOSITE,category-ads-all,REJECT
 - DOMAIN-SUFFIX,cn,DIRECT
 - DOMAIN-SUFFIX,xn--fiqs8s,DIRECT
