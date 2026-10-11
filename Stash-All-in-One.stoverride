@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.4 正式版"
+name: "3.8.5 正式版"
 desc: |-
-  3.8.4｜修复国际 Bing 直连缓慢：普通 bing.com 使用主代理，cn.bing.com 保留国内直连，Copilot 与 Sydney 保留 AI 策略。保留微信、微软商店、碰一碰、推送及现有防护策略。
+  3.8.5｜修复 Bing 直连与国外 DNS 不一致：普通 bing.com 使用国内 DNS 并直连，Copilot/Sydney 保持 AI 策略与国外 DNS。保留微信、微软商店、碰一碰、推送及现有防护策略。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.4"
+version: "3.8.5"
 
 mode: rule
 ipv6: false
@@ -524,6 +524,9 @@ dns: #!replace
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
     +.bing.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.sydney.bing.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
@@ -641,7 +644,7 @@ rules: #!replace
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,msftncsi.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,azureedge.net)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,cn.bing.com)),DIRECT
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bing.com)),🚀节点选择
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bing.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,dns.alidns.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,doh.pub)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,dns.google)),🚀节点选择
