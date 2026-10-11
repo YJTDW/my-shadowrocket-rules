@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.7 正式版"
+name: "3.8.8 正式版"
 desc: |-
-  3.8.7｜统一 sing-box/Stash 国内外分流与 DNS：国内直连，国际 Bing 及未知境外走代理；保留微软/Apple 直连例外与 Copilot/Sydney AI 分流，补齐直连例外的国内 DNS。
+  3.8.8｜Oracle 官网、登录、控制台、云服务与静态资源统一直连，配套国内 DNS；其余国内外分流保留 3.8.7 策略。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-11"
-version: "3.8.7"
+version: "3.8.8"
 
 mode: rule
 ipv6: false
@@ -658,6 +658,39 @@ dns: #!replace
     sydney.bing.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    +.oracle.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclecloud.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclecloudapps.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracleimg.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oraclefoundation.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracleinfinity.io:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.ateam-oracle.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle-tencent.com:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle-tencent.net:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.oracle-tencent.org:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -715,6 +748,17 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
     interval: 86400
 rules: #!replace
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloud.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclecloudapps.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleimg.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oraclefoundation.org)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracleinfinity.io)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ateam-oracle.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.com)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.net)),DIRECT
+- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,oracle-tencent.org)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,appclip.apple.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,app-site-association.cdn-apple.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN,app-site-association.networking.apple)),DIRECT
@@ -994,6 +1038,17 @@ rules: #!replace
 - DOMAIN-SUFFIX,stun.cloudflare.com,REJECT
 - SCRIPT,webrtc-ports,REJECT
 - SCRIPT,webrtc-turn-tls,REJECT
+- DOMAIN-SUFFIX,oracle.com,DIRECT
+- DOMAIN-SUFFIX,oraclecloud.com,DIRECT
+- DOMAIN-SUFFIX,oraclecloudapps.com,DIRECT
+- DOMAIN-SUFFIX,oracleimg.com,DIRECT
+- DOMAIN-SUFFIX,oraclefoundation.org,DIRECT
+- DOMAIN-SUFFIX,oracleinfinity.io,DIRECT
+- DOMAIN-SUFFIX,ateam-oracle.com,DIRECT
+- DOMAIN-SUFFIX,oracle,DIRECT
+- DOMAIN-SUFFIX,oracle-tencent.com,DIRECT
+- DOMAIN-SUFFIX,oracle-tencent.net,DIRECT
+- DOMAIN-SUFFIX,oracle-tencent.org,DIRECT
 - RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台
 - RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube
 - GEOSITE,youtube,📺 YouTube
