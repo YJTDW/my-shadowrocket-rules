@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.13 正式版"
+name: "3.8.14 正式版"
 desc: |-
-  3.8.13｜国内域名/中国 IP 使用与 sing-box 同源的自动更新规则集，保留解析后的国内 IP 兜底；移除关键词和共享 CDN 的宽泛代理匹配，保留指定服务例外与既有防护。
+  3.8.14｜DNS fake-ip-filter 与 nameserver-policy 同步接入同源国内域名集并将单层 *. 升级为多层 +. 后缀匹配，确保国内多级子域与直连服务直接返回真实 IP（对齐 sing-box）；保留指定服务例外与既有防护。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-10-12"
-version: "3.8.13"
+date: "2026-10-13"
+version: "3.8.14"
 
 mode: rule
 ipv6: false
@@ -72,7 +72,7 @@ dns: #!replace
     - 240.0.0.0/4
   fake-ip-filter:
   - push.apple.com
-  - "*.push.apple.com"
+  - "+.push.apple.com"
   - alipay.com
   - '*.alipay.com'
   - alipayobjects.com
@@ -81,64 +81,64 @@ dns: #!replace
   - '*.alipay.com.cn'
   - alipay.net
   - '*.alipay.net'
-  - '*.lan'
-  - '*.local'
-  - '*.arpa'
+  - '+.lan'
+  - '+.local'
+  - '+.arpa'
   - time.*
   - ntp.*
   - +.pool.ntp.org
   - localhost
   - +.home.arpa
-  - '*.apple.com'
-  - '*.apple.co'
-  - '*.appstore.com'
-  - '*.icloud.com'
-  - '*.icloud-content.com'
-  - '*.cdn-apple.com'
+  - '+.apple.com'
+  - '+.apple.co'
+  - '+.appstore.com'
+  - '+.icloud.com'
+  - '+.icloud-content.com'
+  - '+.cdn-apple.com'
   - '*.mzstatic.com'
-  - '*.aaplimg.com'
-  - '*.swcdn.apple.com'
-  - '*.me.com'
-  - '*.apple-cloudkit.com'
-  - '*.apple-livephotoskit.com'
-  - '*.apple-mapkit.com'
-  - '*.baichuan-ai.com'
-  - '*.chatglm.cn'
-  - '*.deepseek.com'
-  - '*.deepseeksvc.com'
-  - '*.doubao.com'
-  - '*.doubaocdn.com'
-  - '*.hailuoai.com'
-  - '*.kimi.ai'
-  - '*.kimi.com'
-  - '*.minimax.chat'
-  - '*.moonshot.ai'
-  - '*.moonshot.cn'
-  - '*.qwen.ai'
-  - '*.sensechat.cn'
-  - '*.sensetime.com'
-  - '*.stepfun.com'
-  - '*.yuewen.cn'
-  - '*.zhipuai.cn'
+  - '+.aaplimg.com'
+  - '+.swcdn.apple.com'
+  - '+.me.com'
+  - '+.apple-cloudkit.com'
+  - '+.apple-livephotoskit.com'
+  - '+.apple-mapkit.com'
+  - '+.baichuan-ai.com'
+  - '+.chatglm.cn'
+  - '+.deepseek.com'
+  - '+.deepseeksvc.com'
+  - '+.doubao.com'
+  - '+.doubaocdn.com'
+  - '+.hailuoai.com'
+  - '+.kimi.ai'
+  - '+.kimi.com'
+  - '+.minimax.chat'
+  - '+.moonshot.ai'
+  - '+.moonshot.cn'
+  - '+.qwen.ai'
+  - '+.sensechat.cn'
+  - '+.sensetime.com'
+  - '+.stepfun.com'
+  - '+.yuewen.cn'
+  - '+.zhipuai.cn'
   - captive.apple.com
-  - '*.wechat.com'
-  - '*.weixin.com'
-  - '*.servicewechat.com'
-  - '*.qq.com'
-  - '*.qpic.cn'
-  - '*.qlogo.cn'
-  - '*.gtimg.com'
-  - '*.cn'
-  - '*.xn--fiqs8s'
-  - '*.xn--fiqz9s'
-  - '*.xn--55qx5d'
-  - '*.xn--io0a7i'
-  - '*.xn--zfr164b'
-  - '*.xn--55qw42g'
-  - '*.qihangjiaoyu.com'
-  - '*.polyv.net'
-  - '*.polyv.cn'
-  - '*.alicdn.com'
+  - '+.wechat.com'
+  - '+.weixin.com'
+  - '+.servicewechat.com'
+  - '+.qq.com'
+  - '+.qpic.cn'
+  - '+.qlogo.cn'
+  - '+.gtimg.com'
+  - '+.cn'
+  - '+.xn--fiqs8s'
+  - '+.xn--fiqz9s'
+  - '+.xn--55qx5d'
+  - '+.xn--io0a7i'
+  - '+.xn--zfr164b'
+  - '+.xn--55qw42g'
+  - '+.qihangjiaoyu.com'
+  - '+.polyv.net'
+  - '+.polyv.cn'
+  - '+.alicdn.com'
   - '*.msftncsi.com'
   - '*.msftconnecttest.com'
   - appclip.apple.com
@@ -311,6 +311,9 @@ dns: #!replace
   - p03b.hs.eloqua.com
   - rightnow.com
   - s1973398186.hs.eloqua.com
+  - rule-set:aligned-cn-domain
+  - geosite:cn
+  - geosite:apple
   nameserver-policy:
     "+.ads-twitter.com":
     - https://dns.google/dns-query
@@ -978,6 +981,14 @@ dns: #!replace
     +.courier-push-apple.com.akadns.net:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    rule-set:aligned-cn-domain:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    +.browserleaks.com: &id001
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.ip.net.coffee: *id001
+    +.ipleak.net: *id001
   skip-cert-verify: false
 
 script:
