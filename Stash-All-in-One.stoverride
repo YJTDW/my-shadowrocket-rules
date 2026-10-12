@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.12 正式版"
+name: "3.8.13 正式版"
 desc: |-
-  3.8.12｜按 Oracle 官方控制台清单、官网脚本与实测 DNS 别名统一补全直连；与 sing-box 共用域名策略，覆盖官网、登录、云服务、Cookie 和已核实 CDN，保留其他分流与防护。
+  3.8.13｜国内域名/中国 IP 使用与 sing-box 同源的自动更新规则集，保留解析后的国内 IP 兜底；移除关键词和共享 CDN 的宽泛代理匹配，保留指定服务例外与既有防护。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-10-11"
-version: "3.8.12"
+date: "2026-10-12"
+version: "3.8.13"
 
 mode: rule
 ipv6: false
@@ -972,6 +972,12 @@ dns: #!replace
     s1973398186.hs.eloqua.com:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    +.push-apple.com.akadns.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.courier-push-apple.com.akadns.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
 
 script:
@@ -1023,10 +1029,20 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
 
-  aligned-managed-ai-b6f8d310ba5f495a:
+  aligned-managed-ai-e178fffb86ff5c3f:
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/b6f8d310ba5f495a4b6192fd3dd71ab106a678b703e802cd33ff65aee509a95b.classical.yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/e178fffb86ff5c3f2c554d3c6eb2e359fac9a25162518fb9c88cb0c92de251ff.yaml
+    interval: 86400
+  aligned-cn-domain:
+    behavior: domain
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.yaml
+    interval: 86400
+  aligned-cn-ip:
+    behavior: ipcidr
+    format: yaml
+    url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.yaml
     interval: 86400
 rules: #!replace
 # Oracle unified DIRECT policy: website, login, console, APIs and verified dependencies
@@ -1196,9 +1212,9 @@ rules: #!replace
 - DOMAIN-SUFFIX,metacareers.com,🤖 AI平台
 - DOMAIN,fbcdn-a.akamaihd.net,🤖 AI平台
 - GEOSITE,meta,🤖 AI平台
-- DOMAIN-SUFFIX,akadns.net,🚀节点选择
-- DOMAIN-KEYWORD,apple.com.edgekey.net,🚀节点选择
 - DOMAIN-SUFFIX,push.apple.com,🚀节点选择
+- DOMAIN-SUFFIX,push-apple.com.akadns.net,🚀节点选择
+- DOMAIN-SUFFIX,courier-push-apple.com.akadns.net,🚀节点选择
 - IP-CIDR,17.249.0.0/16,🚀节点选择,no-resolve
 - IP-CIDR,17.252.0.0/16,🚀节点选择,no-resolve
 - IP-CIDR,17.57.144.0/22,🚀节点选择,no-resolve
@@ -1257,6 +1273,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,wechat.com,DIRECT
 - DOMAIN-SUFFIX,weixin.com,DIRECT
 - DOMAIN-SUFFIX,servicewechat.com,DIRECT
+- AND,((NETWORK,TCP),(IP-CIDR6,::/0,no-resolve),(RULE-SET,aligned-cn-ip,no-resolve)),DIRECT
 - AND,((NETWORK,TCP),(IP-CIDR6,::/0,no-resolve),(GEOIP,CN,no-resolve)),DIRECT
 - IP-CIDR6,::/0,REJECT,no-resolve
 - DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择
@@ -1428,11 +1445,10 @@ rules: #!replace
 - RULE-SET,vps-domain-083863a0da25b445,🤖 AI平台
 - DOMAIN-REGEX,^r+[0-9]+(---|\.)sn-(2x3|ni5|j5o)\w{5}\.xn--ngstr-lra8j\.com$,🤖 AI平台
 - DOMAIN-REGEX,^r+[0-9]+(---|\.)sn-(2x3|ni5|j5o)\w{5}\.googlevideo\.com$,🤖 AI平台
-- RULE-SET,aligned-managed-ai-b6f8d310ba5f495a,🤖 AI平台
+- RULE-SET,aligned-managed-ai-e178fffb86ff5c3f,🤖 AI平台
 - GEOSITE,google,🤖 AI平台
 - GEOSITE,openai,🤖 AI平台
 - RULE-SET,vps-domain-1e9db824fb228459,🤖 AI平台
-- DOMAIN-KEYWORD,youtube,📺 YouTube
 - DOMAIN-SUFFIX,youtube.com,📺 YouTube
 - DOMAIN-SUFFIX,googlevideo.com,📺 YouTube
 - DOMAIN-SUFFIX,youtu.be,📺 YouTube
@@ -1446,7 +1462,6 @@ rules: #!replace
 - RULE-SET,vps-domain-0a8e99d063901310,DIRECT
 - GEOSITE,apple,DIRECT
 - GEOSITE,twitter,🚀节点选择
-- DOMAIN-KEYWORD,twitter,🚀节点选择
 - DOMAIN-SUFFIX,x.com,🚀节点选择
 - DOMAIN-SUFFIX,twitter.com,🚀节点选择
 - DOMAIN-SUFFIX,twimg.com,🚀节点选择
@@ -1454,9 +1469,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,pscp.tv,🚀节点选择
 - DOMAIN-SUFFIX,periscope.tv,🚀节点选择
 - GEOSITE,google,🤖 AI平台
-- DOMAIN-KEYWORD,google,🤖 AI平台
 - RULE-SET,vps-domain-e8e6f448a3e8ad3a,🤖 AI平台
-- DOMAIN-KEYWORD,browserleaks,🚀节点选择
 - DOMAIN-SUFFIX,browserleaks.com,🚀节点选择
 - DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择
 - DOMAIN-SUFFIX,ipleak.net,🚀节点选择
@@ -1470,7 +1483,9 @@ rules: #!replace
 - DOMAIN-SUFFIX,xn--io0a7i,DIRECT
 - DOMAIN-SUFFIX,xn--zfr164b,DIRECT
 - DOMAIN-SUFFIX,xn--55qw42g,DIRECT
+- RULE-SET,aligned-cn-domain,DIRECT
 - GEOSITE,cn,DIRECT
+- RULE-SET,aligned-cn-ip,DIRECT
 - GEOIP,CN,DIRECT
 - SCRIPT,merged-quic,REJECT,no-track
 - MATCH,🚀节点选择
