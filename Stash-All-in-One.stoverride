@@ -2,16 +2,16 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.14 正式版"
+name: "3.8.15 正式版"
 desc: |-
-  3.8.14｜DNS fake-ip-filter 与 nameserver-policy 同步接入同源国内域名集并将单层 *. 升级为多层 +. 后缀匹配，确保国内多级子域与直连服务直接返回真实 IP（对齐 sing-box）；保留指定服务例外与既有防护。
+  3.8.15｜恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-10-13"
-version: "3.8.14"
+date: "2026-10-14"
+version: "3.8.15"
 
 mode: rule
-ipv6: false
+ipv6: true
 
 tun:
   enable: true
@@ -30,9 +30,9 @@ proxy-groups: #!replace
   type: url-test
   include-all: true
   exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
-  url: http://www.apple.com/library/test/success.html
-  interval: 900
-  tolerance: 3
+  url: http://cp.cloudflare.com/generate_204
+  interval: 300
+  tolerance: 30
   lazy: true
 - name: 🖐手动节点
   type: select
@@ -50,7 +50,7 @@ proxy-groups: #!replace
 dns: #!replace
   follow-rule: true
   enable: true
-  ipv6: false
+  ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   default-nameserver:
@@ -994,10 +994,6 @@ dns: #!replace
 script:
   shortcuts:
     merged-quic: "network == 'udp' and dst_port == 443"
-    webrtc-ports: "network == 'udp' and dst_port >= 3478 and dst_port <= 3481"
-    webrtc-turn-tls: "network == 'udp' and dst_port == 5349"
-
-# Indexed domain sets; original rule order and coverage preserved.
 rule-providers:
   vps-domain-96021d255b1e4213:
     behavior: domain
@@ -1057,6 +1053,22 @@ rule-providers:
     interval: 86400
 rules: #!replace
 # Oracle unified DIRECT policy: website, login, console, APIs and verified dependencies
+- DOMAIN-SUFFIX,local,DIRECT
+- DOMAIN-SUFFIX,localhost,DIRECT
+- DOMAIN-SUFFIX,lan,DIRECT
+- DOMAIN-SUFFIX,home.arpa,DIRECT
+- IP-CIDR,0.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+- IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
+- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+- IP-CIDR,224.0.0.0/4,DIRECT,no-resolve
+- IP-CIDR6,::1/128,DIRECT,no-resolve
+- IP-CIDR6,fc00::/7,DIRECT,no-resolve
+- IP-CIDR6,fe80::/10,DIRECT,no-resolve
+- IP-CIDR6,ff00::/8,DIRECT,no-resolve
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ateam-oracle.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bronto.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,covid19-rx.org)),DIRECT
@@ -1284,9 +1296,6 @@ rules: #!replace
 - DOMAIN-SUFFIX,wechat.com,DIRECT
 - DOMAIN-SUFFIX,weixin.com,DIRECT
 - DOMAIN-SUFFIX,servicewechat.com,DIRECT
-- AND,((NETWORK,TCP),(IP-CIDR6,::/0,no-resolve),(RULE-SET,aligned-cn-ip,no-resolve)),DIRECT
-- AND,((NETWORK,TCP),(IP-CIDR6,::/0,no-resolve),(GEOIP,CN,no-resolve)),DIRECT
-- IP-CIDR6,::/0,REJECT,no-resolve
 - DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择
 - DOMAIN-SUFFIX,cms-twdigitalassets.com,🚀节点选择
 - DOMAIN-SUFFIX,periscope.tv,🚀节点选择
@@ -1331,27 +1340,11 @@ rules: #!replace
 - DOMAIN-SUFFIX,stepfun.com,DIRECT
 - DOMAIN-SUFFIX,yuewen.cn,DIRECT
 - DOMAIN-SUFFIX,zhipuai.cn,DIRECT
-- DOMAIN-SUFFIX,local,DIRECT
-- DOMAIN-SUFFIX,localhost,DIRECT
-- DOMAIN-SUFFIX,lan,DIRECT
-- DOMAIN-SUFFIX,home.arpa,DIRECT
 - DOMAIN,captive.apple.com,DIRECT
-- DOMAIN-SUFFIX,qq.com,DIRECT
-- DOMAIN-SUFFIX,qpic.cn,DIRECT
-- DOMAIN-SUFFIX,qlogo.cn,DIRECT
-- DOMAIN-SUFFIX,gtimg.com,DIRECT
 - DOMAIN-SUFFIX,qihangjiaoyu.com,DIRECT
 - DOMAIN-SUFFIX,polyv.net,DIRECT
 - DOMAIN-SUFFIX,polyv.cn,DIRECT
 - DOMAIN-SUFFIX,alicdn.com,DIRECT
-- IP-CIDR,0.0.0.0/8,DIRECT,no-resolve
-- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
-- IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
-- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
-- IP-CIDR,169.254.0.0/16,DIRECT,no-resolve
-- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
-- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
-- IP-CIDR,224.0.0.0/4,DIRECT,no-resolve
 - RULE-SET,vps-domain-96021d255b1e4213,DIRECT
 - DOMAIN-SUFFIX,livekit.cloud,🤖 AI平台
 - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🤖 AI平台
@@ -1377,23 +1370,21 @@ rules: #!replace
 - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,68.155.152.41/32,no-resolve)),🤖 AI平台
 - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,72.146.20.246/32,no-resolve)),🤖 AI平台
 - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,74.248.148.7/32,no-resolve)),🤖 AI平台
-- PROTOCOL,STUN,REJECT
-- AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,3479)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,3480)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,3481)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,19302)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,19305)),REJECT
-- AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT
-- DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$),REJECT
-- DOMAIN-SUFFIX,stun.l.google.com,REJECT
-- DOMAIN-SUFFIX,stun1.l.google.com,REJECT
-- DOMAIN-SUFFIX,stun2.l.google.com,REJECT
-- DOMAIN-SUFFIX,stun3.l.google.com,REJECT
-- DOMAIN-SUFFIX,stun4.l.google.com,REJECT
-- DOMAIN-SUFFIX,stun.cloudflare.com,REJECT
-- SCRIPT,webrtc-ports,REJECT
-- SCRIPT,webrtc-turn-tls,REJECT
+- AND,((PROTOCOL,STUN),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,3478))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,3479))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,3480))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,3481))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,19302))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,19305))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DST-PORT,5349))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((AND,((NETWORK,UDP),(DOMAIN-REGEX,(^|[.])(stun|turn)[0-9]*([.-]|$)))),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun.l.google.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun1.l.google.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun2.l.google.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun3.l.google.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun4.l.google.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
+- AND,((DOMAIN-SUFFIX,stun.cloudflare.com),(NOT,((OR,((RULE-SET,aligned-cn-domain),(GEOSITE,cn),(RULE-SET,aligned-cn-ip,no-resolve),(GEOIP,CN,no-resolve),(DOMAIN-SUFFIX,cn),(DOMAIN-SUFFIX,xn--fiqs8s),(DOMAIN-SUFFIX,xn--fiqz9s),(DOMAIN-SUFFIX,xn--55qx5d),(DOMAIN-SUFFIX,xn--io0a7i),(DOMAIN-SUFFIX,xn--zfr164b),(DOMAIN-SUFFIX,xn--55qw42g)))))),REJECT
 - DOMAIN-SUFFIX,ateam-oracle.com,DIRECT
 - DOMAIN-SUFFIX,bronto.com,DIRECT
 - DOMAIN-SUFFIX,covid19-rx.org,DIRECT
@@ -1473,13 +1464,6 @@ rules: #!replace
 - RULE-SET,vps-domain-0a8e99d063901310,DIRECT
 - GEOSITE,apple,DIRECT
 - GEOSITE,twitter,🚀节点选择
-- DOMAIN-SUFFIX,x.com,🚀节点选择
-- DOMAIN-SUFFIX,twitter.com,🚀节点选择
-- DOMAIN-SUFFIX,twimg.com,🚀节点选择
-- DOMAIN-SUFFIX,t.co,🚀节点选择
-- DOMAIN-SUFFIX,pscp.tv,🚀节点选择
-- DOMAIN-SUFFIX,periscope.tv,🚀节点选择
-- GEOSITE,google,🤖 AI平台
 - RULE-SET,vps-domain-e8e6f448a3e8ad3a,🤖 AI平台
 - DOMAIN-SUFFIX,browserleaks.com,🚀节点选择
 - DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择
