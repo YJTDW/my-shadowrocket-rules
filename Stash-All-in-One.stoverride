@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.15 正式版"
+name: "3.8.16 正式版"
 desc: |-
-  3.8.15｜恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
+  3.8.16｜新增数字资产独立选择组，请首次手动选日本 JP，覆盖六家平台专用域名与 DNS；恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-10-14"
-version: "3.8.15"
+date: "2026-10-22"
+version: "3.8.16"
 
 mode: rule
 ipv6: true
@@ -47,6 +47,10 @@ proxy-groups: #!replace
   include-all: true
   exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 
+- name: 💰 数字资产
+  type: select
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 dns: #!replace
   follow-rule: true
   enable: true
@@ -315,6 +319,243 @@ dns: #!replace
   - geosite:cn
   - geosite:apple
   nameserver-policy:
+    "+.binance.cc":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.charity":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.cloud":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.info":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.me":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.us":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binance.vision":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binanceapi.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancecnt.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binanceru.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.be":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.biz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.cc":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.info":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.ink":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.kim":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.link":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.live":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.mobi":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.pro":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.sh":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.binancezh.top":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bmwweb.solutions":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bnappweb.black":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bnbchain.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bnbstatic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bntrace.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bsappapi.cc":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bsappapi.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bscdnweb.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.byabcde.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.byapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.byapps.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybdc6.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit-global.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.ae":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.biz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.cloud":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.eu":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.id":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.kz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybit.tr":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybitgeorgia.ge":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bybitglobal.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bycbe.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bycsi.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.byd3c3.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bymj.io":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bytick.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.coinbase.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.crypto.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.kraken.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.kraken.onl":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.nftstatic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okex.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oklink.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx-dns.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx-dns1.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx-dns2.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx.ac":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx.cab":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.okx.com.cdn.cloudflare.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.saasexch.cc":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.saasexch.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.saasexch.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.saasexch.info":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.saasexch.io":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.xlayer.tech":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "bybit-exchange.github.io":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "bybit.ada.support":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     "+.ads-twitter.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -1069,6 +1310,86 @@ rules: #!replace
 - IP-CIDR6,fc00::/7,DIRECT,no-resolve
 - IP-CIDR6,fe80::/10,DIRECT,no-resolve
 - IP-CIDR6,ff00::/8,DIRECT,no-resolve
+# Digital assets: service-specific rules precede CN fallbacks.
+- DOMAIN-SUFFIX,binance.cc,💰 数字资产
+- DOMAIN-SUFFIX,binance.charity,💰 数字资产
+- DOMAIN-SUFFIX,binance.cloud,💰 数字资产
+- DOMAIN-SUFFIX,binance.co,💰 数字资产
+- DOMAIN-SUFFIX,binance.com,💰 数字资产
+- DOMAIN-SUFFIX,binance.info,💰 数字资产
+- DOMAIN-SUFFIX,binance.me,💰 数字资产
+- DOMAIN-SUFFIX,binance.net,💰 数字资产
+- DOMAIN-SUFFIX,binance.org,💰 数字资产
+- DOMAIN-SUFFIX,binance.us,💰 数字资产
+- DOMAIN-SUFFIX,binance.vision,💰 数字资产
+- DOMAIN-SUFFIX,binanceapi.com,💰 数字资产
+- DOMAIN-SUFFIX,binancecnt.com,💰 数字资产
+- DOMAIN-SUFFIX,binanceru.net,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.be,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.biz,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.cc,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.co,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.com,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.info,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.ink,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.kim,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.link,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.live,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.mobi,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.net,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.pro,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.sh,💰 数字资产
+- DOMAIN-SUFFIX,binancezh.top,💰 数字资产
+- DOMAIN-SUFFIX,bmwweb.solutions,💰 数字资产
+- DOMAIN-SUFFIX,bnappweb.black,💰 数字资产
+- DOMAIN-SUFFIX,bnbchain.org,💰 数字资产
+- DOMAIN-SUFFIX,bnbstatic.com,💰 数字资产
+- DOMAIN-SUFFIX,bntrace.com,💰 数字资产
+- DOMAIN-SUFFIX,bsappapi.cc,💰 数字资产
+- DOMAIN-SUFFIX,bsappapi.com,💰 数字资产
+- DOMAIN-SUFFIX,bscdnweb.com,💰 数字资产
+- DOMAIN-SUFFIX,byabcde.com,💰 数字资产
+- DOMAIN-SUFFIX,byapis.com,💰 数字资产
+- DOMAIN-SUFFIX,byapps.net,💰 数字资产
+- DOMAIN-SUFFIX,bybdc6.com,💰 数字资产
+- DOMAIN-SUFFIX,bybit-global.com,💰 数字资产
+- DOMAIN-SUFFIX,bybit.ae,💰 数字资产
+- DOMAIN-SUFFIX,bybit.biz,💰 数字资产
+- DOMAIN-SUFFIX,bybit.cloud,💰 数字资产
+- DOMAIN-SUFFIX,bybit.com,💰 数字资产
+- DOMAIN-SUFFIX,bybit.eu,💰 数字资产
+- DOMAIN-SUFFIX,bybit.id,💰 数字资产
+- DOMAIN-SUFFIX,bybit.kz,💰 数字资产
+- DOMAIN-SUFFIX,bybit.tr,💰 数字资产
+- DOMAIN-SUFFIX,bybitgeorgia.ge,💰 数字资产
+- DOMAIN-SUFFIX,bybitglobal.com,💰 数字资产
+- DOMAIN-SUFFIX,bycbe.com,💰 数字资产
+- DOMAIN-SUFFIX,bycsi.com,💰 数字资产
+- DOMAIN-SUFFIX,byd3c3.com,💰 数字资产
+- DOMAIN-SUFFIX,bymj.io,💰 数字资产
+- DOMAIN-SUFFIX,bytick.com,💰 数字资产
+- DOMAIN-SUFFIX,coinbase.com,💰 数字资产
+- DOMAIN-SUFFIX,crypto.com,💰 数字资产
+- DOMAIN-SUFFIX,kraken.com,💰 数字资产
+- DOMAIN-SUFFIX,kraken.onl,💰 数字资产
+- DOMAIN-SUFFIX,nftstatic.com,💰 数字资产
+- DOMAIN-SUFFIX,okex.com,💰 数字资产
+- DOMAIN-SUFFIX,oklink.com,💰 数字资产
+- DOMAIN-SUFFIX,okx-dns.com,💰 数字资产
+- DOMAIN-SUFFIX,okx-dns1.com,💰 数字资产
+- DOMAIN-SUFFIX,okx-dns2.com,💰 数字资产
+- DOMAIN-SUFFIX,okx.ac,💰 数字资产
+- DOMAIN-SUFFIX,okx.cab,💰 数字资产
+- DOMAIN-SUFFIX,okx.com,💰 数字资产
+- DOMAIN-SUFFIX,okx.com.cdn.cloudflare.net,💰 数字资产
+- DOMAIN-SUFFIX,saasexch.cc,💰 数字资产
+- DOMAIN-SUFFIX,saasexch.co,💰 数字资产
+- DOMAIN-SUFFIX,saasexch.com,💰 数字资产
+- DOMAIN-SUFFIX,saasexch.info,💰 数字资产
+- DOMAIN-SUFFIX,saasexch.io,💰 数字资产
+- DOMAIN-SUFFIX,xlayer.tech,💰 数字资产
+- DOMAIN,bybit-exchange.github.io,💰 数字资产
+- DOMAIN,bybit.ada.support,💰 数字资产
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ateam-oracle.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,bronto.com)),DIRECT
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,covid19-rx.org)),DIRECT
