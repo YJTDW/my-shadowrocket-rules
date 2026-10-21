@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.16 正式版"
+name: "3.8.17 正式版"
 desc: |-
-  3.8.16｜新增数字资产独立选择组，请首次手动选日本 JP，覆盖六家平台专用域名与 DNS；恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
+  3.8.17｜显式补齐 mistral.ai 域名分流至 🤖 AI平台 与安全 DNS；包含数字资产独立选择组，请首次手动选日本 JP，覆盖六家平台专用域名与 DNS；恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-10-22"
-version: "3.8.16"
+version: "3.8.17"
 
 mode: rule
 ipv6: true
@@ -701,6 +701,9 @@ dns: #!replace
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.copilot.microsoft.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.mistral.ai":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
     "+.push.apple.com":
@@ -1594,6 +1597,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,gemini.google.com,🤖 AI平台
 - DOMAIN-SUFFIX,aistudio.google.com,🤖 AI平台
 - DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI平台
+- DOMAIN-SUFFIX,mistral.ai,🤖 AI平台
 - DOMAIN-SUFFIX,alipay.com,DIRECT
 - DOMAIN-SUFFIX,alipayobjects.com,DIRECT
 - DOMAIN-SUFFIX,alipay.com.cn,DIRECT
