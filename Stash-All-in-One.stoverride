@@ -4,11 +4,11 @@
 
 name: "3.8.23 正式版"
 desc: |-
-  3.8.23｜二轮核查与全端一致性加固：补全 ChatGPT WebPubSub 动态正则与 8 个 IP 泄漏检测后缀；补齐 nameserver-policy 中 AI、Meta、Google、YouTube、IP 检测及 Apple Relay 显式分流解析；同步清理失效引用，保持 Meta/AI/Google/YouTube/数字资产独立分组与安全 DNS。
+  3.8.24｜海外 AI 域名全面扩展并排除国内 AI：补全 GitHub Copilot 全区 WebPubSub/Telemetry、Anthropic Datadog、Cursor S3 下载、Microsoft copilot.com 及 55 个纯海外 AI 平台与开发生态后缀，移除失效 observeit.net，同步 nameserver-policy 代理 DoH；保持 Meta/Google/YouTube/数字资产独立分组与安全 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-11-13"
-version: "3.8.23"
+version: "3.8.24"
 
 mode: rule
 ipv6: true
@@ -1720,9 +1720,6 @@ dns: #!replace
     "+.oaistatsig.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
-    "+.observeit.net":
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
     "+.openai.com.cdn.cloudflare.net":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -1840,6 +1837,198 @@ dns: #!replace
     production-copilot-host-westus.webpubsub.azure.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    anysphere-binaries.s3.us-east-1.amazonaws.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    browser-intake-us5-datadoghq.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    origin-tracker.githubusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-austriaeast.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-centralus.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-centralus-02.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-eastasia.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-westus3.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.agentclientprotocol.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.anythingllm.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.arena.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.artificialanalysis.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cerebras.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chutes.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.clawhub.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cline.bot":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.clipdrop.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.codeium.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.codeiumdata.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.coderabbit.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.coderabbit.gallery.vsassets.io":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.comfy.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.comfyci.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.comfyregistry.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.commandcode.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.context7.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.copilot-stg.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.copilot.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.crewai.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.deepwiki.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.deepwiki.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.devin.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.diabrowser.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.diabrowser.engineering":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.dreamgen.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.duck.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.elevenlabs.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.elevenlabs.io":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.h2o.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.hf.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.hf.space":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.huggingface.co":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.jasper.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.kiro.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.langchain.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.lmstudio.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.magnific.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.mozilla.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.nousresearch.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.novelai.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ollama.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openart.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openclaw.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.opencode.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openrouter.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openspec.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.plannotator.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.spicywriter.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.syntx.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.talkai.info":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.typesafe.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.windsurf.build":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.windsurf.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     rum.browser-intake-datadoghq.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -1897,10 +2086,10 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
 
-  aligned-managed-ai-0185a27c9f5f0436:
+  aligned-managed-ai-ca84bf9d332ebf33:
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/0185a27c9f5f04369d461c2655c2235cc501b634f35f49a71595c90a8953a7e9.yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/ca84bf9d332ebf33cfa1c2bf952c78564e29e4ff5c957a5247033c0720da9c7f.yaml
     interval: 86400
   aligned-cn-domain:
     behavior: domain
@@ -2379,8 +2568,9 @@ rules: #!replace
 - DOMAIN-SUFFIX,robinfrontend-pa.googleapis.com,🌐 Google服务
 - DOMAIN-SUFFIX,stitch.withgoogle.com,🌐 Google服务
 - GEOSITE,google,🌐 Google服务
-- RULE-SET,aligned-managed-ai-0185a27c9f5f0436,🤖 AI平台
+- RULE-SET,aligned-managed-ai-ca84bf9d332ebf33,🤖 AI平台
 - DOMAIN-REGEX,^chatgpt-async-webps-prod-\S+-\d+\.webpubsub\.azure\.com$,🤖 AI平台
+- DOMAIN-REGEX,^production-copilot-host(?:-[a-z0-9-]+)?\.webpubsub\.azure\.com$,🤖 AI平台
 - DOMAIN,apple-relay.apple.com,DIRECT
 - DOMAIN,apple-relay.cloudflare.com,DIRECT
 - DOMAIN,apple-relay.fastly-edge.com,DIRECT
