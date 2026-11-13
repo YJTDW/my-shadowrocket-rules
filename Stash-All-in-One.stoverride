@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.20 正式版"
+name: "3.8.21 正式版"
 desc: |-
-  3.8.20｜补齐 Google AI / Cloud / Firebase 等 11 个官方域名后缀并对齐 DNS 全协议分流，清理 Google 与 AI 规则集跨组重复；独立 Google 服务选择组默认跟随 AI 平台，YouTube 仍独立；显式补齐 mistral.ai 域名分流至 🤖 AI平台 与安全 DNS；包含数字资产独立选择组，默认 DIRECT 直连，可手动选择其他节点，覆盖六家平台专用域名与 DNS；恢复双栈目标分流与局域网优先；STUN/端口拦截排除通用国内目标，保留境外防护；保留微软、Apple、Oracle 等指定例外与广告策略；去重并统一 CF 测速（5 分钟、30ms 容差）。Stash 使用系统双栈竞速，非强制 IPv4；客户端由用户自行更新。
+  3.8.21｜新增独立「Meta」策略组（支持单独选节点，默认 🚀节点选择），将 Facebook、Instagram、WhatsApp、Threads、Messenger、Meta AI 及 Quest/Oculus 全部流量与安全 DNS 从 🤖 AI平台 拆分至 Meta；补充 instagr.am、whatsapp.biz、metaaiusercontent.com、fbwat.ch 等直属域名并避免把共享 CDN 整体划入；托管 AI 规则集同步移除 meta.ai；Google、YouTube、AI 平台、数字资产、国内与安全拦截优先级保持不变。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
-date: "2026-10-30"
-version: "3.8.20"
+date: "2026-11-13"
+version: "3.8.21"
 
 mode: rule
 ipv6: true
@@ -51,6 +51,13 @@ proxy-groups: #!replace
   exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: 🤖 AI平台
   type: select
+  include-all: true
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+- name: Meta
+  type: select
+  proxies: #!replace
+  - 🚀节点选择
+  - ♻️自动选择
   include-all: true
   exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 
@@ -1266,6 +1273,153 @@ dns: #!replace
     - https://cloudflare-dns.com/dns-query
     +.ip.net.coffee: *id001
     +.ipleak.net: *id001
+    geosite:meta:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.muse.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.meta.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.metaaiusercontent.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.metaaivm.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.meta.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.atmeta.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.llama.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.metacareers.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebook.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebook.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.thefacebook.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.thefacebook.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fb.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fb.me":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fb.watch":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbwat.ch":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fb.gg":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fb.audio":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbcdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbcdn.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbsbx.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbsbx.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.tfbnw.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.instagram.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.instagr.am":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cdninstagram.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ig.me":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.igcdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.igsonar.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.igtv.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.threads.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.threads.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.messenger.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.fbmessenger.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.m.me":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whatsapp.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whatsapp.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whatsapp.biz":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.wa.me":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whatsappbrand.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oculus.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oculuscdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oculusvr.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ocul.us":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oculusforbusiness.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.metaquest.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    fbcdn-a.akamaihd.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    developers.facebook.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
 
 script:
@@ -1298,10 +1452,10 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
 
-  aligned-managed-ai-41a91bf72feb03f3:
+  aligned-managed-ai-e0d6085fd5d1f4e7:
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/41a91bf72feb03f38d2ceb268ee11a7b242759665546620b1c0a0af749252013.yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/e0d6085fd5d1f4e7723107be429ca88f9f9c0f1bb5b5154de8dc1cce7ff5989a.yaml
     interval: 86400
   aligned-cn-domain:
     behavior: domain
@@ -1531,51 +1685,62 @@ rules: #!replace
 - DOMAIN,dns.google,🚀节点选择
 - DOMAIN,cloudflare-dns.com,🚀节点选择
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,vipqihang.com)),DIRECT
-- DOMAIN-SUFFIX,muse.ai,🤖 AI平台
-- DOMAIN-SUFFIX,meta.ai,🤖 AI平台
-- DOMAIN-SUFFIX,meta.com,🤖 AI平台
-- DOMAIN-SUFFIX,atmeta.com,🤖 AI平台
-- DOMAIN-SUFFIX,llama.com,🤖 AI平台
-- DOMAIN-SUFFIX,facebook.com,🤖 AI平台
-- DOMAIN-SUFFIX,facebook.net,🤖 AI平台
-- DOMAIN-SUFFIX,fb.com,🤖 AI平台
-- DOMAIN-SUFFIX,fb.me,🤖 AI平台
-- DOMAIN-SUFFIX,fb.watch,🤖 AI平台
-- DOMAIN-SUFFIX,fb.gg,🤖 AI平台
-- DOMAIN-SUFFIX,fbcdn.com,🤖 AI平台
-- DOMAIN-SUFFIX,fbcdn.net,🤖 AI平台
-- DOMAIN-SUFFIX,fbsbx.com,🤖 AI平台
-- DOMAIN-SUFFIX,fbsbx.net,🤖 AI平台
-- DOMAIN-SUFFIX,facebookmail.com,🤖 AI平台
-- DOMAIN-SUFFIX,facebook-hardware.com,🤖 AI平台
-- DOMAIN-SUFFIX,facebookportal.com,🤖 AI平台
-- DOMAIN-SUFFIX,facebookwork.com,🤖 AI平台
-- DOMAIN-SUFFIX,workplace.com,🤖 AI平台
-- DOMAIN-SUFFIX,workplaceusecases.com,🤖 AI平台
-- DOMAIN-SUFFIX,instagram.com,🤖 AI平台
-- DOMAIN-SUFFIX,cdninstagram.com,🤖 AI平台
-- DOMAIN-SUFFIX,ig.me,🤖 AI平台
-- DOMAIN-SUFFIX,igcdn.com,🤖 AI平台
-- DOMAIN-SUFFIX,igsonar.com,🤖 AI平台
-- DOMAIN-SUFFIX,igtv.com,🤖 AI平台
-- DOMAIN-SUFFIX,threads.com,🤖 AI平台
-- DOMAIN-SUFFIX,threads.net,🤖 AI平台
-- DOMAIN-SUFFIX,messenger.com,🤖 AI平台
-- DOMAIN-SUFFIX,fbmessenger.com,🤖 AI平台
-- DOMAIN-SUFFIX,m.me,🤖 AI平台
-- DOMAIN-SUFFIX,whatsapp.com,🤖 AI平台
-- DOMAIN-SUFFIX,whatsapp.net,🤖 AI平台
-- DOMAIN-SUFFIX,wa.me,🤖 AI平台
-- DOMAIN-SUFFIX,whatsappbrand.com,🤖 AI平台
-- DOMAIN-SUFFIX,oculus.com,🤖 AI平台
-- DOMAIN-SUFFIX,oculuscdn.com,🤖 AI平台
-- DOMAIN-SUFFIX,oculusvr.com,🤖 AI平台
-- DOMAIN-SUFFIX,ocul.us,🤖 AI平台
-- DOMAIN-SUFFIX,oculusforbusiness.com,🤖 AI平台
-- DOMAIN-SUFFIX,metaquest.com,🤖 AI平台
-- DOMAIN-SUFFIX,metacareers.com,🤖 AI平台
-- DOMAIN,fbcdn-a.akamaihd.net,🤖 AI平台
-- GEOSITE,meta,🤖 AI平台
+- DOMAIN-SUFFIX,muse.ai,Meta
+- DOMAIN-SUFFIX,meta.ai,Meta
+- DOMAIN-SUFFIX,metaaiusercontent.com,Meta
+- DOMAIN-SUFFIX,metaaivm.com,Meta
+- DOMAIN-SUFFIX,meta.com,Meta
+- DOMAIN-SUFFIX,atmeta.com,Meta
+- DOMAIN-SUFFIX,llama.com,Meta
+- DOMAIN-SUFFIX,metacareers.com,Meta
+- DOMAIN-SUFFIX,facebook.com,Meta
+- DOMAIN-SUFFIX,facebook.net,Meta
+- DOMAIN-SUFFIX,thefacebook.com,Meta
+- DOMAIN-SUFFIX,thefacebook.net,Meta
+- DOMAIN-SUFFIX,fb.com,Meta
+- DOMAIN-SUFFIX,fb.me,Meta
+- DOMAIN-SUFFIX,fb.watch,Meta
+- DOMAIN-SUFFIX,fbwat.ch,Meta
+- DOMAIN-SUFFIX,fb.gg,Meta
+- DOMAIN-SUFFIX,fb.audio,Meta
+- DOMAIN-SUFFIX,fbcdn.com,Meta
+- DOMAIN-SUFFIX,fbcdn.net,Meta
+- DOMAIN-SUFFIX,fbsbx.com,Meta
+- DOMAIN-SUFFIX,fbsbx.net,Meta
+- DOMAIN-SUFFIX,tfbnw.net,Meta
+- DOMAIN-SUFFIX,accountkit.com,Meta
+- DOMAIN-SUFFIX,facebookmail.com,Meta
+- DOMAIN-SUFFIX,facebook-hardware.com,Meta
+- DOMAIN-SUFFIX,facebookportal.com,Meta
+- DOMAIN-SUFFIX,facebookwork.com,Meta
+- DOMAIN-SUFFIX,workplace.com,Meta
+- DOMAIN-SUFFIX,workplaceusecases.com,Meta
+- DOMAIN-SUFFIX,instagram.com,Meta
+- DOMAIN-SUFFIX,instagr.am,Meta
+- DOMAIN-SUFFIX,cdninstagram.com,Meta
+- DOMAIN-SUFFIX,ig.me,Meta
+- DOMAIN-SUFFIX,igcdn.com,Meta
+- DOMAIN-SUFFIX,igsonar.com,Meta
+- DOMAIN-SUFFIX,igtv.com,Meta
+- DOMAIN-SUFFIX,threads.com,Meta
+- DOMAIN-SUFFIX,threads.net,Meta
+- DOMAIN-SUFFIX,messenger.com,Meta
+- DOMAIN-SUFFIX,fbmessenger.com,Meta
+- DOMAIN-SUFFIX,m.me,Meta
+- DOMAIN-SUFFIX,whatsapp.com,Meta
+- DOMAIN-SUFFIX,whatsapp.net,Meta
+- DOMAIN-SUFFIX,whatsapp.biz,Meta
+- DOMAIN-SUFFIX,wa.me,Meta
+- DOMAIN-SUFFIX,whatsappbrand.com,Meta
+- DOMAIN-SUFFIX,oculus.com,Meta
+- DOMAIN-SUFFIX,oculuscdn.com,Meta
+- DOMAIN-SUFFIX,oculusvr.com,Meta
+- DOMAIN-SUFFIX,ocul.us,Meta
+- DOMAIN-SUFFIX,oculusforbusiness.com,Meta
+- DOMAIN-SUFFIX,metaquest.com,Meta
+- DOMAIN,fbcdn-a.akamaihd.net,Meta
+- DOMAIN,developers.facebook.com,Meta
+- GEOSITE,meta,Meta
 - DOMAIN-SUFFIX,push.apple.com,🚀节点选择
 - DOMAIN-SUFFIX,push-apple.com.akadns.net,🚀节点选择
 - DOMAIN-SUFFIX,courier-push-apple.com.akadns.net,🚀节点选择
@@ -1793,7 +1958,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,firebase.app,🌐 Google服务
 - DOMAIN-SUFFIX,recaptcha.net,🌐 Google服务
 - GEOSITE,google,🌐 Google服务
-- RULE-SET,aligned-managed-ai-41a91bf72feb03f3,🤖 AI平台
+- RULE-SET,aligned-managed-ai-e0d6085fd5d1f4e7,🤖 AI平台
 - GEOSITE,openai,🤖 AI平台
 - DOMAIN,apple-relay.apple.com,DIRECT
 - DOMAIN,apple-relay.cloudflare.com,DIRECT
