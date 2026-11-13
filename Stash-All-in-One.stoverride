@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.21 正式版"
+name: "3.8.22 正式版"
 desc: |-
-  3.8.21｜新增独立「Meta」策略组（支持单独选节点，默认 🚀节点选择），将 Facebook、Instagram、WhatsApp、Threads、Messenger、Meta AI 及 Quest/Oculus 全部流量与安全 DNS 从 🤖 AI平台 拆分至 Meta；补充 instagr.am、whatsapp.biz、metaaiusercontent.com、fbwat.ch 等直属域名并避免把共享 CDN 整体划入；托管 AI 规则集同步移除 meta.ai；Google、YouTube、AI 平台、数字资产、国内与安全拦截优先级保持不变。
+  3.8.22｜同步全端规则一致性：清理重复内联 AI 与国内规则、移除宽泛通用策略引用，升级 aligned-managed-ai 至收紧版 0185a27c；补全 Gemini、tiktokrow-cdn.com 与抖音前置规则，保留 Meta 独立策略组与安全 DNS 解析。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-11-13"
-version: "3.8.21"
+version: "3.8.22"
 
 mode: rule
 ipv6: true
@@ -1052,9 +1052,6 @@ dns: #!replace
     +.grok.x.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
-    +.cloudflareinsights.com:
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
     +.featuregates.org:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -1420,6 +1417,102 @@ dns: #!replace
     developers.facebook.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    "+.tiktokrow-cdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.aicode.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.aida.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.aisandbox-pa.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.aistudio.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.antigravity-unleash.goog":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.antigravity.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.bard.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.deepmind.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.flow.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.flow.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.geller-pa.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gemini.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gemini.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gemini.gstatic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.generativeai.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.generativelanguage.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.jules.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.jules.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.labs.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.labs.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.labstailwind.pa.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.makersuite.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.notebook.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.notebook.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.notebooklm.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.notebooklm.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.opal.google":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.opal.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.proactivebackend-pa.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.robinfrontend-pa.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.stitch.withgoogle.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
   skip-cert-verify: false
 
 script:
@@ -1430,11 +1523,6 @@ rule-providers:
     behavior: domain
     format: yaml
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/96021d255b1e42134de823c9a8bbcf88713609d0e804f2f2cd64362838e8845b.yaml
-    interval: 86400
-  vps-domain-70845adfa1a4e7a5:
-    behavior: domain
-    format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/70845adfa1a4e7a5ead970810d6a5e847c5aab5f15332ada365def8c2a8a80fb.yaml
     interval: 86400
   vps-domain-84ae868c1dec6dc4:
     behavior: domain
@@ -1452,10 +1540,10 @@ rule-providers:
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
 
-  aligned-managed-ai-e0d6085fd5d1f4e7:
+  aligned-managed-ai-0185a27c9f5f0436:
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/e0d6085fd5d1f4e7723107be429ca88f9f9c0f1bb5b5154de8dc1cce7ff5989a.yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/0185a27c9f5f04369d461c2655c2235cc501b634f35f49a71595c90a8953a7e9.yaml
     interval: 86400
   aligned-cn-domain:
     behavior: domain
@@ -1650,7 +1738,6 @@ rules: #!replace
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,copilot.microsoft.com)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,sydney.bing.com)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,ai.azure.com)),🤖 AI平台
-- AND,((NETWORK,TCP),(DOMAIN-SUFFIX,cloudflareinsights.com)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,featuregates.org)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,grazie.aws.intellij.net)),🤖 AI平台
 - AND,((NETWORK,TCP),(DOMAIN-SUFFIX,intercom.io)),🤖 AI平台
@@ -1753,43 +1840,10 @@ rules: #!replace
 - IP-CIDR6,2403:300:a42::/48,🚀节点选择,no-resolve
 - IP-CIDR6,2403:300:a51::/48,🚀节点选择,no-resolve
 - IP-CIDR6,2a01:b740:a42::/48,🚀节点选择,no-resolve
-- DOMAIN-SUFFIX,ai.azure.com,🤖 AI平台
-- DOMAIN-SUFFIX,perplexity.com,🤖 AI平台
-- DOMAIN-SUFFIX,poecdn.net,🤖 AI平台
-- DOMAIN-SUFFIX,replicate.delivery,🤖 AI平台
-- DOMAIN-SUFFIX,together.xyz,🤖 AI平台
-- DOMAIN,copilot-proxy.githubusercontent.com,🤖 AI平台
-- DOMAIN,copilot-workspace.githubnext.com,🤖 AI平台
-- DOMAIN,copilotprodattachments.blob.core.windows.net,🤖 AI平台
-- DOMAIN,ppl-ai-file-upload.s3.amazonaws.com,🤖 AI平台
-- DOMAIN,pplx-res.cloudinary.com,🤖 AI平台
-- DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI平台
-- DOMAIN-SUFFIX,anthropic.com,🤖 AI平台
-- DOMAIN-SUFFIX,claude.ai,🤖 AI平台
-- DOMAIN-SUFFIX,openai.com,🤖 AI平台
-- DOMAIN-SUFFIX,chatgpt.com,🤖 AI平台
-- DOMAIN-SUFFIX,sora.com,🤖 AI平台
-- DOMAIN-SUFFIX,grok.com,🤖 AI平台
-- DOMAIN-SUFFIX,x.ai,🤖 AI平台
-- DOMAIN,grok.x.com,🤖 AI平台
-- DOMAIN-SUFFIX,grok.x.com,🤖 AI平台
-- DOMAIN-SUFFIX,pixpix.com,🤖 AI平台
-- DOMAIN-SUFFIX,perplexity.ai,🤖 AI平台
-- DOMAIN-SUFFIX,midjourney.com,🤖 AI平台
-- DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI平台
-- DOMAIN-SUFFIX,mistral.ai,🤖 AI平台
 - DOMAIN-SUFFIX,alipay.com,DIRECT
 - DOMAIN-SUFFIX,alipayobjects.com,DIRECT
 - DOMAIN-SUFFIX,alipay.com.cn,DIRECT
 - DOMAIN-SUFFIX,alipay.net,DIRECT
-- DOMAIN,workos.imgix.net,🤖 AI平台
-- DOMAIN,js.stripe.com,🤖 AI平台
-- DOMAIN,o207216.ingest.sentry.io,🤖 AI平台
-- DOMAIN,o33249.ingest.sentry.io,🤖 AI平台
-- DOMAIN,rum.browser-intake-datadoghq.com,🤖 AI平台
-- DOMAIN,browser-intake-datadoghq.com,🤖 AI平台
-- DOMAIN-SUFFIX,ct.sendgrid.net,🤖 AI平台
-- DOMAIN-SUFFIX,oaistatsig.com,🤖 AI平台
 - DOMAIN-SUFFIX,qq.com,DIRECT
 - DOMAIN-SUFFIX,qpic.cn,DIRECT
 - DOMAIN-SUFFIX,qlogo.cn,DIRECT
@@ -1823,29 +1877,9 @@ rules: #!replace
 - DOMAIN-SUFFIX,x.com,🚀节点选择
 - DOMAIN-SUFFIX,qqmail.com,DIRECT
 - DOMAIN-SUFFIX,idqqimg.com,DIRECT
-- DOMAIN-SUFFIX,baichuan-ai.com,DIRECT
-- DOMAIN-SUFFIX,chatglm.cn,DIRECT
-- DOMAIN-SUFFIX,deepseek.com,DIRECT
-- DOMAIN-SUFFIX,deepseeksvc.com,DIRECT
-- DOMAIN-SUFFIX,doubao.com,DIRECT
-- DOMAIN-SUFFIX,doubaocdn.com,DIRECT
-- DOMAIN-SUFFIX,hailuoai.com,DIRECT
-- DOMAIN-SUFFIX,kimi.ai,DIRECT
-- DOMAIN-SUFFIX,kimi.com,DIRECT
-- DOMAIN-SUFFIX,minimax.chat,DIRECT
-- DOMAIN-SUFFIX,moonshot.ai,DIRECT
-- DOMAIN-SUFFIX,moonshot.cn,DIRECT
-- DOMAIN-SUFFIX,qwen.ai,DIRECT
-- DOMAIN-SUFFIX,sensechat.cn,DIRECT
-- DOMAIN-SUFFIX,sensetime.com,DIRECT
-- DOMAIN-SUFFIX,stepfun.com,DIRECT
-- DOMAIN-SUFFIX,yuewen.cn,DIRECT
-- DOMAIN-SUFFIX,zhipuai.cn,DIRECT
 - DOMAIN,captive.apple.com,DIRECT
 - DOMAIN-SUFFIX,qihangjiaoyu.com,DIRECT
-- DOMAIN-SUFFIX,polyv.net,DIRECT
 - DOMAIN-SUFFIX,polyv.cn,DIRECT
-- DOMAIN-SUFFIX,alicdn.com,DIRECT
 - RULE-SET,vps-domain-96021d255b1e4213,DIRECT
 - DOMAIN-SUFFIX,livekit.cloud,🤖 AI平台
 - AND,((NETWORK,UDP),(DST-PORT,3478),(IP-CIDR,102.37.57.54/32,no-resolve)),🤖 AI平台
@@ -1942,7 +1976,6 @@ rules: #!replace
 - DOMAIN,p03b.hs.eloqua.com,DIRECT
 - DOMAIN,rightnow.com,DIRECT
 - DOMAIN,s1973398186.hs.eloqua.com,DIRECT
-- RULE-SET,vps-domain-70845adfa1a4e7a5,🤖 AI平台
 - RULE-SET,vps-domain-84ae868c1dec6dc4,📺 YouTube
 - GEOSITE,youtube,📺 YouTube
 - DOMAIN-SUFFIX,ai.dev,🌐 Google服务
@@ -1957,9 +1990,39 @@ rules: #!replace
 - DOMAIN-SUFFIX,firebasestorage.app,🌐 Google服务
 - DOMAIN-SUFFIX,firebase.app,🌐 Google服务
 - DOMAIN-SUFFIX,recaptcha.net,🌐 Google服务
+- DOMAIN-SUFFIX,aicode.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,aida.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,aisandbox-pa.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,aistudio.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,antigravity-unleash.goog,🌐 Google服务
+- DOMAIN-SUFFIX,antigravity.google,🌐 Google服务
+- DOMAIN-SUFFIX,bard.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,deepmind.google,🌐 Google服务
+- DOMAIN-SUFFIX,flow.google,🌐 Google服务
+- DOMAIN-SUFFIX,flow.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,geller-pa.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,gemini.google,🌐 Google服务
+- DOMAIN-SUFFIX,gemini.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,gemini.gstatic.com,🌐 Google服务
+- DOMAIN-SUFFIX,generativeai.google,🌐 Google服务
+- DOMAIN-SUFFIX,generativelanguage.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,jules.google,🌐 Google服务
+- DOMAIN-SUFFIX,jules.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,labs.google,🌐 Google服务
+- DOMAIN-SUFFIX,labs.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,labstailwind.pa.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,makersuite.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,notebook.google,🌐 Google服务
+- DOMAIN-SUFFIX,notebook.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,notebooklm.google,🌐 Google服务
+- DOMAIN-SUFFIX,notebooklm.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,opal.google,🌐 Google服务
+- DOMAIN-SUFFIX,opal.google.com,🌐 Google服务
+- DOMAIN-SUFFIX,proactivebackend-pa.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,robinfrontend-pa.googleapis.com,🌐 Google服务
+- DOMAIN-SUFFIX,stitch.withgoogle.com,🌐 Google服务
 - GEOSITE,google,🌐 Google服务
-- RULE-SET,aligned-managed-ai-e0d6085fd5d1f4e7,🤖 AI平台
-- GEOSITE,openai,🤖 AI平台
+- RULE-SET,aligned-managed-ai-0185a27c9f5f0436,🤖 AI平台
 - DOMAIN,apple-relay.apple.com,DIRECT
 - DOMAIN,apple-relay.cloudflare.com,DIRECT
 - DOMAIN,apple-relay.fastly-edge.com,DIRECT
@@ -1974,6 +2037,14 @@ rules: #!replace
 - RULE-SET,vps-domain-7454c3e8328d3448,DIRECT
 - DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net,DIRECT
 - GEOSITE,category-ads-all,REJECT
+- DOMAIN-SUFFIX,tiktokrow-cdn.com,🚀节点选择
+- DOMAIN-SUFFIX,douyin.com,DIRECT
+- DOMAIN-SUFFIX,douyinpay.com,DIRECT
+- DOMAIN-SUFFIX,douyinstatic.com,DIRECT
+- DOMAIN-SUFFIX,douyincdn.com,DIRECT
+- DOMAIN-SUFFIX,douyinvod.com,DIRECT
+- DOMAIN-SUFFIX,iesdouyin.com,DIRECT
+- DOMAIN-SUFFIX,amemv.com,DIRECT
 - DOMAIN-SUFFIX,cn,DIRECT
 - DOMAIN-SUFFIX,xn--fiqs8s,DIRECT
 - DOMAIN-SUFFIX,xn--fiqz9s,DIRECT
