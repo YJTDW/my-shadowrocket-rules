@@ -2,13 +2,13 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.22 正式版"
+name: "3.8.23 正式版"
 desc: |-
-  3.8.22｜同步全端规则一致性：清理重复内联 AI 与国内规则、移除宽泛通用策略引用，升级 aligned-managed-ai 至收紧版 0185a27c；补全 Gemini、tiktokrow-cdn.com 与抖音前置规则，保留 Meta 独立策略组与安全 DNS 解析。
+  3.8.23｜二轮核查与全端一致性加固：补全 ChatGPT WebPubSub 动态正则与 8 个 IP 泄漏检测后缀；补齐 nameserver-policy 中 AI、Meta、Google、YouTube、IP 检测及 Apple Relay 显式分流解析；同步清理失效引用，保持 Meta/AI/Google/YouTube/数字资产独立分组与安全 DNS。
 author: YJTDW
 homepage: "https://github.com/YJTDW/my-shadowrocket-rules"
 date: "2026-11-13"
-version: "3.8.22"
+version: "3.8.23"
 
 mode: rule
 ipv6: true
@@ -1513,6 +1513,363 @@ dns: #!replace
     "+.stitch.withgoogle.com":
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    "+.1e100.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.accountkit.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ai.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.android.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ant.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.anthropic.team":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.antigravity.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.antspace.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.appspot.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.arkoselabs.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.blogger.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.blogspot.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.browserleaks.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.browserleaks.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chat.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chatbotclaude.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chatgpt.livekit.cloud":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.chatgpt.site":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.check.place":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.clau.de":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.app":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.new":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claude.site":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudeacademy.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudemcpclient.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudemcpcontent.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudepages.dev":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudestudio.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.claudeusercontent.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cohere.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cohere.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.copilot.cloud.microsoft":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.crixet.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cursor-cdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cursor.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cursor.sh":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cursorapi.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.cursorvm.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.deepmind.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.dnsleaktest.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebook-hardware.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebookmail.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebookportal.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.facebookwork.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.firebaseapp.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.firebaseio.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ggpht.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.githubcopilot.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.google.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.googleapis.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.googleusercontent.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.googlevideo.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.grazie.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.grokbot.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.grokipedia.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gstatic.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gvt0.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gvt1.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gvt2.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.gvt3.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.host.livekit.cloud":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ip8.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.iphey.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.jetbrains.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.kaggle.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.launchdarkly.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.oaistatsig.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.observeit.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openai.com.cdn.cloudflare.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.openai.org":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.poe.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.pplx.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.replicate.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.statsig.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.statsigapi.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.together.ai":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.turn.livekit.cloud":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.waze.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whatismyipaddress.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.whoer.net":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.widevine.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.withgoogle.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.workos.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.workoscdn.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.workplace.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.workplaceusecases.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.youtu.be":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.youtube-nocookie.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.youtube.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.yt.be":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.ytimg.com":
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    browser-intake-datadoghq.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    cdn.usefathom.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    challenges.cloudflare.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    copilot-telemetry-service.githubusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    copilot-telemetry.githubusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    ct.sendgrid.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    http-intake.logs.us5.datadoghq.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    js.stripe.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    o1158394.ingest.us.sentry.io:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    o207216.ingest.sentry.io:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    o33249.ingest.sentry.io:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    o33249.ingest.us.sentry.io:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openai.qualtrics.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openaicom-api-bdcpf8c6d2e9atf6.z01.azurefd.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    openaicom.imgix.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    production-copilot-host-westus.webpubsub.azure.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    rum.browser-intake-datadoghq.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    workos.imgix.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    "+.apple-cloudkit.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple-livephotoskit.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple-mapkit.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple-relay.akamaized.net":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple-relay.cloudflare.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple-relay.fastly-edge.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.apple.co":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    "+.cp4.cloudflare.com":
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   skip-cert-verify: false
 
 script:
@@ -2023,6 +2380,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,stitch.withgoogle.com,🌐 Google服务
 - GEOSITE,google,🌐 Google服务
 - RULE-SET,aligned-managed-ai-0185a27c9f5f0436,🤖 AI平台
+- DOMAIN-REGEX,^chatgpt-async-webps-prod-\S+-\d+\.webpubsub\.azure\.com$,🤖 AI平台
 - DOMAIN,apple-relay.apple.com,DIRECT
 - DOMAIN,apple-relay.cloudflare.com,DIRECT
 - DOMAIN,apple-relay.fastly-edge.com,DIRECT
@@ -2032,8 +2390,16 @@ rules: #!replace
 - GEOSITE,apple,DIRECT
 - GEOSITE,twitter,🚀节点选择
 - DOMAIN-SUFFIX,browserleaks.com,🚀节点选择
+- DOMAIN-SUFFIX,browserleaks.net,🚀节点选择
+- DOMAIN-SUFFIX,browserleaks.org,🚀节点选择
 - DOMAIN-SUFFIX,ip.net.coffee,🚀节点选择
 - DOMAIN-SUFFIX,ipleak.net,🚀节点选择
+- DOMAIN-SUFFIX,dnsleaktest.com,🚀节点选择
+- DOMAIN-SUFFIX,whoer.net,🚀节点选择
+- DOMAIN-SUFFIX,iphey.com,🚀节点选择
+- DOMAIN-SUFFIX,ip8.com,🚀节点选择
+- DOMAIN-SUFFIX,whatismyipaddress.com,🚀节点选择
+- DOMAIN-SUFFIX,check.place,🚀节点选择
 - RULE-SET,vps-domain-7454c3e8328d3448,DIRECT
 - DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net,DIRECT
 - GEOSITE,category-ads-all,REJECT
