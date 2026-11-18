@@ -2,7 +2,7 @@
 # 企业级跨平台客户端与服务端标准配置 - Stash 通用终极覆写 (全面对齐 sing-box 架构)
 # 支持任何机场 / 私有聚合订阅，全自动生成策略组并自动过滤流量信息节点。
 
-name: "3.8.23 正式版"
+name: "3.8.24 正式版"
 desc: |-
   3.8.24｜海外 AI 域名全面扩展并排除国内 AI：补全 GitHub Copilot 全区 WebPubSub/Telemetry、Anthropic Datadog、Cursor S3 下载、Microsoft copilot.com 及 55 个纯海外 AI 平台与开发生态后缀，移除失效 observeit.net，同步 nameserver-policy 代理 DoH；保持 Meta/Google/YouTube/数字资产独立分组与安全 DNS。
 author: YJTDW
