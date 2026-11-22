@@ -1,12 +1,17 @@
-name: "3.9.5 正式版"
+name: "3.9.4 正式版"
 desc: |-
-  3.9.5｜全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；手动节点与自动选择跟随当前配置，无需在覆写中填写节点订阅地址；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
+  3.9.4｜全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；所有手动策略组均在同一层列出原有策略入口与订阅节点，自动选择使用同一订阅测速；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
 author: "YJTDW"
 date: "2026-11-23"
-version: "3.9.5"
+version: "3.9.4"
 category: "核心分流与安全"
 arguments-version: 1
 arguments:
+  node_subscription:
+    type: input
+    title: "Stash 节点订阅地址"
+    description: "填入当前 Stash / Clash YAML 节点订阅的 HTTPS 地址。"
+    required: true
   wechat_fast_direct:
     type: switch
     title: "微信与腾讯生态极速直连"
@@ -27,10 +32,13 @@ proxy-groups: #!replace
   type: select
   proxies: #!replace
   - ♻️自动选择
-  - 手动节点
+  use:
+  - digital-assets-subscription
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: ♻️自动选择
   type: url-test
-  include-all: true
+  use:
+  - digital-assets-subscription
   exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
   url: http://www.apple.com/library/test/success.html
   interval: 3600
@@ -41,37 +49,46 @@ proxy-groups: #!replace
   proxies: #!replace
   - 🚀节点选择
   - ♻️自动选择
-  - 手动节点
+  use:
+  - digital-assets-subscription
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: 🌐 Google服务
   type: select
   proxies: #!replace
   - 🤖 AI平台
   - 🚀节点选择
   - ♻️自动选择
-  - 手动节点
+  use:
+  - digital-assets-subscription
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: 🤖 AI平台
   type: select
   proxies: #!replace
   - 🚀节点选择
   - ♻️自动选择
-  - 手动节点
+  use:
+  - digital-assets-subscription
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: Meta
   type: select
   proxies: #!replace
   - 🚀节点选择
   - ♻️自动选择
-  - 手动节点
+  use:
+  - digital-assets-subscription
+  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
 - name: 💰 数字资产
   type: select
   proxies:
   - DIRECT
   - 🚀节点选择
   - ♻️自动选择
-  - 手动节点
-- name: 手动节点
-  type: select
-  include-all: true
-  exclude-filter: (?i)剩余|流量|套餐|到期|重置|官网|客服
+  use:
+  - digital-assets-subscription
+proxy-providers:
+  digital-assets-subscription:
+    url: '${args.node_subscription}'
+    interval: 3600
 dns:
   enable: true
   ipv6: true
