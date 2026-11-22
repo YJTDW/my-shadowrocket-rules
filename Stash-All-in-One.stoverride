@@ -8,18 +8,21 @@ category: "核心分流与安全"
 arguments-version: 1
 arguments:
   crypto_default_mode:
-    name: "数字资产默认策略说明"
-    desc: "💰 数字资产 策略组默认第 1 项为 DIRECT（直连），并内置 🚀节点选择、♻️自动选择 与全部订阅节点，可在策略面板随时切换"
     type: select
+    title: "数字资产默认策略"
+    description: "💰 数字资产 策略组默认第 1 项为 DIRECT（直连），并内置 🚀节点选择、♻️自动选择 与全部订阅节点，可在策略面板随时切换"
     default: "DIRECT"
     options:
-    - "DIRECT"
-    - "🚀节点选择"
-    - "♻️自动选择"
+    - value: "DIRECT"
+      label: "DIRECT（默认直连）"
+    - value: "🚀节点选择"
+      label: "🚀节点选择（跟随主节点）"
+    - value: "♻️自动选择"
+      label: "♻️自动选择（自动测速）"
   wechat_fast_direct:
-    name: "微信与腾讯生态极速直连"
-    desc: "置顶直连微信/微信支付/小程序/视频号/腾讯云 CDN 与 AS45090，配合腾讯 DNSPod + 阿里双 DoH 真实 IP 解析与 MMTLS 嗅探豁免"
     type: switch
+    title: "微信与腾讯生态极速直连"
+    description: "置顶直连微信/微信支付/小程序/视频号/腾讯云 CDN 与 AS45090，配合腾讯 DNSPod + 阿里双 DoH 真实 IP 解析"
     default: true
 mode: rule
 log-level: info
