@@ -1,24 +1,12 @@
-name: "3.9.1 正式版"
+name: "3.9.2 正式版"
 desc: |-
-  3.9.1｜全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；「💰 数字资产」显式列出直连与策略组，通过独立子组收集订阅节点；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
+  3.9.2｜全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；「💰 数字资产」显式列出直连与策略组，通过独立子组收集订阅节点；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
 author: "YJTDW"
 date: "2026-11-23"
-version: "3.9.1"
+version: "3.9.2"
 category: "核心分流与安全"
 arguments-version: 1
 arguments:
-  crypto_default_mode:
-    type: select
-    title: "数字资产默认策略"
-    description: "选择「默认」时使用此策略。也可单独选择 DIRECT、节点选择、自动选择，或在「数字资产手动节点」中指定节点。"
-    default: "DIRECT"
-    options:
-    - value: "DIRECT"
-      label: "DIRECT（默认直连）"
-    - value: "🚀节点选择"
-      label: "🚀节点选择（跟随主节点）"
-    - value: "♻️自动选择"
-      label: "♻️自动选择（自动测速）"
   wechat_fast_direct:
     type: switch
     title: "微信与腾讯生态极速直连"
@@ -81,16 +69,10 @@ proxy-groups: #!replace
 - name: 💰 数字资产
   type: select
   proxies:
-  - '默认 · ${args.crypto_default_mode}'
   - DIRECT
   - 🚀节点选择
   - ♻️自动选择
   - 数字资产手动节点
-- name: '默认 · ${args.crypto_default_mode}'
-  type: select
-  hidden: true
-  proxies:
-  - '${args.crypto_default_mode}'
 - name: 数字资产手动节点
   type: select
   include-all: true
