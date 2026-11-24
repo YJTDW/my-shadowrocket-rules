@@ -1,9 +1,9 @@
-name: "3.9.4 正式版"
+name: "3.9.5 正式版"
 desc: |-
-  3.9.4｜全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；所有手动策略组均在同一层列出原有策略入口与订阅节点，自动选择使用同一订阅测速；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
+  3.9.5｜T3 Code 全系纳入 AI 平台，补齐微信小程序云托管/网关/直播/COS 直连；全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；所有手动策略组均在同一层列出原有策略入口与订阅节点，自动选择使用同一订阅测速；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
 author: "YJTDW"
-date: "2026-11-23"
-version: "3.9.4"
+date: "2026-11-24"
+version: "3.9.5"
 category: "核心分流与安全"
 arguments-version: 1
 arguments:
@@ -134,6 +134,16 @@ dns:
   - +.tencentcos.cn
   - +.url.cn
   - +.ugcdns.com
+  - +.wxcloudrun.com
+  - +.wxgateway.com
+  - +.wxlivecdn.com
+  - +.rmwxgame.com
+  - +.weixinsxy.com
+  - +.tencentcos.com
+  - +.qcloudcdn.com
+  - +.qcloudcos.com
+  - +.tencentyun.com
+  - +.tencentcloudapi.com
   - +.alipay.com
   - +.alipayobjects.com
   - +.alipay.com.cn
@@ -334,6 +344,16 @@ dns:
     +.tencentcos.cn: *id001
     +.url.cn: *id001
     +.ugcdns.com: *id001
+    +.wxcloudrun.com: *id001
+    +.wxgateway.com: *id001
+    +.wxlivecdn.com: *id001
+    +.rmwxgame.com: *id001
+    +.weixinsxy.com: *id001
+    +.tencentcos.com: *id001
+    +.qcloudcdn.com: *id001
+    +.qcloudcos.com: *id001
+    +.tencentyun.com: *id001
+    +.tencentcloudapi.com: *id001
     +.binance.cc:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -2001,6 +2021,27 @@ dns:
     +.windsurf.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    +.axiom.co:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.clerk.services:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.clerkprod-cloudflare.net:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.elevenlabsusercontent.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.t3.codes:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.t3coderelay.com:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+    +.gemma.ai:
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
     rum.browser-intake-datadoghq.com:
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
@@ -2056,10 +2097,10 @@ rule-providers:
     format: yaml
     url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/7454c3e8328d34485adcf07a33992cfb060bf3bb9095ad28cb404b1f8232d45f.yaml
     interval: 86400
-  aligned-managed-ai-ca84bf9d332ebf33:
+  aligned-managed-ai-237e87349ac61125:
     behavior: classical
     format: yaml
-    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/ca84bf9d332ebf33cfa1c2bf952c78564e29e4ff5c957a5247033c0720da9c7f.yaml
+    url: https://raw.githubusercontent.com/YJTDW/my-shadowrocket-rules/main/rules/stash/237e87349ac6112510f420096107cf13e31f3ef2bb2a6b6d8e49390a97873b8a.yaml
     interval: 86400
   aligned-cn-domain:
     behavior: domain
@@ -2136,6 +2177,16 @@ rules: #!replace
 - DOMAIN-SUFFIX,tencentcos.cn,DIRECT
 - DOMAIN-SUFFIX,url.cn,DIRECT
 - DOMAIN-SUFFIX,ugcdns.com,DIRECT
+- DOMAIN-SUFFIX,wxcloudrun.com,DIRECT
+- DOMAIN-SUFFIX,wxgateway.com,DIRECT
+- DOMAIN-SUFFIX,wxlivecdn.com,DIRECT
+- DOMAIN-SUFFIX,rmwxgame.com,DIRECT
+- DOMAIN-SUFFIX,weixinsxy.com,DIRECT
+- DOMAIN-SUFFIX,tencentcos.com,DIRECT
+- DOMAIN-SUFFIX,qcloudcdn.com,DIRECT
+- DOMAIN-SUFFIX,qcloudcos.com,DIRECT
+- DOMAIN-SUFFIX,tencentyun.com,DIRECT
+- DOMAIN-SUFFIX,tencentcloudapi.com,DIRECT
 - RULE-SET,aligned-tencent-domain,DIRECT
 - IP-ASN,45090,DIRECT,no-resolve
 
@@ -2494,6 +2545,7 @@ rules: #!replace
 - DOMAIN-SUFFIX,gke.io,🌐 Google服务
 - DOMAIN-SUFFIX,firebasestorage.app,🌐 Google服务
 - DOMAIN-SUFFIX,firebase.app,🌐 Google服务
+- DOMAIN-SUFFIX,gemma.ai,🌐 Google服务
 - DOMAIN-SUFFIX,recaptcha.net,🌐 Google服务
 - DOMAIN-SUFFIX,aicode.googleapis.com,🌐 Google服务
 - DOMAIN-SUFFIX,aida.googleapis.com,🌐 Google服务
@@ -2529,7 +2581,7 @@ rules: #!replace
 - GEOSITE,google,🌐 Google服务
 
   # ==================== 10. 海外 AI 平台、Twitter(X) 与防泄露检测站分流 ====================
-- RULE-SET,aligned-managed-ai-ca84bf9d332ebf33,🤖 AI平台
+- RULE-SET,aligned-managed-ai-237e87349ac61125,🤖 AI平台
 - DOMAIN-REGEX,^chatgpt-async-webps-prod-\S+-\d+\.webpubsub\.azure\.com$,🤖 AI平台
 - DOMAIN-REGEX,^production-copilot-host(?:-[a-z0-9-]+)?\.webpubsub\.azure\.com$,🤖 AI平台
 - DOMAIN-SUFFIX,ads-twitter.com,🚀节点选择
