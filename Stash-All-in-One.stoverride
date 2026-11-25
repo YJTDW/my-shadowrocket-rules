@@ -1,9 +1,9 @@
-name: "3.9.7 正式版"
+name: "3.9.8 正式版"
 desc: |-
-  3.9.7｜同步国内直连域名和网段；补齐校园扫码收银入口直连；T3 Code 全系纳入 AI 平台，补齐微信小程序云托管/网关/直播/COS 直连；全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；所有手动策略组均在同一层列出原有策略入口与订阅节点，自动选择使用同一订阅测速；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
+  3.9.8｜补齐两个国内网页入口直连；同步国内直连域名和网段；补齐校园扫码收银入口直连；T3 Code 全系纳入 AI 平台，补齐微信小程序云托管/网关/直播/COS 直连；全面适配 Stash 5.0 覆写分类管理（category）与参数配置（arguments）；微信与腾讯生态全场景极速直连绝对置顶（涵盖微信支付、小程序、视频号、腾讯多媒体/对象存储 CDN、客户端进程与 AS45090 直连免解析，并加入嗅探豁免防 MMTLS 首包阻塞）；所有手动策略组均在同一层列出原有策略入口与订阅节点，自动选择使用同一订阅测速；清理 83 条重复 Fake-IP 过滤项与 68 条冗余 TCP 重复直连规则，按优先级重构 12 大规则分区。
 author: "YJTDW"
-date: "2026-11-24"
-version: "3.9.7"
+date: "2026-11-25"
+version: "3.9.8"
 category: "核心分流与安全"
 arguments-version: 1
 arguments:
@@ -138,6 +138,8 @@ dns:
   - +.qr.95516.com
   - +.qr.chinaums.com
   - +.qr.shouqianba.com
+  - +.www.ding-iot.com
+  - +.h5c.fakamiao.top
   - +.schooljftpay.fuioupay.com
   - +.jftpay.fuioupay.com
   - +.pay.lakala.com
@@ -354,6 +356,8 @@ dns:
     +.qr.95516.com: *id001
     +.qr.chinaums.com: *id001
     +.qr.shouqianba.com: *id001
+    +.www.ding-iot.com: *id001
+    +.h5c.fakamiao.top: *id001
     +.schooljftpay.fuioupay.com: *id001
     +.jftpay.fuioupay.com: *id001
     +.pay.lakala.com: *id001
@@ -2193,6 +2197,8 @@ rules: #!replace
 - DOMAIN-SUFFIX,qr.95516.com,DIRECT
 - DOMAIN-SUFFIX,qr.chinaums.com,DIRECT
 - DOMAIN-SUFFIX,qr.shouqianba.com,DIRECT
+- DOMAIN-SUFFIX,www.ding-iot.com,DIRECT
+- DOMAIN-SUFFIX,h5c.fakamiao.top,DIRECT
 - DOMAIN-SUFFIX,schooljftpay.fuioupay.com,DIRECT
 - DOMAIN-SUFFIX,jftpay.fuioupay.com,DIRECT
 - DOMAIN-SUFFIX,pay.lakala.com,DIRECT
